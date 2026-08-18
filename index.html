@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vibrantix Reel Recorder</title>
+<style>
+  :root{ --gold:#C4A34F; --gold-soft:#dcc07d; --bg:#08080a; --panel:#111116; --line:rgba(196,163,79,.34);
+    --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ background:radial-gradient(130% 90% at 50% 0%,#141418,#000 72%); color:#f4f1ea; font-family:var(--sans);
+    min-height:100svh; display:flex; flex-direction:column; align-items:center; gap:14px; padding:16px; }
+  h1{ font-size:15px; letter-spacing:.2em; text-transform:uppercase; color:#8f8a7e; font-weight:700; margin-top:4px; }
+  h1 b{ color:var(--gold-soft); }
+  .wrap{ position:relative; }
+  canvas#stage{ aspect-ratio:9/16; height:min(74svh, 74vw*16/9); width:auto; border-radius:16px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(196,163,79,.14); background:#000; display:block; }
+  .rectag{ position:absolute; top:14px; left:14px; display:none; align-items:center; gap:8px; z-index:2;
+    background:rgba(0,0,0,.55); padding:6px 12px; border-radius:20px; font-size:13px; font-weight:700; letter-spacing:.05em; }
+  .rectag.on{ display:flex; } .rectag .dot{ width:11px; height:11px; border-radius:50%; background:#e5484d; animation:blink 1s infinite; }
+  @keyframes blink{ 50%{ opacity:.25; } }
+  .controls{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:560px; }
+  button{ appearance:none; border:1px solid var(--line); background:var(--panel); color:#f4f1ea; font:inherit;
+    font-weight:700; font-size:15px; padding:12px 20px; border-radius:11px; cursor:pointer; }
+  button:hover:not(:disabled){ border-color:var(--gold); color:var(--gold); }
+  button:disabled{ opacity:.4; cursor:not-allowed; }
+  button.primary{ background:var(--gold); color:#0b0b0d; border-color:var(--gold); }
+  button.rec{ background:#e5484d; color:#fff; border-color:#e5484d; }
+  .row{ display:flex; gap:10px; align-items:center; }
+  .hint{ font-size:13px; color:#6f6a5f; letter-spacing:.04em; text-align:center; max-width:560px; line-height:1.5; }
+  .hint b{ color:var(--gold-soft); }
+  a.dl{ text-decoration:none; }
+  #beatlabel{ font-size:13px; color:#8f8a7e; font-weight:700; min-width:64px; text-align:center; }
+  video{ display:none; }
+</style>
+</head>
+<body>
+  <h1>Vibrantix <b>Reel Recorder</b></h1>
+  <div class="wrap">
+    <canvas id="stage" width="1080" height="1920"></canvas>
+    <div class="rectag" id="rectag"><span class="dot"></span><span id="timer">0:00</span></div>
+  </div>
+
+  <div class="controls">
+    <button class="primary" id="enable">Enable camera &amp; mic</button>
+    <div class="row">
+      <button id="prev" disabled>&larr; Prev</button>
+      <span id="beatlabel">1 / 9</span>
+      <button id="next" disabled>Next &rarr;</button>
+    </div>
+    <button class="rec" id="record" disabled>&#9679; Record</button>
+    <button id="stop" disabled>&#9632; Stop</button>
+    <a class="dl" id="download" style="display:none"><button class="primary">&darr; Download reel</button></a>
+  </div>
+  <div class="hint">
+    1. Enable camera &amp; mic. 2. Hit <b>Record</b>. 3. Advance the board with <b>Next</b> (or the &rarr; key) while you talk.
+    4. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.
+  </div>
+  <video id="cam" playsinline muted></video>
+
+<script>
+(function(){
+  var W=1080, H=1920, camH=Math.round(H*0.42);           // camera = top 42%
+  var canvas=document.getElementById('stage'), ctx=canvas.getContext('2d');
+  var cam=document.getElementById('cam');
+  var G='#C4A34F', GS='#dcc07d', INK='#f4f1ea', MUT='#c6c1b5';
+
+  var beats=[
+    {eb:'THE METRIC NOBODY TRACKS', t:'Your best ad might be losing you money.', b:'A cheaper ad can cost you MORE per registration. Here is the number that tells you.'},
+    {eb:'THE TRAP', t:'Cost per lead is a vanity metric.', b:'Cheap clicks feel great. But a click is not a registration, and a registration is not a buyer.'},
+    {eb:'THE NUMBER THAT MATTERS', t:'Cost per registration', b:'= ad spend / page conversion. Your ad can be brilliant and this still awful, because the page is where it leaks.'},
+    {eb:'EXAMPLE  ·  SAME BUDGET', kind:'compare'},
+    {eb:'LEVER 1', t:'Test the page, not just the ad.', b:'Run 3 to 5 registration pages against the same traffic. Keep the winner. Almost no coach does this.'},
+    {eb:'LEVER 2', t:'Then test the ads on the winning page.', b:'Now every new ad competes on a page that already converts. Two wins stacked, not one.'},
+    {eb:'THE REAL GOAL', t:'Volume is not the win. Qualified is.', b:'Track cost per qualified registration, the ones who fit your buyer, not the cheapest opt-ins.'},
+    {eb:'BUILD THE ANALYTICS', t:'Track every step, per version.', b:'Ad, page, registration, qualified, call. If you cannot see where it leaks, you cannot fix it.'},
+    {eb:'', kind:'final', t:'Best page x best ad x qualified tracking.', b:'Same budget, cheaper registrations, higher intent. Comment "PAGES" for the full teardown.'}
+  ];
+  var i=0, trans=0, from=0, animating=false;
+
+  function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function wrap(text,font,maxw){ ctx.font=font; var words=text.split(' '), lines=[], line='';
+    for(var k=0;k<words.length;k++){ var test=line?line+' '+words[k]:words[k];
+      if(ctx.measureText(test).width>maxw && line){ lines.push(line); line=words[k]; } else line=test; }
+    if(line) lines.push(line); return lines; }
+
+  // draw one beat card into the board region, vertically centered, with vertical offset dy (for slide)
+  function drawBeat(beat, dy){
+    var pad=64, x=pad, w=W-pad*2, top=camH, regH=H-camH;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, top, W, regH); ctx.clip();       // clip to board region
+    // measure content to center it
+    var blocks=[]; var titleFont='800 62px '+"system-ui,sans-serif"; var bodyFont='500 34px '+"system-ui,sans-serif";
+    if(beat.eb){ blocks.push({type:'eb', h:44}); }
+    if(beat.kind==='compare'){ blocks.push({type:'compare', h:430}); }
+    else if(beat.kind==='formula'){
+      var tl=wrap(beat.t, titleFont, w-72); blocks.push({type:'title', lines:tl, h:tl.length*66+8});
+      var bl=wrap(beat.b, bodyFont, w-72); blocks.push({type:'body', lines:bl, h:bl.length*46+30});
+    } else {
+      var tl2=wrap(beat.t, titleFont, w-72); blocks.push({type:'title', lines:tl2, h:tl2.length*66+8});
+      var bl2=wrap(beat.b, bodyFont, w-72); blocks.push({type:'body', lines:bl2, h:bl2.length*46+30});
+    }
+    var totalH=0; for(var b0=0;b0<blocks.length;b0++) totalH+=blocks[b0].h;
+    var cardPadV=56, cardH=totalH+cardPadV*2;
+    var cy=top+(regH-cardH)/2+dy, cx=x;
+    // card bg
+    var fin=beat.kind==='final';
+    ctx.fillStyle=fin?'rgba(196,163,79,.10)':'#111116';
+    rr(cx,cy,w,cardH,22); ctx.fill();
+    ctx.lineWidth=fin?3:1.5; ctx.strokeStyle=fin?G:'rgba(196,163,79,.34)'; rr(cx,cy,w,cardH,22); ctx.stroke();
+    // content
+    var yy=cy+cardPadV, ix=cx+40, iw=w-80;
+    for(var bi=0;bi<blocks.length;bi++){ var blk=blocks[bi];
+      if(blk.type==='eb'){ ctx.font='700 26px system-ui,sans-serif'; ctx.fillStyle=G; ctx.textBaseline='top';
+        ctx.fillText(spaced(beat.eb), ix, yy); yy+=blk.h; }
+      else if(blk.type==='title'){ ctx.font='800 62px system-ui,sans-serif'; ctx.fillStyle=fin?INK:INK; ctx.textBaseline='top';
+        for(var l=0;l<blk.lines.length;l++){ ctx.fillText(blk.lines[l], ix, yy); yy+=66; } yy+=8; }
+      else if(blk.type==='body'){ ctx.font='500 34px system-ui,sans-serif'; ctx.fillStyle=MUT; ctx.textBaseline='top';
+        yy+=22; for(var m=0;m<blk.lines.length;m++){ ctx.fillText(blk.lines[m], ix, yy); yy+=46; } }
+      else if(blk.type==='compare'){ drawCompare(ix, yy, iw); yy+=blk.h; }
+    }
+    ctx.restore();
+  }
+  function spaced(s){ return s.split('').join(' '); } // light letter-spacing for eyebrow
+
+  function drawCompare(x,y,w){
+    var gap=24, cw=(w-gap)/2, ch=390;
+    var cols=[ {h:'Ad A  —  cheap', a:'$2.00 / click', p:'page opts in 15%', r:'$13 / registration', win:false},
+               {h:'Ad B  —  pricey', a:'$4.00 / click', p:'page opts in 40%', r:'$10 / registration', win:true} ];
+    for(var c=0;c<2;c++){ var col=cols[c], cx=x+c*(cw+gap);
+      ctx.fillStyle=col.win?'rgba(196,163,79,.12)':'rgba(255,255,255,.04)';
+      rr(cx,y,cw,ch,16); ctx.fill();
+      ctx.lineWidth=1.5; ctx.strokeStyle=col.win?G:'rgba(255,255,255,.10)'; rr(cx,y,cw,ch,16); ctx.stroke();
+      var px=cx+26, py=y+30;
+      ctx.font='800 30px system-ui,sans-serif'; ctx.fillStyle=INK; ctx.textBaseline='top'; ctx.fillText(col.h,px,py); py+=64;
+      ctx.font='500 28px system-ui,sans-serif'; ctx.fillStyle=MUT; ctx.fillText(col.a,px,py); py+=44; ctx.fillText(col.p,px,py); py+=70;
+      ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(cx+cw-26,py); ctx.stroke(); py+=22;
+      ctx.font='900 34px system-ui,sans-serif'; ctx.fillStyle=col.win?G:'#fff'; ctx.fillText(col.r,px,py);
+    }
+    ctx.font='600 30px system-ui,sans-serif'; ctx.fillStyle=MUT; ctx.textBaseline='top';
+    var tl=wrap('The "expensive" ad is cheaper where it counts. The page did that.','600 30px system-ui,sans-serif',w);
+    var ty=y+ch+24; for(var t=0;t<tl.length;t++){ ctx.fillText(tl[t],x,ty); ty+=40; }
+  }
+
+  function drawCamera(){
+    var r=camH/W; // region aspect
+    if(cam.videoWidth){
+      var vw=cam.videoWidth, vh=cam.videoHeight, tr=W/camH, vr=vw/vh, sw,sh,sx,sy;
+      if(vr>tr){ sh=vh; sw=vh*tr; sx=(vw-sw)/2; sy=0; } else { sw=vw; sh=vw/tr; sx=0; sy=(vh-sh)/2; }
+      ctx.save(); ctx.translate(W,0); ctx.scale(-1,1);   // mirror (selfie)
+      ctx.drawImage(cam, sx,sy,sw,sh, 0,0,W,camH); ctx.restore();
+    } else {
+      ctx.fillStyle='#0d0d10'; ctx.fillRect(0,0,W,camH);
+      ctx.fillStyle='rgba(255,255,255,.18)'; ctx.font='700 34px system-ui,sans-serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('YOUR CAMERA', W/2, camH/2); ctx.textAlign='left';
+    }
+    // divider
+    ctx.fillStyle='rgba(196,163,79,.4)'; ctx.fillRect(0,camH-2,W,2);
+  }
+
+  function frame(){
+    // board bg
+    ctx.fillStyle='#0a0a0d'; ctx.fillRect(0,camH,W,H-camH);
+    // subtle grid
+    ctx.strokeStyle='rgba(255,255,255,.035)'; ctx.lineWidth=1;
+    for(var gx=0;gx<W;gx+=54){ ctx.beginPath(); ctx.moveTo(gx,camH); ctx.lineTo(gx,H); ctx.stroke(); }
+    for(var gy=camH;gy<H;gy+=54){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+    if(animating){
+      var e=trans<0.5?2*trans*trans:1-Math.pow(-2*trans+2,2)/2; // easeInOut
+      drawBeat(beats[from], -e*(H-camH));      // outgoing slides up
+      drawBeat(beats[i], (1-e)*(H-camH));      // incoming from below
+    } else { drawBeat(beats[i], 0); }
+    drawCamera();
+    // brand
+    ctx.fillStyle='rgba(143,138,126,.8)'; ctx.font='700 22px system-ui,sans-serif'; ctx.textBaseline='alphabetic';
+    ctx.fillText(spaced('VIBRANTIX'), 60, H-40);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // animate transition
+  function go(to){ if(animating||to<0||to>=beats.length||to===i) return; from=i; i=to; trans=0; animating=true;
+    var start=null; function step(ts){ if(!start)start=ts; trans=Math.min(1,(ts-start)/520);
+      if(trans>=1){ animating=false; } else requestAnimationFrame(step); }
+    requestAnimationFrame(step); updateLabel(); }
+  function updateLabel(){ document.getElementById('beatlabel').textContent=(i+1)+' / '+beats.length;
+    document.getElementById('prev').disabled=(i===0); document.getElementById('next').disabled=(i===beats.length-1); }
+
+  document.getElementById('next').onclick=function(){ go(i+1); };
+  document.getElementById('prev').onclick=function(){ go(i-1); };
+  window.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);} if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);} });
+
+  // camera
+  var stream=null;
+  document.getElementById('enable').onclick=async function(){
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720},facingMode:'user'},audio:true});
+      cam.srcObject=stream; await cam.play();
+      document.getElementById('enable').textContent='Camera on';
+      document.getElementById('enable').disabled=true;
+      document.getElementById('record').disabled=false;
+      document.getElementById('next').disabled=false;
+      updateLabel();
+    }catch(err){ alert('Camera/mic blocked: '+err.message+'\nAllow access and reload. (Must be on https or localhost.)'); }
+  };
+
+  // recording
+  var mr=null, chunks=[], t0=0, timerInt=null;
+  function pickMime(){ var c=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm']; for(var k=0;k<c.length;k++){ if(window.MediaRecorder&&MediaRecorder.isTypeSupported(c[k])) return c[k]; } return ''; }
+  document.getElementById('record').onclick=function(){
+    if(!stream) return; chunks=[];
+    var out=canvas.captureStream(30);
+    stream.getAudioTracks().forEach(function(tr){ out.addTrack(tr); });
+    var mime=pickMime();
+    try{ mr=new MediaRecorder(out, mime?{mimeType:mime,videoBitsPerSecond:6000000}:undefined); }
+    catch(e){ alert('Recording not supported in this browser: '+e.message); return; }
+    mr.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+    mr.onstop=function(){ var blob=new Blob(chunks,{type:'video/webm'});
+      var url=URL.createObjectURL(blob); var a=document.getElementById('download');
+      a.href=url; a.download='vibrantix-reel.webm'; a.style.display='inline-block'; };
+    mr.start();
+    document.getElementById('record').disabled=true; document.getElementById('stop').disabled=false;
+    document.getElementById('rectag').classList.add('on'); document.getElementById('download').style.display='none';
+    t0=Date.now(); timerInt=setInterval(function(){ var s=Math.floor((Date.now()-t0)/1000);
+      document.getElementById('timer').textContent=Math.floor(s/60)+':'+('0'+(s%60)).slice(-2); },500);
+  };
+  document.getElementById('stop').onclick=function(){ if(mr&&mr.state!=='inactive') mr.stop();
+    clearInterval(timerInt); document.getElementById('rectag').classList.remove('on');
+    document.getElementById('record').disabled=false; document.getElementById('stop').disabled=true; };
+})();
+</script>
+</body>
+</html>
