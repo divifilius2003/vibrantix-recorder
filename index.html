@@ -43,6 +43,10 @@
 
   <div class="controls">
     <button class="primary" id="enable">Enable camera &amp; mic</button>
+    <div class="row" style="margin-bottom:2px">
+      <label for="boardsel" style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:700">Board</label>
+      <select id="boardsel" style="background:#141418;color:#f4f1ea;border:1px solid #33312c;border-radius:9px;padding:8px 11px;font:inherit;font-size:14px;font-weight:600"></select>
+    </div>
     <div class="row">
       <button id="prev" disabled>&larr; Prev</button>
       <span id="beatlabel">1 / 9</span>
@@ -65,17 +69,61 @@
   var cam=document.getElementById('cam');
   var G='#C4A34F', GS='#dcc07d', INK='#f4f1ea', MUT='#c6c1b5';
 
-  var beats=[
-    {eb:'THE METRIC NOBODY TRACKS', t:'Your best ad might be losing you money.', b:'A cheaper ad can cost you MORE per registration. Here is the number that tells you.'},
-    {eb:'THE TRAP', t:'Cost per lead is a vanity metric.', b:'Cheap clicks feel great. But a click is not a registration, and a registration is not a buyer.'},
-    {eb:'THE NUMBER THAT MATTERS', t:'Cost per registration', b:'= ad spend / page conversion. Your ad can be brilliant and this still awful, because the page is where it leaks.'},
-    {eb:'EXAMPLE  ·  SAME BUDGET', kind:'compare'},
-    {eb:'LEVER 1', t:'Test the page, not just the ad.', b:'Run 3 to 5 registration pages against the same traffic. Keep the winner. Almost no coach does this.'},
-    {eb:'LEVER 2', t:'Then test the ads on the winning page.', b:'Now every new ad competes on a page that already converts. Two wins stacked, not one.'},
-    {eb:'THE REAL GOAL', t:'Volume is not the win. Qualified is.', b:'Track cost per qualified registration, the ones who fit your buyer, not the cheapest opt-ins.'},
-    {eb:'BUILD THE ANALYTICS', t:'Track every step, per version.', b:'Ad, page, registration, qualified, call. If you cannot see where it leaks, you cannot fix it.'},
-    {eb:'', kind:'final', t:'Best page x best ad x qualified tracking.', b:'Same budget, cheaper registrations, higher intent. Comment "PAGES" for the full teardown.'}
-  ];
+  // ---------------------------------------------------------------
+  // BOARD LIBRARY.  Every board obeys one rule: NO EXHIBIT, NO VIDEO.
+  // Beat 1 must put something checkable on screen, with a date.
+  // Load a specific board with ?b=<slug>.
+  // ---------------------------------------------------------------
+  var BOARDS = {
+    '951-days': {
+      name: '951 days · the ad that never stopped',
+      beats: [
+        {eb:'EXHIBIT A · META AD LIBRARY', t:'This ad has been running for 951 days.', b:'Alejandro Reyes, "Automated Client Engine." Checked 26 Aug 2026. You can pull it up yourself in ninety seconds.'},
+        {eb:'WHAT THAT MEANS', t:'Nobody funds a losing ad for 951 days.', b:'Two and a half years of continuous spend is not taste, and it is not luck. It is a profitable ad, and it is public.'},
+        {eb:'SO WHAT IS IT DOING', t:'Three moves. That is the whole thing.', b:'Every ad still running after a year in this market makes the same three. Almost no coach makes any of them.'},
+        {eb:'MOVE 1', t:'It names the enemy as the thing you already do.', b:'Not a competitor. Not your discipline. The mechanism you are grinding right now.'},
+        {eb:'MOVE 2', t:'It sells a flat line, not a bigger number.', b:'Predictability outsells size to anyone who has already had one great month and one that scared them.'},
+        {eb:'MOVE 3', t:'It owns one named mechanism.', b:'Same words, every ad, 951 days straight. He is sick of them. That is the job, not a problem with it.'},
+        {eb:'THE PART EVERYONE MISSES', t:'A name is not evidence.', b:'951 days proves the ad works. It says nothing about whether the thing behind it works. The market treats those as the same claim. They are not.'},
+        {eb:'WHAT I WOULD CHANGE', t:'Put the receipt inside the ad.', b:'One dated client number beats a named system. Nobody in this entire set does it, which is exactly why it is still available.'},
+        {eb:'', kind:'final', t:'Run this check on your own market.', b:'I pulled every coach ad live 30+ days across five niches. Comment SCOUT and I will send you yours.'}
+      ]
+    },
+
+    'jaap-pnl': {
+      name: 'The 9-day P&L, line by line',
+      beats: [
+        {eb:'EXHIBIT A · ONE CLIENT, ONE WEBINAR', t:'$5,700 of ad spend. Nine days.', b:'A Dutch relationship coach, July 2026. Here is the whole thing, line by line. Check my math as I go.'},
+        {eb:'THE SPEND', t:'€5,050. That is the entire media budget.', b:'No agency retainer stacked on top for this number. One webinar, one audience, one offer.'},
+        {eb:'THE TOP', t:'Around 190 registrations.', b:'Not a big number. It was never supposed to be. Cheap volume is what kills these launches.'},
+        {eb:'THE MIDDLE', t:'16 calls booked. 6 closed.', b:'A 37% close rate on calls. That is the number that actually moved, and it moved because of who registered, not how many.'},
+        {eb:'THE HONEST SPLIT', t:'~$59k collected. ~$100k contracted.', b:'Those are two different numbers and most people quote the bigger one and call it revenue. Contracted includes payment-plan balances not yet paid.'},
+        {eb:'WHY IT WORKED', t:'The offer matched who was in the room.', b:'Every failed launch I have run failed the same way: the traffic, the message and the price were selling to three different people.'},
+        {eb:'WHAT I WILL NOT CLAIM', t:'This is one launch, not a guarantee.', b:'I have also run a webinar where 75% of the room watched two full hours and nobody bought. Same build, wrong buyer.'},
+        {eb:'THE ACTUAL LESSON', t:'Fix who is in the room before anything else.', b:'Creative, pages and scripts are downstream. They cannot rescue a room full of people who cannot pay.'},
+        {eb:'', kind:'final', t:'That is the whole P&L.', b:'If your last launch spiked and died, it is almost never the funnel. Comment ROOM and I will show you where it actually leaked.'}
+      ]
+    },
+
+    'cost-per-qualified': {
+      name: 'Cost per qualified registration',
+      beats: [
+        {eb:'EXHIBIT A · TWO REAL CAMPAIGNS', t:'£2 a lead. £9 a lead. The £9 one made the money.', b:'Same offer, same month, same client. The cheap one is the one that lost.'},
+        {eb:'THE TRAP', t:'Cost per lead is a vanity metric.', b:'A click is not a registration. A registration is not a buyer. You are optimising the only number that does not pay you.'},
+        {eb:'WHAT META HEARD', t:'You asked for cheap. It obeyed.', b:'Optimise for clicks and the algorithm finds the people most likely to click and least likely to buy. It is doing its job perfectly.'},
+        {eb:'THE NUMBER THAT MATTERS', t:'Cost per QUALIFIED registration.', b:'Spend divided by the registrations that actually match your buyer. Not the cheapest opt-ins. The right ones.'},
+        {eb:'HOW YOU GET IT', t:'Ask two questions on the thank-you page.', b:'Revenue and situation. Only fire the conversion event for the ones who qualify. Now Meta is learning your buyer instead of your clicker.'},
+        {eb:'THE SECOND LEVER', t:'Test the page, not just the ad.', b:'Three to five registration pages against the same traffic. Almost nobody does this, so almost everybody is guessing.'},
+        {eb:'THEN, AND ONLY THEN', t:'Test ads on the page that already won.', b:'Every new ad now competes on a page that converts. Two wins stacked instead of one.'},
+        {eb:'WHAT THIS COSTS YOU', t:'A higher cost per lead. On purpose.', b:'Your CPL will get worse and your bank balance will get better. That trade is the entire game.'},
+        {eb:'', kind:'final', t:'Cheaper leads are not the goal. Buyers are.', b:'Comment QUALIFIED and I will send you the tracking setup, including the thank-you page questions.'}
+      ]
+    }
+  };
+
+  var _slug = (new URLSearchParams(location.search).get('b') || '951-days');
+  if(!BOARDS[_slug]) _slug = '951-days';
+  var beats = BOARDS[_slug].beats;
   var i=0, trans=0, from=0, animating=false;
 
   function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r);
@@ -186,6 +234,16 @@
     requestAnimationFrame(step); updateLabel(); }
   function updateLabel(){ document.getElementById('beatlabel').textContent=(i+1)+' / '+beats.length;
     document.getElementById('prev').disabled=(i===0); document.getElementById('next').disabled=(i===beats.length-1); }
+
+  // board picker
+  (function(){
+    var sel=document.getElementById('boardsel'); if(!sel) return;
+    Object.keys(BOARDS).forEach(function(k){
+      var o=document.createElement('option'); o.value=k; o.textContent=BOARDS[k].name;
+      if(k===_slug) o.selected=true; sel.appendChild(o);
+    });
+    sel.addEventListener('change', function(){ location.search='?b='+sel.value; });
+  })();
 
   document.getElementById('next').onclick=function(){ go(i+1); };
   document.getElementById('prev').onclick=function(){ go(i-1); };
