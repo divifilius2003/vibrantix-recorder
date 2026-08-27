@@ -90,6 +90,66 @@
       ]
     },
 
+    'optin-testing': {
+      name: 'Opt-in testing · you are testing the wrong layer',
+      beats: [
+        {eb:'EXHIBIT A · TWO REGISTRATION PAGES', t:'Same offer. One made five times more buyers.', b:'Two workshops for the same client, 2026. Same webinar, same closer, same price. Only the registration page changed.'},
+        {eb:'THE NUMBER', t:'0.20% of registrants bought. Then 1.01% did.', b:'Registration to buyer. Five times better, on a page that most people would have called a failure.'},
+        {eb:'WHAT DID NOT CHANGE', t:'Not the design. Not the button. Not the headline promise.', b:'Every element the average A/B test obsesses over stayed exactly where it was.'},
+        {eb:'WHAT DID CHANGE', t:'Three things that filter, not persuade.', b:'A qualifying line above the headline. A two-step form. One qualifying question. That is the entire test.'},
+        {eb:'THE REFRAME', t:'The page is not there to convert more people.', b:'It is there to convert fewer, better ones. Every unqualified opt-in costs you a call slot, a follow-up sequence, and a closer hour.'},
+        {eb:'THE ORDER THAT MATTERS', t:'Who you send. What you promise. Who you exclude.', b:'Then form friction. Then everything else. Button colour is not on this list and never was.'},
+        {eb:'THE TRAP', t:'The winning page got FEWER registrations.', b:'On a cost-per-lead dashboard this test looks like a loss. That is why almost nobody keeps the winner.'},
+        {eb:'WHAT I WILL NOT PRETEND', t:'That launch still underperformed.', b:'The page fix was real and it was not enough, because the media buy underneath it was broken. A better page cannot rescue the wrong traffic.'},
+        {eb:'', kind:'final', t:'Test the filter, not the font.', b:'Comment OPTIN and I will send you the five registration-page variants we run, plus the exact qualifying question.'}
+      ]
+    },
+
+    'tracking': {
+      name: 'Tracking · you cannot tell which ad made you money',
+      beats: [
+        {eb:'EXHIBIT A · ONE REAL LAUNCH', t:'3,498 registrations. Seven sales.', b:'A client launch, 2026. The ads dashboard looked healthy for the entire campaign.'},
+        {eb:'WHY NOBODY CAUGHT IT', t:'Every number the platform showed was fine.', b:'Cost per registration was good. That is the last number Meta can see, and the whole problem happens after it.'},
+        {eb:'THE REAL CHAIN', t:'Eight steps. Meta sees three.', b:'Ad, click, opt-in, qualified, booked, held, offered, closed. You are optimising the first three and getting paid on the last one.'},
+        {eb:'WHERE IT ACTUALLY LEAKED', t:'85.6% never showed up. Then 86.1% never booked.', b:'Both of those happen entirely outside the ad platform. No creative test would ever have found them.'},
+        {eb:'FIX 1 · CARRY THE SOURCE', t:'A dynamic UTM on every ad, stored with the lead.', b:'Now every booked call and every close traces back to the exact creative that produced it. Most setups lose this at the form.'},
+        {eb:'FIX 2 · TEACH THE ALGORITHM', t:'Only fire the conversion event for QUALIFIED opt-ins.', b:'Ask two questions on the thank-you page. Now Meta is learning what your buyer looks like instead of what a clicker looks like.'},
+        {eb:'FIX 3 · ONE PAGE, WHOLE CHAIN', t:'Per ad. Not per platform.', b:'Registrations, qualified, showed, booked, held, closed. If you cannot see the step, you cannot fix the step.'},
+        {eb:'WHAT CHANGES', t:'You stop buying leads and start buying calls.', b:'Cost per lead will get worse. Cost per booked call gets better. That trade is the entire game.'},
+        {eb:'', kind:'final', t:'You are not short on leads. You are blind after the click.', b:'Comment TRACK and I will send the UTM string, the two qualifying questions, and the dashboard spec.'}
+      ]
+    },
+
+    'no-offer': {
+      name: '47% · half your calls never get an offer',
+      beats: [
+        {eb:'EXHIBIT A · 889 SALES CALLS', t:'I read every call one client took in two and a half years.', b:'889 booked, 585 held, 531 with real notes. Apr 2024 to Aug 2026. Here is the thing nobody expected.'},
+        {eb:'THE NUMBER', t:'47% of held calls never got an offer.', b:'224 out of 479. The closer never pitched. Not lost on price, not lost on timing. Never asked.'},
+        {eb:'THE ASSUMPTION', t:'Everyone blames the closer.', b:'So did I, for about an hour. Then I ran the other number.'},
+        {eb:'THE OTHER NUMBER', t:'Close rate per OFFER: 32.7%.', b:'That is normal to good for a five-figure offer. When he pitched, he closed. The closing was never the problem.'},
+        {eb:'SO WHERE IS THE LEAK', t:'The offer rate, not the close rate.', b:'And 39% of the no-offers were people who genuinely could not afford it. That is a lead problem, decided long before the call.'},
+        {eb:'WHAT IT COSTS', t:'Roughly 66 hours of closer time on people who could never buy.', b:'Every one of those slots displaced someone who could. That is the real bill, and it never appears on any dashboard.'},
+        {eb:'THE ONE THAT SURPRISED ME', t:'Mention a payment plan and the close rate triples.', b:'18.6% overall. 56% on the calls where a payment mechanism came up. Right now it gets improvised at the end of a losing call.'},
+        {eb:'THE UNCOMFORTABLE ONE', t:'A "value" objection closes at 15%. The worst of all.', b:'If someone does not see the value on the call, the webinar failed. That one is on me, not the closer.'},
+        {eb:'', kind:'final', t:'Fix who gets on the call before you fix the pitch.', b:'Comment CALLS and I will send the full objection breakdown and what we now brief closers with.'}
+      ]
+    },
+
+    'show-up': {
+      name: 'Show-up beats closing',
+      beats: [
+        {eb:'EXHIBIT A · ONE LAUNCH, RE-RUN ON PAPER', t:'Seven closes could have been about thirty.', b:'Same traffic. Same closer. Same offer. Nothing about the pitch changes in this maths.'},
+        {eb:'THE LEAK TABLE', t:'Registration to live: 85.6% lost.', b:'Live to booked call: 86.1% lost. Booked to held: 70% lost. Those are the three biggest, in order.'},
+        {eb:'THE PART THAT MATTERS', t:'All three happen before the closer speaks.', b:'Everyone spends their money on the pitch. The pitch is the fifth-biggest hole in the bucket.'},
+        {eb:'RUN THE NUMBERS', t:'Show-up 14.4% to 25% is worth +5.2 closes.', b:'On the same traffic. Nothing else changes.'},
+        {eb:'NOW THE PITCH', t:'Close rate 58% to 65% is worth +0.8 closes.', b:'Improving show-up is worth roughly three times improving the close rate. Nobody sells you the show-up fix, because it is boring.'},
+        {eb:'AND THEY MULTIPLY', t:'Fix show-up, held rate and offer rate together.', b:'Seven closes becomes about thirty. Same spend, same closer, same webinar.'},
+        {eb:'WHAT THE FIX ACTUALLY IS', t:'A show-up stack. Not a better slide.', b:'Reminder sequence, a send five minutes before, a day-of message, and a no-show chase that runs the same day.'},
+        {eb:'WHY IT IS IGNORED', t:'It is unglamorous and it is not a secret.', b:'Which is exactly why it is still available to you.'},
+        {eb:'', kind:'final', t:'Nobody is missing a better pitch. They are missing the room.', b:'Comment SHOWUP and I will send the full show-up stack, timings included.'}
+      ]
+    },
+
     'jaap-pnl': {
       name: 'The 9-day P&L, line by line',
       beats: [
