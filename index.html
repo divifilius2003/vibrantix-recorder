@@ -32,6 +32,13 @@
   a.dl{ text-decoration:none; }
   #beatlabel{ font-size:13px; color:#8f8a7e; font-weight:700; min-width:64px; text-align:center; }
   video{ display:none; }
+  .scriptbox{ max-width:820px; margin:22px auto 0; background:#101015; border:1px solid #2a2822;
+    border-radius:14px; padding:18px 22px; text-align:left; }
+  .scriptbox .slab{ font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:#8d887d;
+    font-weight:700; margin-bottom:9px; }
+  .scriptbox p{ font-size:19px; line-height:1.55; color:#f4f1ea; font-weight:500; margin:0; }
+  .scriptbox:empty{ display:none; }
+
 </style>
 </head>
 <body>
@@ -60,6 +67,11 @@
     1. Enable camera &amp; mic. 2. Hit <b>Record</b>. 3. Advance the board with <b>Next</b> (or the &rarr; key) while you talk.
     4. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.
   </div>
+  <div class="scriptbox" id="scriptbox">
+    <div class="slab">Say this <span id="scriptnum"></span></div>
+    <p id="scripttext"></p>
+  </div>
+
   <video id="cam" playsinline muted></video>
 
 <script>
@@ -87,6 +99,38 @@
         {eb:'THE PART EVERYONE MISSES', t:'A name is not evidence.', b:'951 days proves the ad works. It says nothing about whether the thing behind it works. The market treats those as the same claim. They are not.'},
         {eb:'WHAT I WOULD CHANGE', t:'Put the receipt inside the ad.', b:'One dated client number beats a named system. Nobody in this entire set does it, which is exactly why it is still available.'},
         {eb:'', kind:'final', t:'Run this check on your own market.', b:'I pulled every coach ad live 30+ days across five niches. Comment SCOUT and I will send you yours.'}
+      ]
+    },
+
+    'optin-369': {
+      name: '36.9% opt-in · the line that repels',
+      beats: [
+        {eb:'EXHIBIT A · COLD PAID TRAFFIC', t:'1,753 views. 647 sign-ups. 36.9%.', b:'One registration page, paid traffic, people who had never heard of him. It beat every other page we had run.',
+         s:"Thirty six point nine percent of people who hit this page signed up. Cold traffic, paid ads, never heard of him. And what did it is one line most people would tell you to delete."},
+
+        {eb:'THE LINE', t:'"For women 35+ with a cupboard full of supplements they can\u2019t even remember buying."', b:'That sits above the headline. Its entire job is to make some people leave.',
+         s:"This line. For women thirty five plus with a cupboard full of supplements they can't even remember buying. Its whole job is to put people off."},
+
+        {eb:'WHAT HAPPENED', t:'34.96% \u2192 36.9%. And buyers went up 5x.', b:'The opt-in rate went UP. Registrants who became buyers went from 0.20% to 1.01%.',
+         s:"It didn't cost us anything. Thirty four point nine, up to thirty six point nine. And registrants who turned into buyers went up five times."},
+
+        {eb:'WHY IT WORKS', t:'A page that repels the wrong person reads as specific to the right one.', b:'She thinks: that is me. He is describing my cupboard.',
+         s:"A page that repels the wrong person reads as specific to the right one. She thinks, that's me, he's describing my cupboard."},
+
+        {eb:'THE TEST RUNNING NOW', t:'Four headlines. One hypothesis each.', b:'Control. The money she has already spent. Identity. One very specific physical pain.',
+         s:"So now we're testing four headlines. Control. The money she's already spent. Identity. And one very specific, slightly undignified pain."},
+
+        {eb:'THE MISTAKE WE ALREADY MADE', t:'We changed two things at once. 10,500 views, no answer.', b:'Headline and video-on-or-off, tested together. Six cells, null result.',
+         s:"Last time, we changed the headline and the video at the same time. Six versions, no answer, ten and a half thousand views gone. Change one thing."},
+
+        {eb:'THE TRACKING', t:'Every sign-up carries the ad that brought them.', b:'UTM on the ad, stored on the row. Then step two asks their situation.',
+         s:"Every sign-up carries the ad that brought them. Then step two asks their situation. So we're not asking which ad is cheapest. We're asking which one brings people who can afford it."},
+
+        {eb:'THE READ RULE', t:'Only call a winner on a gap of 5 points or more.', b:'1,500 views per arm. The margin on the difference is about 3 points either way.',
+         s:"Fifteen hundred views a version. The margin on the difference is about three points. So we only call a winner at five or more. Most people call it at two. That's noise."},
+
+        {eb:'', kind:'final', t:'I will post the result either way.', b:'Including if the control wins. Comment PROMPT for the four headlines, the tracking string, and the dashboard prompt.',
+         s:"I'll post the result either way, including if the control wins. Comment PROMPT for the four headlines, the tracking string, and the dashboard prompt."}
       ]
     },
 
@@ -292,7 +336,11 @@
     var start=null; function step(ts){ if(!start)start=ts; trans=Math.min(1,(ts-start)/520);
       if(trans>=1){ animating=false; } else requestAnimationFrame(step); }
     requestAnimationFrame(step); updateLabel(); }
-  function updateLabel(){ document.getElementById('beatlabel').textContent=(i+1)+' / '+beats.length;
+  function updateLabel(){
+    var sb=document.getElementById('scripttext'), sn=document.getElementById('scriptnum');
+    if(sb){ var bt=beats[i]; sb.textContent = bt && bt.s ? bt.s : '(no script for this beat)';
+      if(sn) sn.textContent = '· beat '+(i+1)+' of '+beats.length; }
+ document.getElementById('beatlabel').textContent=(i+1)+' / '+beats.length;
     document.getElementById('prev').disabled=(i===0); document.getElementById('next').disabled=(i===beats.length-1); }
 
   // board picker
@@ -304,6 +352,8 @@
     });
     sel.addEventListener('change', function(){ location.search='?b='+sel.value; });
   })();
+
+  updateLabel();   // populate the script panel on load, not just after camera-enable
 
   document.getElementById('next').onclick=function(){ go(i+1); };
   document.getElementById('prev').onclick=function(){ go(i-1); };
