@@ -102,6 +102,31 @@
       ]
     },
 
+    'analytics-page': {
+      name: 'The analytics page · scroll-through (SCREEN RECORD)',
+      screen: 'https://vibrantix-analytics.pages.dev/',
+      beats: [
+        {eb:'ON SCREEN · TOP OF PAGE', t:'The four stat tiles', b:'Cost per registration £5.18 vs £1.08.',
+         s:"This is a real launch. Two thousand pounds of ads, and the cost per registration went up four point eight times against the launch before it. Nobody could say why. So I built this."},
+        {eb:'ON SCREEN · SCROLL TO DECOMPOSITION', t:'"Where the 4.80x came from"', b:'Let the four bars animate in.',
+         s:"Four point eight times worse. But that's not one problem. It's four small ones multiplying together."},
+        {eb:'ON SCREEN · THE FOUR BARS', t:'Read them top to bottom', b:'1.71 / 1.12 / 1.32 / 1.90',
+         s:"Media cost up seventy percent. Click-through slightly down. Page conversion down a third. And then this one."},
+        {eb:'ON SCREEN · HOVER THE STEP 2 ROW', t:'The tooltip fires', b:'Biggest single contributor.',
+         s:"The step two gate. Nearly double. Biggest single contributor, and nobody had looked at it, because every dashboard in the stack stops at cost per lead."},
+        {eb:'ON SCREEN · SCROLL TO VARIANTS', t:'The four page versions', b:'Three dim bars, one gold.',
+         s:"Here's the page test. Four versions. Three of them broken, live for the first four days, eating a third of the paid traffic."},
+        {eb:'ON SCREEN · THE /13 ROW', t:'36.9% on cold traffic', b:'Hover it, the tooltip explains why.',
+         s:"The one that worked did thirty six point nine percent on cold traffic. If all the traffic had hit that page, it'd have been a one point four times lift for nothing."},
+        {eb:'ON SCREEN · SCROLL TO THE FUNNEL', t:'948 → 499 → 457', b:'The hatched blocks are people lost.',
+         s:"And this is the one that actually hurt. Nine hundred and forty eight people typed their name and email. Four hundred and forty four never answered the second question, so they were never registered."},
+        {eb:'ON SCREEN · THE FUNNEL NOTE', t:'46.8% never registered', b:'Our own SOP said not to do this.',
+         s:"Forty seven percent. Our own SOP says put the survey after registration. This build put it in front. That is the whole one point nine."},
+        {eb:'', kind:'final', t:'Comment PROMPT', b:'Scroll back to the top for the last line.',
+         s:"None of this is in Ads Manager. Hyros charges four hundred and fifty nine a month to get near it. Comment PROMPT and I'll send you the prompt that builds this page."}
+      ]
+    },
+
     'optin-369': {
       name: '36.9% opt-in · the line that repels',
       beats: [
@@ -354,6 +379,16 @@
   })();
 
   updateLabel();   // populate the script panel on load, not just after camera-enable
+
+  (function(){
+    var sc = BOARDS[_slug] && BOARDS[_slug].screen;
+    if(!sc) return;
+    var box=document.getElementById('scriptbox');
+    var d=document.createElement('div');
+    d.style.cssText='margin:0 0 14px;padding:11px 14px;border:1px solid rgba(196,163,79,.3);border-radius:10px;background:rgba(196,163,79,.07);font-size:14px';
+    d.innerHTML='<b style="color:#dcc07d">Screen-record this page:</b> <a href="'+sc+'" target="_blank" style="color:#dcc07d;font-weight:700">'+sc+'</a><br><span style="color:#8d887d">Share your screen instead of the board. The beats below are your scroll cues.</span>';
+    box.insertBefore(d, box.firstChild);
+  })();
 
   document.getElementById('next').onclick=function(){ go(i+1); };
   document.getElementById('prev').onclick=function(){ go(i-1); };
