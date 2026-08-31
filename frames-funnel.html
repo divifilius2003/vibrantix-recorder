@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Funnel board frames · 1080×1114</title>
+<style>
+  :root{
+    --gold:#C4A34F; --gold-soft:#dcc07d; --ink:#f4f1ea; --mut:#a8a296; --bg:#0c0c0f;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;font-family:var(--sans)}
+  .f{width:1080px;height:1114px;background:
+      radial-gradient(120% 70% at 50% 0%, rgba(196,163,79,.07), transparent 62%), var(--bg);
+    color:var(--ink);padding:60px 58px;display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden}
+  .eb{font-size:26px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:24px}
+  h1{font-size:100px;line-height:1.0;font-weight:800;letter-spacing:-.035em;text-wrap:balance}
+  h1.sm{font-size:76px}
+  h1 span{color:var(--gold)}
+  .sub{font-size:38px;line-height:1.38;color:var(--mut);font-weight:600;margin-top:28px}
+
+  /* funnel steps */
+  .fun{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .fs{display:flex;align-items:center;gap:20px;border:2px solid rgba(255,255,255,.09);border-radius:16px;
+    padding:22px 26px;background:rgba(255,255,255,.02)}
+  .fs.hi{border-color:rgba(196,163,79,.5);background:rgba(196,163,79,.09)}
+  .fs .ix{font-family:var(--mono);font-size:26px;font-weight:800;color:var(--gold);width:46px;flex:0 0 46px}
+  .fs .nm{font-size:36px;font-weight:700;flex:1}
+  .fs .vv{font-family:var(--mono);font-size:38px;font-weight:800;color:var(--gold-soft)}
+  .arw{text-align:center;font-size:26px;color:#55514a;line-height:.6;margin:-4px 0}
+
+  .shot{border-radius:18px;border:2px solid rgba(196,163,79,.32);overflow:hidden}
+  .shot img{display:block;width:100%}
+
+  ul.pts{list-style:none;display:flex;flex-direction:column;gap:22px;margin-top:10px}
+  ul.pts li{font-size:37px;line-height:1.3;font-weight:600;padding-left:42px;position:relative}
+  ul.pts li::before{content:"";position:absolute;left:0;top:15px;width:15px;height:15px;border-radius:50%;background:var(--gold)}
+  ul.pts li b{color:var(--gold-soft)}
+  ul.pts li small{display:block;font-size:28px;color:var(--mut);font-weight:600;margin-top:6px}
+
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px}
+  .box{border:2px solid rgba(255,255,255,.1);border-radius:18px;padding:28px 26px}
+  .box.on{border-color:rgba(196,163,79,.5);background:rgba(196,163,79,.08)}
+  .box.off{border-color:rgba(255,255,255,.12)}
+  .box .t{font-size:32px;font-weight:800;margin-bottom:12px}
+  .box .d{font-size:27px;line-height:1.4;color:var(--mut);font-weight:600}
+  .box .d b{color:var(--gold-soft)}
+
+  .q{border:2px solid rgba(196,163,79,.4);background:rgba(196,163,79,.07);border-radius:18px;
+    padding:32px 34px;margin-top:8px}
+  .q .lab{font-size:24px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:16px}
+  .q .qq{font-size:42px;font-weight:800;line-height:1.2}
+  .q .opts{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+  .q .opts span{font-family:var(--mono);font-size:28px;font-weight:700;padding:12px 20px;border-radius:10px;
+    border:2px solid rgba(255,255,255,.14);color:var(--mut)}
+  .q .opts span.win{border-color:var(--gold);color:#0c0c0f;background:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- g1 · the hook, in dollars -->
+<div class="f" id="g1">
+  <div class="eb">One webinar · nine days</div>
+  <h1>$5,700 in ads. <span>$100,000</span> back.</h1>
+  <div class="sub">Here is the exact funnel that did it.</div>
+</div>
+
+<!-- g2 · the whole funnel -->
+<div class="f" id="g2">
+  <div class="eb">The whole thing, five steps</div>
+  <div class="fun">
+    <div class="fs"><span class="ix">01</span><span class="nm">Meta ad</span><span class="vv">17 ads</span></div>
+    <div class="arw">▼</div>
+    <div class="fs hi"><span class="ix">02</span><span class="nm">Registration page</span><span class="vv">~190</span></div>
+    <div class="arw">▼</div>
+    <div class="fs"><span class="ix">03</span><span class="nm">Live webinar</span><span class="vv">90 min</span></div>
+    <div class="arw">▼</div>
+    <div class="fs"><span class="ix">04</span><span class="nm">Application &amp; call</span><span class="vv">16 held</span></div>
+    <div class="arw">▼</div>
+    <div class="fs hi"><span class="ix">05</span><span class="nm">Enrolment</span><span class="vv">6</span></div>
+  </div>
+</div>
+
+<!-- g3 · the real page -->
+<div class="f" id="g3">
+  <div class="eb">Step 2 · the registration page</div>
+  <div class="shot"><img src="img/optin-full.jpg" alt=""></div>
+</div>
+
+<!-- g4 · the structure of that page -->
+<div class="f" id="g4">
+  <div class="eb">Every page we test uses this order</div>
+  <ul class="pts">
+    <li><b>Qualifying line</b> above the headline<small>“for entrepreneurs already doing more than €10K a month”</small></li>
+    <li><b>The headline</b> names the real reason they are stuck</li>
+    <li><b>Three pillars</b>, so the mechanism has a shape</li>
+    <li><b>Date, time, location, price</b> in one row</li>
+    <li><b>One button</b>. Nothing else clickable.</li>
+  </ul>
+</div>
+
+<!-- g5 · the qualifying line does the work -->
+<div class="f" id="g5">
+  <div class="eb">The line most people would delete</div>
+  <div class="shot"><img src="img/optin-head.jpg" alt=""></div>
+  <div class="sub" style="font-size:36px">Its whole job is to make the wrong person leave.
+    <b style="color:var(--gold-soft)">It raised the opt-in rate, not lowered it.</b></div>
+</div>
+
+<!-- g6 · step one of the form -->
+<div class="f" id="g6">
+  <div class="eb">Form, step one</div>
+  <h1 class="sm">Name and email. <span>Nothing else.</span></h1>
+  <div class="sub">No phone number. Every extra field here costs you registrations, and you can collect it at booking instead.</div>
+</div>
+
+<!-- g7 · step two, the qualifier -->
+<div class="f" id="g7">
+  <div class="eb">Form, step two · after they are registered</div>
+  <div class="q">
+    <div class="lab">One question</div>
+    <div class="qq">What is your current monthly revenue?</div>
+    <div class="opts"><span>$0–3k</span><span>$3–8k</span><span class="win">$8–15k</span><span class="win">$15k+</span></div>
+  </div>
+  <div class="sub" style="font-size:34px">It goes <b style="color:var(--gold-soft)">after</b> the registration, never in front of it.
+    Gate the registration on this and you lose half of them.</div>
+</div>
+
+<!-- g8 · the thank you page routing -->
+<div class="f" id="g8">
+  <div class="eb">Thank-you page · two versions</div>
+  <div class="split2">
+    <div class="box on"><div class="t">Qualified</div>
+      <div class="d">Fires the conversion event. <b>Meta learns what your buyer looks like.</b> Community and game-day info here.</div></div>
+    <div class="box off"><div class="t">Everyone else</div>
+      <div class="d">Still registered, still welcome. <b>No event fires.</b> They do not get to teach the algorithm.</div></div>
+  </div>
+  <div class="sub" style="font-size:34px;margin-top:26px">This is the difference between buying leads and buying buyers.</div>
+</div>
+
+<!-- g9 · CTA -->
+<div class="f" id="g9">
+  <div class="eb">The whole build</div>
+  <h1 class="sm">Comment <span>FUNNEL</span></h1>
+  <div class="sub">I'll send the page structure, the two-step form spec and the thank-you routing.</div>
+</div>
+
+</body>
+</html>
