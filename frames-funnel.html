@@ -56,6 +56,17 @@
   .q .opts span{font-family:var(--mono);font-size:28px;font-weight:700;padding:12px 20px;border-radius:10px;
     border:2px solid rgba(255,255,255,.14);color:var(--mut)}
   .q .opts span.win{border-color:var(--gold);color:#0c0c0f;background:var(--gold)}
+
+  /* simplified architecture diagram, sized for the board */
+  .dg{display:flex;flex-direction:column;align-items:center;gap:0;margin-top:4px}
+  .dg .lvl{display:flex;gap:14px;justify-content:center;width:100%}
+  .dg .bx{border:3px solid rgba(196,163,79,.45);background:rgba(196,163,79,.08);border-radius:16px;
+    padding:20px 14px;text-align:center;flex:1}
+  .dg .bx.plain{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.03)}
+  .dg .bx .bt{font-size:30px;font-weight:800;line-height:1.15}
+  .dg .bx .bs{font-size:23px;color:var(--mut);font-weight:600;margin-top:7px;line-height:1.25}
+  .dg .cn{height:52px;width:100%;position:relative}
+  .dg .cn svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 </style>
 </head>
 <body>
@@ -64,22 +75,47 @@
 <div class="f" id="g1">
   <div class="eb">One webinar · nine days</div>
   <h1>$5,700 in ads. <span>$100,000</span> back.</h1>
-  <div class="sub">Here is the exact funnel that did it.</div>
+  <div class="sub">A 17.5&times; return on ad spend. Here is the exact funnel that did it.</div>
 </div>
 
-<!-- g2 · the whole funnel -->
-<div class="f" id="g2">
-  <div class="eb">The whole thing, five steps</div>
-  <div class="fun">
-    <div class="fs"><span class="ix">01</span><span class="nm">Meta ad</span><span class="vv">17 ads</span></div>
-    <div class="arw">▼</div>
-    <div class="fs hi"><span class="ix">02</span><span class="nm">Registration page</span><span class="vv">~190</span></div>
-    <div class="arw">▼</div>
-    <div class="fs"><span class="ix">03</span><span class="nm">Live webinar</span><span class="vv">90 min</span></div>
-    <div class="arw">▼</div>
-    <div class="fs"><span class="ix">04</span><span class="nm">Application &amp; call</span><span class="vv">16 held</span></div>
-    <div class="arw">▼</div>
-    <div class="fs hi"><span class="ix">05</span><span class="nm">Enrolment</span><span class="vv">6</span></div>
+<!-- g2 · the architecture, simplified for the board -->
+<div class="f" id="g2" style="padding:48px 44px">
+  <div class="eb">Every page behind it</div>
+  <div class="dg">
+    <div class="lvl">
+      <div class="bx"><div class="bt">A</div><div class="bs">winner</div></div>
+      <div class="bx plain"><div class="bt">B</div></div>
+      <div class="bx plain"><div class="bt">C</div></div>
+      <div class="bx plain"><div class="bt">D</div></div>
+    </div>
+    <div class="bs" style="font-size:24px;color:var(--gold);font-weight:800;letter-spacing:.14em;
+      text-transform:uppercase;margin-top:14px">4 opt-in pages, A/B tested</div>
+    <div class="cn"><svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="M12,0 C12,60 50,40 50,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+      <path d="M37,0 C37,60 50,40 50,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+      <path d="M63,0 C63,60 50,40 50,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+      <path d="M88,0 C88,60 50,40 50,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+    </svg></div>
+    <div class="lvl">
+      <div class="bx"><div class="bt">Two-step form</div>
+        <div class="bs">name + email, then one revenue question</div></div>
+    </div>
+    <div class="cn"><svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="M50,0 C50,55 26,45 26,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+      <path d="M50,0 C50,55 74,45 74,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+    </svg></div>
+    <div class="lvl">
+      <div class="bx"><div class="bt">Qualified</div><div class="bs">pixel fires</div></div>
+      <div class="bx plain"><div class="bt">Everyone else</div><div class="bs">no event</div></div>
+    </div>
+    <div class="cn"><svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="M26,0 C26,55 50,45 50,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+      <path d="M74,0 C74,55 50,45 50,100" stroke="#C4A34F" stroke-opacity=".5" stroke-width="1" fill="none"/>
+    </svg></div>
+    <div class="lvl">
+      <div class="bx"><div class="bt">Custom analytics page</div>
+        <div class="bs">opt-in rate per variant · cost per qualified · best ads</div></div>
+    </div>
   </div>
 </div>
 
@@ -112,8 +148,8 @@
 <!-- g6 · step one of the form -->
 <div class="f" id="g6">
   <div class="eb">Form, step one</div>
-  <h1 class="sm">Name and email. <span>Nothing else.</span></h1>
-  <div class="sub">No phone number. Every extra field here costs you registrations, and you can collect it at booking instead.</div>
+  <h1 class="sm">Name, email, <span>then it registers them.</span></h1>
+  <div class="sub">Keep it to what you will actually use. Every extra field on this step costs you registrations.</div>
 </div>
 
 <!-- g7 · step two, the qualifier -->
@@ -121,8 +157,8 @@
   <div class="eb">Form, step two · after they are registered</div>
   <div class="q">
     <div class="lab">One question</div>
-    <div class="qq">What is your current monthly revenue?</div>
-    <div class="opts"><span>$0–3k</span><span>$3–8k</span><span class="win">$8–15k</span><span class="win">$15k+</span></div>
+    <div class="qq">What's your current monthly revenue?<br><span style="font-size:28px;color:var(--mut);font-weight:600">(5 seconds)</span></div>
+    <div class="opts" style="flex-direction:column;gap:10px"><span>No business yet</span><span>Under €10K per month</span><span class="win">€10K to €50K</span><span class="win">€50K to €200K</span><span class="win">€200K+</span></div>
   </div>
   <div class="sub" style="font-size:34px">It goes <b style="color:var(--gold-soft)">after</b> the registration, never in front of it.
     Gate the registration on this and you lose half of them.</div>
@@ -144,7 +180,7 @@
 <div class="f" id="g9">
   <div class="eb">The whole build</div>
   <h1 class="sm">Comment <span>FUNNEL</span></h1>
-  <div class="sub">I'll send the page structure, the two-step form spec and the thank-you routing.</div>
+  <div class="sub">I'll send you our opt-in form SOPs: the page structure, the two-step spec and the thank-you routing.</div>
 </div>
 
 </body>
