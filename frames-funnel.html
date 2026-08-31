@@ -67,6 +67,41 @@
   .dg .bx .bs{font-size:23px;color:var(--mut);font-weight:600;margin-top:7px;line-height:1.25}
   .dg .cn{height:52px;width:100%;position:relative}
   .dg .cn svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+
+  .stack{display:flex;flex-direction:column;gap:13px;margin-top:6px}
+  .el{display:flex;align-items:center;gap:18px;border:2px solid rgba(255,255,255,.1);border-radius:14px;
+    padding:17px 22px;background:rgba(255,255,255,.02)}
+  .el.key{border-color:rgba(196,163,79,.5);background:rgba(196,163,79,.09)}
+  .el .i{font-family:var(--mono);font-size:22px;font-weight:800;color:var(--gold);width:38px;flex:0 0 38px}
+  .el .n{font-size:31px;font-weight:700}
+  .el .n small{display:block;font-size:22px;color:var(--mut);font-weight:600;margin-top:3px}
+  .steps3{display:flex;flex-direction:column;gap:16px;margin-top:12px}
+  .s3{display:flex;gap:18px;align-items:flex-start;border:2px solid rgba(196,163,79,.32);border-radius:16px;
+    padding:20px 24px;background:rgba(196,163,79,.06)}
+  .s3 .num{font-family:var(--mono);font-size:30px;font-weight:800;color:var(--gold);flex:0 0 44px}
+  .s3 .tx{font-size:31px;font-weight:700;line-height:1.25}
+  .s3 .tx small{display:block;font-size:23px;color:var(--mut);font-weight:600;margin-top:5px}
+  .vid{border:2px solid rgba(196,163,79,.35);border-radius:16px;height:200px;display:flex;align-items:center;
+    justify-content:center;background:rgba(196,163,79,.05);margin-top:4px}
+  .vid .p{width:70px;height:70px;border-radius:50%;border:3px solid var(--gold);display:flex;align-items:center;
+    justify-content:center;color:var(--gold);font-size:28px}
+  .trk{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+  .tr3{border:2px solid rgba(196,163,79,.34);border-radius:15px;padding:20px 24px;background:rgba(196,163,79,.06)}
+  .tr3 .k{font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .tr3 .v{font-size:30px;font-weight:700;margin-top:8px;line-height:1.28}
+
+  .mockbig{background:#111116;border:2px solid rgba(196,163,79,.32);border-radius:18px;padding:30px 32px 26px}
+  .mockbig .mt{font-family:Georgia,serif;font-size:44px;text-align:center;font-weight:600}
+  .mockbig .mt i{color:var(--gold-soft)}
+  .mockbig .ms{font-size:24px;color:var(--mut);text-align:center;margin-top:10px;line-height:1.4}
+  .mockbig .fld{margin-top:22px}
+  .mockbig .fl{font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .mockbig .fi{border-bottom:2px solid rgba(255,255,255,.22);padding:12px 0 10px;font-size:26px;color:#6d6862}
+  .mockbig .btn{margin-top:26px;background:linear-gradient(180deg,#c9a955,#9d8340);color:#12100c;text-align:center;
+    padding:18px;border-radius:6px;font-size:24px;letter-spacing:.16em;font-weight:800}
+  .opts2{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+  .opts2 .o{border:2px solid rgba(255,255,255,.16);border-radius:9px;padding:16px 18px;font-size:25px;color:#c9c4ba}
+  .opts2 .o.q{border-color:var(--gold);background:rgba(196,163,79,.13);color:var(--gold-soft);font-weight:700}
 </style>
 </head>
 <body>
@@ -75,7 +110,7 @@
 <div class="f" id="g1">
   <div class="eb">One webinar · nine days</div>
   <h1>$5,700 in ads. <span>$100,000</span> back.</h1>
-  <div class="sub">A 17.5&times; return on ad spend. Here is the exact funnel that did it.</div>
+  <div class="sub">A 17.5&times; return on ad spend. Here is the exact webinar funnel that did it.</div>
 </div>
 
 <!-- g2 · the architecture, simplified for the board -->
@@ -119,65 +154,89 @@
   </div>
 </div>
 
-<!-- g3 · the real page -->
-<div class="f" id="g3">
-  <div class="eb">Step 2 · the registration page</div>
+<!-- g3 · the opt-in page itself -->
+<div class="f" id="g3" style="padding:46px 44px">
+  <div class="eb">The opt-in page</div>
   <div class="shot"><img src="img/optin-full.jpg" alt=""></div>
 </div>
 
-<!-- g4 · the structure of that page -->
-<div class="f" id="g4">
-  <div class="eb">Every page we test uses this order</div>
-  <ul class="pts">
-    <li><b>Qualifying line</b> above the headline<small>“for entrepreneurs already doing more than €10K a month”</small></li>
-    <li><b>The headline</b> names the real reason they are stuck</li>
-    <li><b>Three pillars</b>, so the mechanism has a shape</li>
-    <li><b>Date, time, location, price</b> in one row</li>
-    <li><b>One button</b>. Nothing else clickable.</li>
-  </ul>
+<!-- g4 · the structure of the opt-in page -->
+<div class="f" id="g4" style="padding:46px 46px">
+  <div class="eb">What is actually on it, in order</div>
+  <div class="stack">
+    <div class="el key"><span class="i">01</span><span class="n">Headline<small>the real reason they are stuck</small></span></div>
+    <div class="el"><span class="i">02</span><span class="n">Sub-headline<small>what the 90 minutes actually covers</small></span></div>
+    <div class="el"><span class="i">03</span><span class="n">About me<small>why this person, and not someone else</small></span></div>
+    <div class="el key"><span class="i">04</span><span class="n">What you will learn<small>three pillars, so the mechanism has a shape</small></span></div>
+    <div class="el"><span class="i">05</span><span class="n">Case studies<small>named clients, real numbers</small></span></div>
+    <div class="el key"><span class="i">06</span><span class="n">A freebie for signing up<small>the reason to register today instead of later</small></span></div>
+  </div>
 </div>
 
-<!-- g5 · the qualifying line does the work -->
-<div class="f" id="g5">
-  <div class="eb">The line most people would delete</div>
-  <div class="shot"><img src="img/optin-head.jpg" alt=""></div>
-  <div class="sub" style="font-size:36px">Its whole job is to make the wrong person leave.
-    <b style="color:var(--gold-soft)">It raised the opt-in rate, not lowered it.</b></div>
-</div>
-
-<!-- g6 · step one of the form -->
-<div class="f" id="g6">
+<!-- g5 · form step one -->
+<div class="f" id="g5" style="padding:44px 44px">
   <div class="eb">Form, step one</div>
-  <h1 class="sm">Name, email, <span>then it registers them.</span></h1>
-  <div class="sub">Keep it to what you will actually use. Every extra field on this step costs you registrations.</div>
+  <div class="mockbig">
+    <div class="mt">Register for <i>free</i></div>
+    <div class="ms">Receive the access link for the webinar replay immediately after registration.</div>
+    <div class="fld"><div class="fl">First name</div><div class="fi">Your first name</div></div>
+    <div class="fld"><div class="fl">Email address</div><div class="fi">you@example.com</div></div>
+    <div class="fld"><div class="fl">Phone number</div><div class="fi">+44</div></div>
+    <div class="btn">NEXT</div>
+  </div>
+  <div class="sub" style="font-size:32px;margin-top:22px">The moment this submits, <b style="color:var(--gold-soft)">they are registered.</b></div>
 </div>
 
-<!-- g7 · step two, the qualifier -->
-<div class="f" id="g7">
+<!-- g6 · the qualifier -->
+<div class="f" id="g6" style="padding:44px 44px">
   <div class="eb">Form, step two · after they are registered</div>
-  <div class="q">
-    <div class="lab">One question</div>
-    <div class="qq">What's your current monthly revenue?<br><span style="font-size:28px;color:var(--mut);font-weight:600">(5 seconds)</span></div>
-    <div class="opts" style="flex-direction:column;gap:10px"><span>No business yet</span><span>Under €10K per month</span><span class="win">€10K to €50K</span><span class="win">€50K to €200K</span><span class="win">€200K+</span></div>
+  <div class="mockbig">
+    <div class="mt">One <i>last</i> question</div>
+    <div class="ms">What's your current monthly revenue? (5 seconds)</div>
+    <div class="opts2">
+      <div class="o">No business yet</div>
+      <div class="o">Under €10K per month</div>
+      <div class="o q">€10K to €50K per month</div>
+      <div class="o q">€50K to €200K per month</div>
+      <div class="o q">€200K+ per month</div>
+    </div>
   </div>
-  <div class="sub" style="font-size:34px">It goes <b style="color:var(--gold-soft)">after</b> the registration, never in front of it.
-    Gate the registration on this and you lose half of them.</div>
+  <div class="sub" style="font-size:31px;margin-top:20px">Gate the registration on this and <b style="color:var(--gold-soft)">you lose half of them.</b></div>
 </div>
 
-<!-- g8 · the thank you page routing -->
-<div class="f" id="g8">
-  <div class="eb">Thank-you page · two versions</div>
-  <div class="split2">
-    <div class="box on"><div class="t">Qualified</div>
-      <div class="d">Fires the conversion event. <b>Meta learns what your buyer looks like.</b> Community and game-day info here.</div></div>
-    <div class="box off"><div class="t">Everyone else</div>
-      <div class="d">Still registered, still welcome. <b>No event fires.</b> They do not get to teach the algorithm.</div></div>
+<!-- g7 · thank-you page structure -->
+<div class="f" id="g7" style="padding:44px 46px">
+  <div class="eb">The thank-you page</div>
+  <div class="vid"><div class="p">&#9654;</div></div>
+  <div class="sub" style="font-size:26px;margin-top:12px;margin-bottom:4px">A short video, then three next steps.</div>
+  <div class="steps3">
+    <div class="s3"><span class="num">1</span><span class="tx">Join the WhatsApp<small>the freebie and the exclusive content live in there</small></span></div>
+    <div class="s3"><span class="num">2</span><span class="tx">Add it to your calendar</small></span></div>
+    <div class="s3"><span class="num">3</span><span class="tx">Check for the confirmation email</small></span></div>
   </div>
-  <div class="sub" style="font-size:34px;margin-top:26px">This is the difference between buying leads and buying buyers.</div>
 </div>
 
-<!-- g9 · CTA -->
-<div class="f" id="g9">
+<!-- g8 · the analytics page -->
+<div class="f" id="g8" style="padding:46px 44px">
+  <div class="eb">And everything lands here</div>
+  <div class="shot"><img src="img/s-chain.jpg" alt=""></div>
+</div>
+
+<!-- g9 · what we track -->
+<div class="f" id="g9" style="padding:46px 46px">
+  <div class="eb">What we track on it</div>
+  <div class="trk">
+    <div class="tr3"><div class="k">Opt-in rate per variant</div>
+      <div class="v">So the A/B test can actually be read, instead of guessed at</div></div>
+    <div class="tr3"><div class="k">Cost per qualified opt-in</div>
+      <div class="v">Not cost per lead. The one that predicts money.</div></div>
+    <div class="tr3"><div class="k">Which ads bring the best leads</div>
+      <div class="v">Not the cheapest clicks. The ones who answered €10K+.</div></div>
+  </div>
+</div>
+
+<!-- g10 · CTA -->
+<div class="f" id="g10">
   <div class="eb">The whole build</div>
   <h1 class="sm">Comment <span>FUNNEL</span></h1>
   <div class="sub">I'll send you our opt-in form SOPs: the page structure, the two-step spec and the thank-you routing.</div>
