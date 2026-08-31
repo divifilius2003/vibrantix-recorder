@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Board frames · 1080×1114</title>
+<style>
+  /* Each frame is EXACTLY the recorder's board region: 1080 x 1114.
+     Type is sized for a phone: nothing under 34px, headlines 74-104px. */
+  :root{
+    --gold:#C4A34F; --gold-soft:#dcc07d; --ink:#f4f1ea; --mut:#a8a296; --bg:#0c0c0f;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;font-family:var(--sans)}
+  .f{width:1080px;height:1114px;background:
+      radial-gradient(120% 70% at 50% 0%, rgba(196,163,79,.07), transparent 62%), var(--bg);
+    color:var(--ink);padding:64px 60px;display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden}
+  .eb{font-size:26px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:800;
+    margin-bottom:22px}
+  h1{font-size:96px;line-height:1.02;font-weight:800;letter-spacing:-.03em;text-wrap:balance}
+  h1.sm{font-size:74px}
+  h1 span{color:var(--gold)}
+  .sub{font-size:38px;line-height:1.4;color:var(--mut);font-weight:600;margin-top:26px;max-width:22ch}
+  .wm{position:absolute;left:60px;bottom:44px;font-size:20px;letter-spacing:.24em;color:#4d4a44;font-weight:800}
+
+  .rows{display:flex;flex-direction:column;gap:20px;margin-top:8px}
+  .row{display:flex;align-items:center;gap:22px}
+  .row .lb{font-size:34px;font-weight:700;width:330px;flex:0 0 330px;line-height:1.2}
+  .row .lb em{display:block;font-style:normal;font-size:24px;color:var(--mut);font-weight:600;margin-top:4px}
+  .row .bar{flex:1;height:56px;background:rgba(255,255,255,.05);border-radius:9px;overflow:hidden}
+  .row .bar i{display:flex;align-items:center;height:100%;background:var(--gold);color:#0c0c0f;
+    font-family:var(--mono);font-size:30px;font-weight:800;padding-left:18px;border-radius:0 9px 9px 0}
+  .row .bar.blind i{background:repeating-linear-gradient(135deg,#7a6733,#7a6733 9px,#8c7740 9px,#8c7740 18px);
+    color:#fff}
+  .cut{display:flex;align-items:center;gap:20px;margin:20px 0}
+  .cut .l{flex:1;height:3px;background:repeating-linear-gradient(90deg,#c8564a,#c8564a 10px,transparent 10px,transparent 20px)}
+  .cut .t{font-size:26px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#e08a80}
+
+  pre{background:#08080b;border:2px solid rgba(196,163,79,.28);border-radius:16px;padding:34px 36px;
+    font-family:var(--mono);font-size:34px;line-height:1.62;color:#d8d3c8;overflow:hidden}
+  pre b{color:var(--gold-soft);font-weight:700}
+
+  .vs{display:flex;flex-direction:column;gap:26px;margin-top:10px}
+  .vs .c{border:2px solid rgba(255,255,255,.10);border-radius:18px;padding:30px 32px}
+  .vs .c.good{border-color:rgba(196,163,79,.45);background:rgba(196,163,79,.07)}
+  .vs .c.bad{border-color:rgba(200,90,80,.42);background:rgba(200,90,80,.07)}
+  .vs .n{font-family:var(--mono);font-size:52px;font-weight:800;line-height:1}
+  .vs .n small{font-size:30px;color:var(--mut);font-weight:700}
+  .vs .d{font-size:30px;color:var(--mut);font-weight:600;margin-top:12px}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:10px}
+  .grid3 img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:14px;border:2px solid rgba(255,255,255,.1)}
+  .shot{border-radius:18px;border:2px solid rgba(196,163,79,.3);overflow:hidden;margin-top:10px}
+  .shot img{display:block;width:100%}
+
+  ul.pts{list-style:none;display:flex;flex-direction:column;gap:24px;margin-top:14px}
+  ul.pts li{font-size:38px;line-height:1.32;font-weight:600;padding-left:40px;position:relative}
+  ul.pts li::before{content:"";position:absolute;left:0;top:16px;width:14px;height:14px;border-radius:50%;
+    background:var(--gold)}
+  ul.pts li b{color:var(--gold-soft)}
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<div class="f" id="f1">
+  <div class="eb">One webinar · nine days</div>
+  <h1>€5,050 in ads became <span>~€87,000</span></h1>
+  <div class="sub">~€51,000 of it collected. Six enrolments from sixteen calls.</div>
+  
+</div>
+
+<!-- 2 -->
+<div class="f" id="f2">
+  <div class="eb">The page every ad pointed at</div>
+  <div class="shot"><img src="img/crop-regpage.jpg" alt=""></div>
+  <div class="sub" style="max-width:none;font-size:34px">Read the line above the headline: <b style="color:var(--gold-soft)">“for entrepreneurs already doing more than €10K a month.”</b> A filter, in public.</div>
+  
+</div>
+
+<!-- 3 -->
+<div class="f" id="f3">
+  <div class="eb">Why nobody can answer it</div>
+  <ul class="pts">
+    <li>Meta knows the <b>click</b>.</li>
+    <li>The CRM knows the <b>call</b>.</li>
+    <li>Stripe knows the <b>payment</b>.</li>
+    <li style="color:var(--gold-soft)">None of them share a key.</li>
+  </ul>
+  <div class="sub" style="margin-top:36px">So nobody can tell you which ad produced the buyer.</div>
+  
+</div>
+
+<!-- 4 -->
+<div class="f" id="f4">
+  <div class="eb">Step one · stamp the ad onto the click</div>
+  <pre>utm_content=<b>{{ad.name}}</b>
+utm_term=<b>{{adset.name}}</b>
+utm_campaign=<b>{{campaign.name}}</b></pre>
+  <div class="sub" style="max-width:none;font-size:34px">Goes in the URL parameters field, once. Meta swaps the tokens per ad.</div>
+  
+</div>
+
+<!-- 5 -->
+<div class="f" id="f5">
+  <div class="eb">Where the platform stops looking</div>
+  <div class="rows">
+    <div class="row"><div class="lb">Impressions<em>Meta sees this</em></div>
+      <div class="bar"><i style="width:100%">29,588</i></div></div>
+    <div class="row"><div class="lb">Registrations<em>Meta sees this</em></div>
+      <div class="bar"><i style="width:64%">62</i></div></div>
+  </div>
+  <div class="cut"><span class="t">Meta's vision ends here</span><span class="l"></span></div>
+  <div class="rows">
+    <div class="row"><div class="lb">Calls held<em>invisible</em></div>
+      <div class="bar blind"><i style="width:28%">16</i></div></div>
+    <div class="row"><div class="lb">Enrolments<em>invisible</em></div>
+      <div class="bar blind"><i style="width:16%">6</i></div></div>
+    <div class="row"><div class="lb">Contracted<em>invisible</em></div>
+      <div class="bar blind"><i style="width:88%">~€87,000</i></div></div>
+  </div>
+  
+</div>
+
+<!-- 6 -->
+<div class="f" id="f6">
+  <div class="eb">The best click-through in the account</div>
+  <div class="vs">
+    <div class="c bad"><div class="n">13.3% <small>CTR · €0.22 a click</small></div>
+      <div class="d">→ 4 registrations, at <b style="color:#e08a80">€22.99</b> each</div></div>
+    <div class="c bad"><div class="n">13.4% <small>CTR · €0.30 a click</small></div>
+      <div class="d">→ <b style="color:#e08a80">zero</b> registrations</div></div>
+    <div class="c good"><div class="n">2.78% <small>CTR · €1.30 a click</small></div>
+      <div class="d">→ 18 registrations, at <b style="color:var(--gold-soft)">€17.99</b> each</div></div>
+  </div>
+  
+</div>
+
+<!-- 7 -->
+<div class="f" id="f7">
+  <div class="eb">Every ad that ran</div>
+  <div class="grid3">
+    <img src="img/ad-3x5x10x-question.jpg" alt="">
+    <img src="img/ad-masterclass-100m.jpg" alt="">
+    <img src="img/ad-melvin-florian-jens-proof.jpg" alt="">
+  </div>
+  <div class="sub" style="max-width:none;font-size:36px;margin-top:34px">Looking at them tells you nothing.
+    <b style="color:var(--gold-soft)">One made 18 registrations. One made zero.</b></div>
+  
+</div>
+
+<!-- 8 -->
+<div class="f" id="f8">
+  <div class="eb">What we did with it</div>
+  <ul class="pts">
+    <li>Scaled the <b>two</b> that actually produced</li>
+    <li>Killed <b>six</b> that spent and produced nothing</li>
+    <li>Stopped chasing a cheaper lead</li>
+    <li style="color:var(--gold-soft)">€19.20 a registration was the cheapest acquisition on the account</li>
+  </ul>
+  
+</div>
+
+<!-- 9 -->
+<div class="f" id="f9">
+  <div class="eb">Build it yourself</div>
+  <h1 class="sm">Comment <span>PROMPT</span></h1>
+  <div class="sub">I'll send the SOP and the prompt that builds this page.</div>
+  <div class="sub" style="font-size:30px;margin-top:20px">Hyros charges $459 a month for something near it.</div>
+  
+</div>
+
+</body>
+</html>
