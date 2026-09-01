@@ -54,6 +54,17 @@
       <label for="boardsel" style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:700">Board</label>
       <select id="boardsel" style="background:#141418;color:#f4f1ea;border:1px solid #33312c;border-radius:9px;padding:8px 11px;font:inherit;font-size:14px;font-weight:600"></select>
     </div>
+    <div class="row" style="margin-bottom:2px">
+      <label for="bgsel" style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:700">Background</label>
+      <select id="bgsel" style="background:#141418;color:#f4f1ea;border:1px solid #33312c;border-radius:9px;padding:8px 11px;font:inherit;font-size:14px;font-weight:600">
+        <option value="off">Off &mdash; my real wall</option>
+        <option value="blur">Blur my wall</option>
+        <option value="shelf" selected>Bookshelf &amp; plant &mdash; airy</option>
+        <option value="study">Bookshelf &mdash; warm study</option>
+        <option value="city">Window &amp; city at dusk</option>
+      </select>
+      <span id="bgstat" style="font-size:12px;color:#6f6a5f"></span>
+    </div>
     <div class="row">
       <button id="prev" disabled>&larr; Prev</button>
       <span id="beatlabel">1 / 9</span>
@@ -64,8 +75,11 @@
     <a class="dl" id="download" style="display:none"><button class="primary">&darr; Download reel</button></a>
   </div>
   <div class="hint">
-    1. Enable camera &amp; mic. 2. Hit <b>Record</b>. 3. Advance the board with <b>Next</b> (or the &rarr; key) while you talk.
-    4. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.
+    1. Enable camera &amp; mic. 2. Pick a <b>Background</b> (first load fetches a ~10MB model, once).
+    3. Hit <b>Record</b>. 4. Advance the board with <b>Next</b> (or the &rarr; key) while you talk.
+    5. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.<br>
+    Backgrounds work best if you sit <b>3-4ft off the wall</b> so you cast no shadow on it, with even light
+    on your face. If it stutters, drop to <b>Blur my wall</b> or <b>Off</b>.
   </div>
   <div class="scriptbox" id="scriptbox">
     <div class="slab">Say this <span id="scriptnum"></span></div>
@@ -279,7 +293,9 @@
       (BOARDS[k].beats||[]).forEach(function(b){ if(b.img) want[b.img]=1; });
     });
     Object.keys(want).forEach(function(src){
-      var im = new Image(); im.onload = function(){ IMGS[src]=im; draw(); }; im.src = src;
+      // frame() is already looping on rAF, so caching the image is enough — the
+      // old draw() call here was a leftover and threw on every single load
+      var im = new Image(); im.onload = function(){ IMGS[src]=im; }; im.src = src;
     });
   })();
 
@@ -383,13 +399,315 @@
     var ty=y+ch+24; for(var t=0;t<tl.length;t++){ ctx.fillText(tl[t],x,ty); ty+=40; }
   }
 
+  // =================================================================
+  // BACKGROUND REPLACEMENT
+  // Segmentation runs in-browser (MediaPipe, vendored in ./vendor so it
+  // is SAME-ORIGIN — a cross-origin model or plate taints the canvas and
+  // captureStream() dies silently, which is the same trap the board
+  // images hit).  Plates are drawn procedurally and then blurred hard:
+  // past ~30px of blur a drawn room and a photographed room are the same
+  // thing, and the blur is what makes a composite read as real anyway.
+  // =================================================================
+  var BG = { mode:'off', plate:null, plates:{}, ready:false, seg:null, fgIdx:-1,
+             personC:null, personX:null, maskC:null, maskX:null, mimg:null,
+             grain:null, lastT:-1, loading:false };
+
+  function rng(seed){ var s=seed>>>0; return function(){ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+
+  // --- plate pieces ------------------------------------------------
+  function pBooks(x, R, bx, by, bw, pal, hMin, hMax){
+    var cx=bx;
+    while(cx < bx+bw-18){
+      var w = 16+R()*26, h = hMin+R()*(hMax-hMin);
+      if(R()<0.09){ cx += 10+R()*22; continue; }                 // a gap
+      if(R()<0.10){                                              // a flat stack
+        var sh2=0, n=2+Math.floor(R()*3);
+        for(var s=0;s<n;s++){ var swid=54+R()*40, sht=13+R()*9;
+          x.fillStyle=pal[Math.floor(R()*pal.length)];
+          x.fillRect(cx, by-sh2-sht, swid, sht); sh2+=sht; }
+        cx += 62+R()*30; continue;
+      }
+      x.fillStyle = pal[Math.floor(R()*pal.length)];
+      if(R()<0.07){                                              // a leaning book
+        x.save(); x.translate(cx, by); x.rotate(-0.18-R()*0.16);
+        x.fillRect(0, -h, w, h); x.restore(); cx += w*1.25; continue;
+      }
+      x.fillRect(cx, by-h, w, h);
+      x.fillStyle='rgba(255,255,255,.10)'; x.fillRect(cx, by-h, 3, h);  // spine highlight
+      cx += w+1+R()*3;
+    }
+  }
+  function pShelfUnit(x, R, ux, uy, uw, uh, rows, wood, pal){
+    x.fillStyle=wood; x.fillRect(ux, uy, uw, uh);
+    var rh = uh/rows;
+    for(var r=0;r<rows;r++){
+      var by = uy + (r+1)*rh - 12;
+      pBooks(x, R, ux+14, by, uw-28, pal, rh*0.42, rh*0.72);
+      x.fillStyle='rgba(0,0,0,.34)'; x.fillRect(ux, by, uw, 13);        // shelf board
+      x.fillStyle='rgba(255,255,255,.07)'; x.fillRect(ux, by, uw, 3);
+    }
+  }
+  // Leaves need visible GAPS between them. Blur merges an overlapping mass
+  // into one green smear that reads as a smudge, not a plant.
+  function pPlant(x, R, px, py, scale, col, leaves){
+    for(var l=0;l<leaves;l++){
+      var a = -Math.PI*0.5 + (l/(leaves-1)-0.5)*2.2 + (R()-0.5)*0.22;
+      var len = (150+R()*170)*scale, wid = (17+R()*15)*scale;
+      x.save(); x.translate(px, py); x.rotate(a);
+      x.strokeStyle=col[col.length-1]; x.lineWidth=5*scale;      // stem
+      x.beginPath(); x.moveTo(0,0); x.lineTo(0,-len*0.62); x.stroke();
+      x.fillStyle = col[Math.floor(R()*col.length)];
+      x.beginPath(); x.ellipse(0, -len*0.72, wid, len*0.30, 0, 0, Math.PI*2); x.fill();
+      x.restore();
+    }
+  }
+  // Blurred, the lit windows become bokeh. This is the one plate where the
+  // blur is doing more than hiding detail — it's the whole effect.
+  function pCity(x, R, wx, wy, ww, wh){
+    var g=x.createLinearGradient(wx,wy,wx,wy+wh);
+    g.addColorStop(0,'#243455'); g.addColorStop(0.55,'#4c4668'); g.addColorStop(1,'#7d5f5c');
+    x.fillStyle=g; x.fillRect(wx,wy,ww,wh);
+    // A lit window has to be BIGGER than the blur radius or it averages away
+    // to nothing — the first pass used 8px lights under a 26px blur and the
+    // whole skyline came out as a flat blue rectangle.
+    var bx=wx-40;
+    while(bx < wx+ww){
+      var bw=110+R()*150, bh=wh*(0.32+R()*0.58), by=wy+wh-bh;
+      x.fillStyle='rgba(14,16,26,'+(0.72+R()*0.24).toFixed(2)+')';
+      x.fillRect(bx,by,bw,bh);
+      for(var ly=by+26; ly<wy+wh-40; ly+=62){
+        for(var lx=bx+18; lx<bx+bw-40; lx+=58){
+          if(R()<0.5){
+            x.fillStyle='rgba(255,'+(206+Math.floor(R()*40))+','+(152+Math.floor(R()*70))+','+(0.70+R()*0.30).toFixed(2)+')';
+            x.fillRect(lx, ly, 34, 30);
+          }
+        }
+      }
+      bx += bw + 12 + R()*22;
+    }
+    // city glow hazing up off the street — this is what gives the skyline depth
+    var hz=x.createLinearGradient(wx, wy+wh, wx, wy+wh*0.30);
+    hz.addColorStop(0,'rgba(255,196,140,.42)'); hz.addColorStop(1,'rgba(255,196,140,0)');
+    x.fillStyle=hz; x.fillRect(wx,wy,ww,wh);
+    x.fillStyle='rgba(38,40,46,.92)';
+    x.fillRect(wx-20,wy-20,ww+40,22); x.fillRect(wx-20,wy+wh-2,ww+40,22);
+    x.fillRect(wx-20,wy-20,22,wh+40); x.fillRect(wx+ww-2,wy-20,22,wh+40);
+    x.fillRect(wx+ww*0.5-8, wy, 16, wh);
+  }
+  function pGlow(x, gx, gy, rad, col){
+    var g=x.createRadialGradient(gx,gy,0,gx,gy,rad);
+    g.addColorStop(0,col); g.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=g; x.fillRect(gx-rad, gy-rad, rad*2, rad*2);
+  }
+  function pFrame(x, fx, fy, fw, fh, edge, fill){
+    x.fillStyle=edge; x.fillRect(fx,fy,fw,fh);
+    x.fillStyle=fill; x.fillRect(fx+16,fy+16,fw-32,fh-32);
+  }
+  // blurred, the mullion bars are what make this read as a window and not a lamp
+  function pWindow(x, wx, wy, ww, wh, bars){
+    var g=x.createLinearGradient(wx,wy,wx,wy+wh);
+    g.addColorStop(0,'#ffffff'); g.addColorStop(1,'#dfe7f2');
+    x.fillStyle=g; x.fillRect(wx,wy,ww,wh);
+    x.fillStyle='rgba(70,72,78,.85)';
+    x.fillRect(wx-16,wy-16,ww+32,18); x.fillRect(wx-16,wy+wh-2,ww+32,18);
+    x.fillRect(wx-16,wy-16,18,wh+32); x.fillRect(wx+ww-2,wy-16,18,wh+32);
+    for(var b=1;b<bars;b++){ x.fillRect(wx+ww*b/bars-5, wy, 10, wh); }
+    x.fillRect(wx, wy+wh*0.5-5, ww, 10);
+  }
+
+  // --- plate builder -----------------------------------------------
+  // Returns a W x camH canvas: room drawn, then blurred with overscan so
+  // the blur never eats the edges into transparency.
+  function makePlate(kind){
+    var c=document.createElement('canvas'); c.width=W; c.height=camH;
+    var x=c.getContext('2d');
+    // NOTE ON VALUES: blur averages everything toward the mean, so anything
+    // drawn here has to be over-contrasted and over-lit to survive it. The
+    // first pass used realistic-looking colours plus a vignette plus a dark
+    // overlay and came out as black mud — which is the exact basement look
+    // this is supposed to fix. Draw bright, darken barely.
+    var cfg = {
+      shelf:  { seed:7717, blur:28, dark:0.06, vig:0.30,
+                sky:['#f6f1e6','#ddd4c4'], wood:'#a68a68',
+                pal:['#7d6650','#a87c56','#55705f','#d8c7a6','#9c4f42','#5f6f84','#e0d3b4','#44584c'],
+                leaf:['#6f8257','#5d7148','#839663'] },
+      study:  { seed:4241, blur:30, dark:0.10, vig:0.34,
+                sky:['#5a4633','#2a211a'], wood:'#6b4f36',
+                pal:['#7a5b3e','#8a6a45','#4f6249','#b39a72','#964f42','#556072','#cbb389','#3d5044'],
+                leaf:['#546b44','#425536','#68804f'] },
+      city:   { seed:9133, blur:24, dark:0.06, vig:0.30,
+                sky:['#8a7d6c','#41382f'], wood:'#6d5941',
+                pal:['#7a6650','#9c7a58','#4f6249','#b3a184','#8a4f42','#5a6472','#c2b193','#3f5148'],
+                leaf:['#5a7150','#43563c','#6d8757'] }
+    }[kind];
+    if(!cfg) return null;
+    var R = rng(cfg.seed);
+
+    // wall
+    var g=x.createLinearGradient(0,0,W*0.35,camH);
+    g.addColorStop(0,cfg.sky[0]); g.addColorStop(1,cfg.sky[1]);
+    x.fillStyle=g; x.fillRect(0,0,W,camH);
+
+    if(kind==='shelf'){
+      pWindow(x, -W*0.06, camH*0.06, W*0.30, camH*0.66, 2);              // window, far left
+      pGlow(x, W*0.10, camH*0.34, camH*1.05, 'rgba(255,252,242,.50)');   // its spill
+      pShelfUnit(x, R, W*0.54, -camH*0.06, W*0.50, camH*1.02, 4, cfg.wood, cfg.pal);
+      pPlant(x, R, W*0.30, camH*1.02, 1.55, cfg.leaf, 14);
+    } else if(kind==='study'){
+      pShelfUnit(x, R, W*0.48, -camH*0.10, W*0.56, camH*1.12, 4, cfg.wood, cfg.pal);
+      pGlow(x, W*0.24, camH*0.66, camH*0.85, 'rgba(255,190,110,.55)');   // lamp: soft falloff
+      pGlow(x, W*0.24, camH*0.66, camH*0.20, 'rgba(255,236,196,.95)');   // + a hot core, or it
+      pPlant(x, R, W*0.06, camH*1.04, 1.35, cfg.leaf, 12);               //   reads as a smudge
+    } else {
+      // interior stays deliberately plain: the window is the feature, and a
+      // half-cropped shelf here just read as brown mud once blurred
+      pCity(x, R, W*0.46, -camH*0.04, W*0.60, camH*0.88);                // window + skyline, right
+      pGlow(x, W*0.16, camH*0.70, camH*0.70, 'rgba(255,186,104,.44)');   // interior practical
+      pGlow(x, W*0.16, camH*0.70, camH*0.16, 'rgba(255,232,190,.88)');
+      pPlant(x, R, W*0.26, camH*1.06, 1.45, cfg.leaf, 13);
+    }
+
+    // blur with overscan so the blur never eats the edges into transparency
+    var out=document.createElement('canvas'); out.width=W; out.height=camH;
+    var o=out.getContext('2d');
+    var ov=Math.ceil(cfg.blur*2.2);
+    o.filter='blur('+cfg.blur+'px)';
+    o.drawImage(c, -ov, -ov, W+ov*2, camH+ov*2);
+    o.filter='none';
+    var vg=o.createRadialGradient(W*0.5,camH*0.44,camH*0.42, W*0.5,camH*0.44,camH*1.25);
+    vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,'+cfg.vig+')');
+    o.fillStyle=vg; o.fillRect(0,0,W,camH);
+    if(cfg.dark){ o.fillStyle='rgba(8,8,11,'+cfg.dark+')'; o.fillRect(0,0,W,camH); }
+    return out;
+  }
+
+  // --- segmentation -------------------------------------------------
+  async function initSeg(){
+    if(BG.seg || BG.loading) return;
+    BG.loading=true; bgstat('loading…');
+    try{
+      var mod = await import('./vendor/vision_bundle.mjs');
+      var fs  = await mod.FilesetResolver.forVisionTasks('./vendor/wasm');
+      BG.seg = await mod.ImageSegmenter.createFromOptions(fs, {
+        baseOptions:{ modelAssetPath:'./vendor/selfie_segmenter.tflite', delegate:'GPU' },
+        runningMode:'VIDEO', outputCategoryMask:false, outputConfidenceMasks:true
+      });
+      BG.ready=true; bgstat('');
+    }catch(e){
+      bgstat('unavailable'); BG.mode='off';
+      console.warn('segmentation failed', e);
+    }
+    BG.loading=false;
+  }
+  function bgstat(s){ var e=document.getElementById('bgstat'); if(e) e.textContent=s; }
+
+  function pickFg(masks){
+    if(masks.length===1) return 0;
+    var best=0, bv=-1;
+    for(var k=0;k<masks.length;k++){
+      var a=masks[k].getAsFloat32Array(), mw=masks[k].width, mh=masks[k].height;
+      var v=a[Math.floor(mh*0.45)*mw + Math.floor(mw*0.5)];   // person sits mid-frame
+      if(v>bv){ bv=v; best=k; }
+    }
+    return best;
+  }
+
+  function applyMask(res){
+    var masks=res.confidenceMasks; if(!masks||!masks.length) return;
+    if(BG.fgIdx<0) BG.fgIdx=pickFg(masks);
+    var m=masks[BG.fgIdx], mw=m.width, mh=m.height, arr=m.getAsFloat32Array();
+    if(!BG.maskC) BG.maskC=document.createElement('canvas');
+    if(BG.maskC.width!==mw||BG.maskC.height!==mh){
+      BG.maskC.width=mw; BG.maskC.height=mh;
+      BG.maskX=BG.maskC.getContext('2d');
+      BG.mimg=BG.maskX.createImageData(mw,mh);
+      var dd=BG.mimg.data; for(var z=0;z<dd.length;z+=4){ dd[z]=dd[z+1]=dd[z+2]=255; }
+    }
+    var d=BG.mimg.data;
+    for(var p=0,q=3;p<arr.length;p++,q+=4){ d[q]=arr[p]*255; }
+    BG.maskX.putImageData(BG.mimg,0,0);
+
+    var vw=cam.videoWidth, vh=cam.videoHeight;
+    if(!BG.personC){ BG.personC=document.createElement('canvas'); BG.personX=BG.personC.getContext('2d'); }
+    if(BG.personC.width!==vw||BG.personC.height!==vh){ BG.personC.width=vw; BG.personC.height=vh; }
+    var px=BG.personX;
+    px.globalCompositeOperation='source-over'; px.filter='none';
+    px.clearRect(0,0,vw,vh);
+    px.drawImage(cam,0,0,vw,vh);
+    px.imageSmoothingEnabled=true; px.imageSmoothingQuality='high';
+    px.globalCompositeOperation='destination-in';
+    px.filter='blur(2px)';                       // feather the cut
+    px.drawImage(BG.maskC,0,0,vw,vh);
+    px.drawImage(BG.maskC,0,0,vw,vh);            // second pass chokes the edge in,
+    px.filter='none';                            // which kills the white-wall spill halo
+    px.globalCompositeOperation='source-over';
+  }
+
+  function segTick(){
+    if(!BG.ready || BG.mode==='off' || !cam.videoWidth) return;
+    if(cam.currentTime===BG.lastT) return;       // same frame, don't re-run
+    BG.lastT=cam.currentTime;
+    try{
+      BG.seg.segmentForVideo(cam, performance.now(), function(res){
+        try{ applyMask(res); } finally { if(res && res.close) res.close(); }
+      });
+    }catch(e){ /* a dropped frame is not worth killing the loop over */ }
+  }
+
+  function makeGrain(){
+    var c=document.createElement('canvas'); c.width=c.height=180;
+    var x=c.getContext('2d'), im=x.createImageData(180,180), d=im.data;
+    for(var p=0;p<d.length;p+=4){ var v=128+(Math.random()*2-1)*30; d[p]=d[p+1]=d[p+2]=v; d[p+3]=255; }
+    x.putImageData(im,0,0); return c;
+  }
+  // camera grain and a clean plate never match; give them a shared one
+  function drawGrain(){
+    if(!BG.grain) BG.grain=makeGrain();
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0,0,W,camH); ctx.clip();
+    ctx.globalCompositeOperation='overlay'; ctx.globalAlpha=0.11;
+    ctx.fillStyle=ctx.createPattern(BG.grain,'repeat'); ctx.fillRect(0,0,W,camH);
+    ctx.restore();
+  }
+
+  window.__plate = makePlate;   // dev hook: regenerate plate previews without a camera
+
+  function setBg(mode){
+    BG.mode=mode;
+    try{ localStorage.setItem('vbx_bg', mode); }catch(e){}
+    if(mode==='off'){ bgstat(''); return; }
+    if(mode!=='blur'){
+      if(!BG.plates[mode]) BG.plates[mode]=makePlate(mode);
+      BG.plate=BG.plates[mode];
+    }
+    initSeg();
+  }
+
   function drawCamera(){
-    var r=camH/W; // region aspect
     if(cam.videoWidth){
+      segTick();
       var vw=cam.videoWidth, vh=cam.videoHeight, tr=W/camH, vr=vw/vh, sw,sh,sx,sy;
       if(vr>tr){ sh=vh; sw=vh*tr; sx=(vw-sw)/2; sy=0; } else { sw=vw; sh=vw/tr; sx=0; sy=(vh-sh)/2; }
-      ctx.save(); ctx.translate(W,0); ctx.scale(-1,1);   // mirror (selfie)
-      ctx.drawImage(cam, sx,sy,sw,sh, 0,0,W,camH); ctx.restore();
+      var live = (BG.mode!=='off' && BG.ready && BG.personC);
+      if(live){
+        ctx.save();
+        ctx.beginPath(); ctx.rect(0,0,W,camH); ctx.clip();
+        if(BG.mode==='blur'){                       // real room, thrown out of focus
+          ctx.save(); ctx.filter='blur(24px)'; ctx.translate(W,0); ctx.scale(-1,1);
+          ctx.drawImage(cam, sx,sy,sw,sh, -40,-40, W+80, camH+80);
+          ctx.restore();
+        } else {
+          ctx.drawImage(BG.plate, 0,0,W,camH);
+        }
+        ctx.save(); ctx.translate(W,0); ctx.scale(-1,1);
+        ctx.drawImage(BG.personC, sx,sy,sw,sh, 0,0,W,camH);
+        ctx.restore();
+        ctx.restore();
+        drawGrain();
+      } else {
+        ctx.save(); ctx.translate(W,0); ctx.scale(-1,1);   // mirror (selfie)
+        ctx.drawImage(cam, sx,sy,sw,sh, 0,0,W,camH); ctx.restore();
+      }
     } else {
       ctx.fillStyle='#0d0d10'; ctx.fillRect(0,0,W,camH);
       ctx.fillStyle='rgba(255,255,255,.18)'; ctx.font='700 34px system-ui,sans-serif';
@@ -441,6 +759,15 @@
     sel.addEventListener('change', function(){ location.search='?b='+sel.value; });
   })();
 
+  // background picker
+  (function(){
+    var sel=document.getElementById('bgsel'); if(!sel) return;
+    var saved=null; try{ saved=localStorage.getItem('vbx_bg'); }catch(e){}
+    if(saved) sel.value=saved;
+    BG.mode = sel.value;
+    sel.addEventListener('change', function(){ setBg(sel.value); });
+  })();
+
   updateLabel();   // populate the script panel on load, not just after camera-enable
 
   (function(){
@@ -467,6 +794,7 @@
       document.getElementById('enable').disabled=true;
       document.getElementById('record').disabled=false;
       document.getElementById('next').disabled=false;
+      setBg(document.getElementById('bgsel').value);   // build the plate + load the model now
       updateLabel();
     }catch(err){ alert('Camera/mic blocked: '+err.message+'\nAllow access and reload. (Must be on https or localhost.)'); }
   };
