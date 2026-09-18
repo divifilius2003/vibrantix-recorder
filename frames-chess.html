@@ -49,6 +49,24 @@
   .rt{display:flex;align-items:center;gap:18px;border:2px solid rgba(129,182,76,.35);
     border-radius:16px;padding:20px 24px;background:rgba(129,182,76,.07);font-size:36px;font-weight:700}
   .rt b{font-family:var(--mono);font-size:26px;color:var(--cc);font-weight:800}
+
+  /* red ocean / blue ocean */
+  .ocean{display:flex;flex-direction:column;gap:20px;margin-top:6px}
+  .oc{border-radius:22px;padding:26px 28px 28px;border:2px solid}
+  .oc .lab{font-family:var(--mono);font-size:22px;letter-spacing:.2em;text-transform:uppercase;
+    font-weight:800;margin-bottom:6px}
+  .oc .note{font-size:27px;color:var(--mut);font-weight:600;margin-bottom:18px}
+  .oc.red{border-color:rgba(206,78,68,.42);background:rgba(206,78,68,.10)}
+  .oc.red .lab{color:#e0736a}
+  .oc.blue{border-color:rgba(96,158,224,.45);background:rgba(96,158,224,.10)}
+  .oc.blue .lab{color:#7db4f0}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{border-radius:12px;padding:12px 16px;font-size:27px;font-weight:700;
+    border:2px solid rgba(206,78,68,.35);background:rgba(206,78,68,.12);color:#f0ada6}
+  .lone{display:flex;align-items:center;gap:22px;border-radius:14px;padding:18px 24px;
+    border:2px solid rgba(129,182,76,.5);background:rgba(129,182,76,.12)}
+  .lone img{width:290px;height:auto;display:block}
+  .lone span{font-size:30px;font-weight:700;color:#cfe3bb}
 </style>
 </head>
 <body>
@@ -60,11 +78,26 @@
   <div class="sub">I'm not joking. Give me twenty seconds.</div>
 </div>
 
-<!-- c2 · the gap -->
+<!-- c2 · red ocean / blue ocean -->
 <div class="f" id="c2">
-  <div class="eb">Why it works</div>
-  <h1 class="sm">Everyone is fighting in the same <span>Instagram DMs</span>.</h1>
-  <div class="sub">Same inbox, same twenty messages, same day. Nobody is here.</div>
+  <div class="eb">Where everyone else is</div>
+  <div class="ocean">
+    <div class="oc red">
+      <div class="lab">Red ocean</div>
+      <div class="note">His inbox already has forty of these in it today.</div>
+      <div class="chips">
+        <div class="chip">Instagram DMs</div><div class="chip">LinkedIn</div>
+        <div class="chip">Cold email</div><div class="chip">X DMs</div>
+        <div class="chip">Facebook groups</div><div class="chip">Loom pitches</div>
+        <div class="chip">Cold calls</div><div class="chip">Voice notes</div>
+      </div>
+    </div>
+    <div class="oc blue">
+      <div class="lab">Blue ocean</div>
+      <div class="note">Nobody has ever sold him anything here.</div>
+      <div class="lone"><img src="img/cc-logo.png" alt="chess.com"><span>zero competition</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- c3 · the search string -->
@@ -111,14 +144,15 @@
   <div class="sub">His Instagram has forty pitches in it. His chess.com inbox has never had one. Same person, completely different odds.</div>
 </div>
 
-<!-- c8 · how to not be weird about it -->
+<!-- c8 · how to actually run it -->
 <div class="f" id="c8">
-  <div class="eb">Do it properly</div>
+  <div class="eb">How to actually run it</div>
   <div class="steps">
     <div class="st"><div class="n">1</div><div class="t">Check they still log in<small>plenty of these profiles have been dead since 2013</small></div></div>
-    <div class="st"><div class="n">2</div><div class="t">Play them first<small>challenge, lose, then talk. You are a person, not a pitch</small></div></div>
-    <div class="st"><div class="n">3</div><div class="t">Mention the chess, not the offer<small>you found him on a chess site. Open like a human would</small></div></div>
+    <div class="st"><div class="n">2</div><div class="t">Challenge them, and <span style="color:var(--cc)">let them win</span><small>you are building rapport, not proving you are good at chess</small></div></div>
+    <div class="st"><div class="n">3</div><div class="t">Then message them<small>and if they never accept the game, send it anyway</small></div></div>
   </div>
+  <div class="sub" style="margin-top:34px">Nobody buys from the man who just beat them.</div>
 </div>
 
 <!-- c9 · CTA -->
