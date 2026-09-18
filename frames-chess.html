@@ -24,12 +24,10 @@
   h1 .cc{color:var(--cc)}
   .sub{font-size:38px;line-height:1.38;color:var(--mut);font-weight:600;margin-top:28px}
 
-  /* chess.com badge, top right */
-  .cbadge{position:absolute;top:48px;right:52px;display:flex;align-items:center;gap:14px}
-  .cbadge .pawn{width:58px;height:58px;border-radius:14px;background:var(--cc);
-    display:flex;align-items:center;justify-content:center;font-size:38px;line-height:1;color:#14340a}
-  .cbadge .wm{font-size:30px;font-weight:800;letter-spacing:-.02em;color:#e8e6e1}
-  .cbadge .wm i{font-style:normal;color:var(--cc)}
+  /* the real chess.com lockup, lifted from their own share asset */
+  .cbadge{position:absolute;top:52px;right:56px}
+  .cbadge img{display:block;width:360px;height:auto}
+  .clogo-big{display:block;width:620px;height:auto;margin:0 0 46px}
 
   .q{font-family:var(--mono);font-size:40px;font-weight:700;color:var(--gold-soft);
     border:2px solid rgba(196,163,79,.45);border-radius:18px;padding:30px 28px;
@@ -57,7 +55,7 @@
 
 <!-- c1 · HOOK -->
 <div class="f" id="c1">
-  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
+  <img class="clogo-big" src="img/cc-logo.png" alt="chess.com">
   <h1>The most underrated client acquisition strategy right now is <span class="cc">chess.com</span>.</h1>
   <div class="sub">I'm not joking. Give me twenty seconds.</div>
 </div>
@@ -71,7 +69,7 @@
 
 <!-- c3 · the search string -->
 <div class="f" id="c3">
-  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
+  <div class="cbadge"><img src="img/cc-logo.png" alt="chess.com"></div>
   <div class="eb">Paste this into Google</div>
   <div class="q">site:chess.com/member "business"</div>
   <div class="qnote">that is it. that is the whole tool.</div>
@@ -97,7 +95,7 @@
 
 <!-- c6 · you can just message them -->
 <div class="f" id="c6">
-  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
+  <div class="cbadge"><img src="img/cc-logo.png" alt="chess.com"></div>
   <h1 class="sm">And you can just <span class="cc">message them</span>.</h1>
   <div class="route">
     <div class="rt"><b>1</b>Open the profile</div>
@@ -125,7 +123,7 @@
 
 <!-- c9 · CTA -->
 <div class="f" id="c9">
-  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
+  <div class="cbadge"><img src="img/cc-logo.png" alt="chess.com"></div>
   <div class="eb">The whole thing, written up</div>
   <h1 class="sm">Comment <span class="cc">CHESS</span></h1>
   <div class="sub">and I'll send you the full SOP: the searches, the swaps, how to pick a live profile and the exact opener.</div>
