@@ -67,6 +67,57 @@
     border:2px solid rgba(129,182,76,.5);background:rgba(129,182,76,.12)}
   .lone img{width:290px;height:auto;display:block}
   .lone span{font-size:30px;font-weight:700;color:#cfe3bb}
+
+  /* ---- blue ocean chart (option A: saturation cliff) ---- */
+  .chartwrap{position:relative;margin-top:30px;border-radius:22px;overflow:hidden;
+    border:2px solid rgba(255,255,255,.10);background:#0a0a0d;padding-bottom:78px}
+  .zone{position:absolute;left:0;right:0;pointer-events:none}
+  .zone.red{top:0;height:70%;background:linear-gradient(180deg,rgba(206,78,68,.22),rgba(206,78,68,.04))}
+  .zone.blue{bottom:0;height:30%;background:linear-gradient(0deg,rgba(96,158,224,.26),rgba(96,158,224,.03))}
+  .zlab{position:absolute;font-family:var(--mono);font-size:23px;letter-spacing:.2em;
+    text-transform:uppercase;font-weight:800}
+  .zlab.red{top:20px;right:24px;color:#e0736a}
+  .zlab.blue{bottom:20px;left:24px;color:#7db4f0}
+  .bars{position:relative;display:flex;align-items:flex-end;gap:15px;height:430px;
+    padding:70px 26px 0}
+  .bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .col{width:100%;border-radius:10px 10px 4px 4px;background:linear-gradient(180deg,#d2564b,#8e3029);
+    border:2px solid rgba(240,173,166,.45);position:relative}
+  .col .v{position:absolute;top:-44px;left:0;right:0;text-align:center;font-family:var(--mono);
+    font-size:27px;font-weight:800;color:#f0ada6}
+  .bar.cc .col{background:linear-gradient(180deg,#81b64c,#4d7a2a);border-color:rgba(129,182,76,.65)}
+  .bar.cc .col .v{color:#bfe39a;font-size:34px}
+  .baseline{height:3px;background:rgba(255,255,255,.16);margin:14px 26px 0}
+  .blabs{display:flex;gap:15px;padding:16px 26px 0}
+  .blabs div{flex:1;font-size:22px;font-weight:700;color:var(--mut);text-align:center;line-height:1.2}
+  .blabs div.cc{color:#cfe3bb}
+
+  /* ---- option B: crowded sea ---- */
+  .sea{position:relative;margin-top:24px;border-radius:22px;overflow:hidden;height:640px;
+    border:2px solid rgba(255,255,255,.10)}
+  .sea .half{position:absolute;left:0;right:0;padding:26px 28px}
+  .sea .top{top:0;height:58%;background:linear-gradient(180deg,rgba(206,78,68,.22),rgba(206,78,68,.08))}
+  .sea .bot{bottom:0;height:42%;background:linear-gradient(0deg,rgba(96,158,224,.24),rgba(96,158,224,.06));
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px}
+  .sea .lab2{font-family:var(--mono);font-size:22px;letter-spacing:.2em;text-transform:uppercase;font-weight:800}
+  .sea .top .lab2{color:#e0736a}
+  .sea .bot .lab2{color:#7db4f0;position:absolute;top:22px;left:28px}
+  .swarm{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+  .swarm .chip{font-size:25px;padding:10px 14px}
+  .solo{display:flex;align-items:center;gap:20px;border-radius:16px;padding:20px 28px;
+    border:2px solid rgba(129,182,76,.55);background:rgba(129,182,76,.14)}
+  .solo img{width:300px;height:auto;display:block}
+  .solo span{font-size:30px;font-weight:800;color:#cfe3bb}
+
+  /* ---- option C: one ocean ---- */
+  .oceanart{position:relative;margin-top:26px;border-radius:24px;overflow:hidden;
+    border:2px solid rgba(255,255,255,.10)}
+  .ccfloat{position:absolute;left:50%;top:78%;transform:translate(-50%,-50%);
+    display:flex;flex-direction:column;align-items:center;gap:14px}
+  .ccfloat img{width:400px;height:auto;display:block;
+    filter:drop-shadow(0 10px 30px rgba(0,0,0,.6))}
+  .ccfloat span{font-family:var(--mono);font-size:26px;letter-spacing:.16em;text-transform:uppercase;
+    font-weight:800;color:#cfe3bb}
 </style>
 </head>
 <body>
@@ -160,6 +211,140 @@
   <div class="eb">The whole thing, written up</div>
   <h1 class="sm">Comment <span class="cc">CHESS</span></h1>
   <div class="sub">and I'll send you the full SOP: the searches, the swaps, how to pick a live profile and the exact opener.</div>
+</div>
+
+
+<!-- c2a · OPTION A, saturation cliff -->
+<div class="f" id="c2a">
+  <div class="eb">Pitches already sitting in his inbox</div>
+  <div class="chartwrap">
+    <div class="zone red"></div><div class="zone blue"></div>
+    <div class="zlab red">Red ocean</div><div class="zlab blue">Blue ocean</div>
+    <div class="bars">
+      <div class="bar"><div class="col" style="height:88%"><div class="v">41</div></div></div>
+      <div class="bar"><div class="col" style="height:80%"><div class="v">37</div></div></div>
+      <div class="bar"><div class="col" style="height:95%"><div class="v">44</div></div></div>
+      <div class="bar"><div class="col" style="height:62%"><div class="v">29</div></div></div>
+      <div class="bar"><div class="col" style="height:70%"><div class="v">33</div></div></div>
+      <div class="bar"><div class="col" style="height:55%"><div class="v">26</div></div></div>
+      <div class="bar cc"><div class="col" style="height:1.5%"><div class="v">0</div></div></div>
+    </div>
+    <div class="baseline"></div>
+    <div class="blabs">    <div>IG DMs</div>    <div>LinkedIn</div>    <div>Cold email</div>    <div>X DMs</div>    <div>FB groups</div>    <div>Cold calls</div><div class="cc">chess.com</div></div>
+  </div>
+  <div class="sub">Same person. Completely different odds.</div>
+</div>
+
+<!-- c2b · OPTION B, crowded sea -->
+<div class="f" id="c2b">
+  <div class="eb">Where everyone else is</div>
+  <div class="sea">
+    <div class="half top">
+      <div class="lab2">Red ocean</div>
+      <div class="swarm">
+        <div class="chip">Instagram DMs</div><div class="chip">LinkedIn</div><div class="chip">Cold email</div>
+        <div class="chip">X DMs</div><div class="chip">Facebook groups</div><div class="chip">Cold calls</div>
+        <div class="chip">Instagram DMs</div><div class="chip">Cold email</div><div class="chip">LinkedIn</div>
+        <div class="chip">Cold calls</div><div class="chip">X DMs</div><div class="chip">Cold email</div>
+        <div class="chip">Facebook groups</div><div class="chip">Instagram DMs</div><div class="chip">LinkedIn</div>
+        <div class="chip">Cold email</div><div class="chip">Cold calls</div><div class="chip">Instagram DMs</div>
+      </div>
+    </div>
+    <div class="half bot">
+      <div class="lab2">Blue ocean</div>
+      <div class="solo"><img src="img/cc-logo.png" alt="chess.com"><span>one message. yours.</span></div>
+    </div>
+  </div>
+  <div class="sub">Same person. Completely different odds.</div>
+</div>
+
+<!-- c2c · OPTION C, one ocean -->
+<div class="f" id="c2c">
+  <div class="eb">Where everyone else is fishing</div>
+  <div class="oceanart">
+    <svg viewBox="0 0 1080 760" style="width:100%;height:auto;display:block">
+  <defs>
+    <linearGradient id="redsea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a1712"/><stop offset=".6" stop-color="#96251d"/><stop offset="1" stop-color="#c0362d"/>
+    </linearGradient>
+    <linearGradient id="bluesea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d6ba6"/><stop offset=".45" stop-color="#16406e"/><stop offset="1" stop-color="#081628"/>
+    </linearGradient>
+    <g id="fsh">
+      <path d="M14 0 C 22 -10, 40 -11, 52 0 C 40 11, 22 10, 14 0 Z" fill="#350906"/>
+      <path d="M14 0 L 1 -8 L 5 0 L 1 8 Z" fill="#350906"/>
+    </g>
+    <clipPath id="redclip"><path d="M0,0 H1080 V372 C 902,428 760,352 592,404 C 430,454 262,372 0,416 Z"/></clipPath>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#8fc4f5" stop-opacity=".26"/><stop offset="1" stop-color="#8fc4f5" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="760" fill="url(#bluesea)"/>
+  <ellipse cx="540" cy="600" rx="340" ry="160" fill="url(#glow)"/>
+  <g opacity=".45">
+    <path d="M120 520 q 46 -14 92 0" stroke="#8fc4f5" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M872 566 q 46 -14 92 0" stroke="#8fc4f5" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M196 700 q 46 -14 92 0" stroke="#8fc4f5" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M806 712 q 46 -14 92 0" stroke="#8fc4f5" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <path d="M0,0 H1080 V372 C 902,428 760,352 592,404 C 430,454 262,372 0,416 Z" fill="url(#redsea)"/>
+  <g clip-path="url(#redclip)">
+        <use href="#fsh" transform="translate(357,77) rotate(-21) scale(0.80,0.93)" opacity="0.44"/>
+        <use href="#fsh" transform="translate(697,49) rotate(-19) scale(-0.92,0.88)" opacity="0.59"/>
+        <use href="#fsh" transform="translate(577,153) rotate(-11) scale(0.50,0.53)" opacity="0.59"/>
+        <use href="#fsh" transform="translate(80,203) rotate(-17) scale(-0.86,0.77)" opacity="0.52"/>
+        <use href="#fsh" transform="translate(93,56) rotate(-2) scale(0.73,0.45)" opacity="0.32"/>
+        <use href="#fsh" transform="translate(461,315) rotate(3) scale(-0.47,0.60)" opacity="0.32"/>
+        <use href="#fsh" transform="translate(673,358) rotate(-11) scale(-0.77,0.83)" opacity="0.31"/>
+        <use href="#fsh" transform="translate(1035,40) rotate(-9) scale(0.92,0.64)" opacity="0.35"/>
+        <use href="#fsh" transform="translate(913,126) rotate(4) scale(0.46,0.95)" opacity="0.37"/>
+        <use href="#fsh" transform="translate(341,311) rotate(-8) scale(0.87,0.69)" opacity="0.36"/>
+        <use href="#fsh" transform="translate(208,229) rotate(-11) scale(-0.93,0.77)" opacity="0.30"/>
+        <use href="#fsh" transform="translate(684,155) rotate(-13) scale(-0.89,0.66)" opacity="0.36"/>
+        <use href="#fsh" transform="translate(590,46) rotate(7) scale(0.91,0.70)" opacity="0.50"/>
+        <use href="#fsh" transform="translate(491,130) rotate(10) scale(0.63,0.55)" opacity="0.54"/>
+        <use href="#fsh" transform="translate(846,270) rotate(11) scale(0.70,0.70)" opacity="0.34"/>
+        <use href="#fsh" transform="translate(566,332) rotate(12) scale(0.55,0.56)" opacity="0.52"/>
+        <use href="#fsh" transform="translate(779,125) rotate(-9) scale(0.93,0.76)" opacity="0.57"/>
+        <use href="#fsh" transform="translate(743,233) rotate(-1) scale(0.91,0.92)" opacity="0.33"/>
+        <use href="#fsh" transform="translate(894,357) rotate(-5) scale(-0.56,0.52)" opacity="0.30"/>
+        <use href="#fsh" transform="translate(195,65) rotate(-19) scale(-0.65,0.89)" opacity="0.51"/>
+        <use href="#fsh" transform="translate(81,294) rotate(22) scale(0.92,0.55)" opacity="0.49"/>
+        <use href="#fsh" transform="translate(310,170) rotate(1) scale(0.68,0.78)" opacity="0.40"/>
+        <use href="#fsh" transform="translate(404,223) rotate(-6) scale(0.62,0.50)" opacity="0.31"/>
+        <use href="#fsh" transform="translate(1011,267) rotate(-18) scale(0.66,0.73)" opacity="0.52"/>
+        <use href="#fsh" transform="translate(556,241) rotate(-5) scale(0.83,0.86)" opacity="0.42"/>
+        <use href="#fsh" transform="translate(995,372) rotate(-20) scale(0.69,0.72)" opacity="0.42"/>
+        <use href="#fsh" transform="translate(1013,152) rotate(-8) scale(0.82,0.47)" opacity="0.41"/>
+        <use href="#fsh" transform="translate(172,315) rotate(14) scale(0.83,0.64)" opacity="0.43"/>
+        <use href="#fsh" transform="translate(248,359) rotate(13) scale(0.48,0.82)" opacity="0.57"/>
+        <use href="#fsh" transform="translate(280,29) rotate(-7) scale(-0.59,0.47)" opacity="0.52"/>
+        <use href="#fsh" transform="translate(25,117) rotate(8) scale(0.91,0.45)" opacity="0.52"/>
+        <use href="#fsh" transform="translate(765,333) rotate(18) scale(0.77,0.46)" opacity="0.35"/>
+        <use href="#fsh" transform="translate(158,151) rotate(-1) scale(0.93,0.84)" opacity="0.57"/>
+        <use href="#fsh" transform="translate(928,32) rotate(14) scale(0.52,0.54)" opacity="0.54"/>
+  </g>
+  <path d="M0,416 C 262,372 430,454 592,404 C 760,352 902,428 1080,372" fill="none"
+        stroke="rgba(255,255,255,.34)" stroke-width="3"/>
+  <g>
+        <g transform="translate(86,62) rotate(-7)"><rect rx="13" ry="13" width="265" height="58" fill="rgba(20,4,3,.66)" stroke="rgba(240,173,166,.6)" stroke-width="2"/><text x="132.5" y="38" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="27" font-weight="700" fill="#f7c7c0">Instagram DMs</text></g>
+        <g transform="translate(636,48) rotate(5)"><rect rx="13" ry="13" width="180" height="58" fill="rgba(20,4,3,.66)" stroke="rgba(240,173,166,.6)" stroke-width="2"/><text x="90.0" y="38" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="27" font-weight="700" fill="#f7c7c0">LinkedIn</text></g>
+        <g transform="translate(180,182) rotate(4)"><rect rx="13" ry="13" width="214" height="58" fill="rgba(20,4,3,.66)" stroke="rgba(240,173,166,.6)" stroke-width="2"/><text x="107.0" y="38" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="27" font-weight="700" fill="#f7c7c0">Cold email</text></g>
+        <g transform="translate(712,166) rotate(-6)"><rect rx="13" ry="13" width="129" height="58" fill="rgba(20,4,3,.66)" stroke="rgba(240,173,166,.6)" stroke-width="2"/><text x="64.5" y="38" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="27" font-weight="700" fill="#f7c7c0">X DMs</text></g>
+        <g transform="translate(372,286) rotate(-3)"><rect rx="13" ry="13" width="299" height="58" fill="rgba(20,4,3,.66)" stroke="rgba(240,173,166,.6)" stroke-width="2"/><text x="149.5" y="38" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="27" font-weight="700" fill="#f7c7c0">Facebook groups</text></g>
+        <g transform="translate(820,268) rotate(7)"><rect rx="13" ry="13" width="214" height="58" fill="rgba(20,4,3,.66)" stroke="rgba(240,173,166,.6)" stroke-width="2"/><text x="107.0" y="38" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="27" font-weight="700" fill="#f7c7c0">Cold calls</text></g>
+  </g>
+
+  <text x="34" y="52" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="26"
+        letter-spacing="5" font-weight="800" fill="#f7c7c0">RED OCEAN</text>
+  <text x="34" y="740" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="26"
+        letter-spacing="5" font-weight="800" fill="#8fc4f5">BLUE OCEAN</text>
+</svg>
+    <div class="ccfloat"><img src="img/cc-logo.png" alt="chess.com"><span>nobody is here</span></div>
+  </div>
+  <div class="sub">Same person. Completely different odds.</div>
 </div>
 
 </body>
