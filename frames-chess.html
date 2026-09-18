@@ -6,6 +6,7 @@
 <style>
   :root{
     --gold:#C4A34F; --gold-soft:#dcc07d; --ink:#f4f1ea; --mut:#a8a296; --bg:#0c0c0f;
+    --cc:#81b64c;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
@@ -16,61 +17,74 @@
     color:var(--ink);padding:60px 58px;display:flex;flex-direction:column;justify-content:center;
     position:relative;overflow:hidden}
   .eb{font-size:26px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:24px}
-  h1{font-size:100px;line-height:1.0;font-weight:800;letter-spacing:-.035em;text-wrap:balance}
+  h1{font-size:96px;line-height:1.0;font-weight:800;letter-spacing:-.035em;text-wrap:balance}
   h1.sm{font-size:76px}
   h1.xs{font-size:62px}
   h1 span{color:var(--gold)}
+  h1 .cc{color:var(--cc)}
   .sub{font-size:38px;line-height:1.38;color:var(--mut);font-weight:600;margin-top:28px}
 
-  /* the search string, treated like a product */
+  /* chess.com badge, top right */
+  .cbadge{position:absolute;top:48px;right:52px;display:flex;align-items:center;gap:14px}
+  .cbadge .pawn{width:58px;height:58px;border-radius:14px;background:var(--cc);
+    display:flex;align-items:center;justify-content:center;font-size:38px;line-height:1;color:#14340a}
+  .cbadge .wm{font-size:30px;font-weight:800;letter-spacing:-.02em;color:#e8e6e1}
+  .cbadge .wm i{font-style:normal;color:var(--cc)}
+
   .q{font-family:var(--mono);font-size:40px;font-weight:700;color:var(--gold-soft);
     border:2px solid rgba(196,163,79,.45);border-radius:18px;padding:30px 28px;
     background:rgba(196,163,79,.07);line-height:1.35;word-break:break-word;margin-top:12px}
   .qnote{font-family:var(--mono);font-size:24px;color:#6f6a5c;letter-spacing:.06em;margin-top:18px}
 
-  /* swap list */
   .swaps{display:flex;flex-direction:column;gap:14px;margin-top:10px}
   .sw{border:2px solid rgba(255,255,255,.09);border-radius:16px;padding:20px 24px;
     background:rgba(255,255,255,.02);font-family:var(--mono);font-size:32px;color:var(--gold-soft)}
 
-  .steps{display:flex;flex-direction:column;gap:16px;margin-top:8px}
+  .steps{display:flex;flex-direction:column;gap:18px;margin-top:8px}
   .st{display:flex;align-items:flex-start;gap:22px}
   .st .n{font-family:var(--mono);font-size:30px;font-weight:800;color:var(--gold);
     width:54px;flex:0 0 54px;padding-top:6px}
   .st .t{font-size:40px;font-weight:700;line-height:1.25}
   .st .t small{display:block;font-size:29px;font-weight:600;color:var(--mut);margin-top:6px}
+
+  .route{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+  .rt{display:flex;align-items:center;gap:18px;border:2px solid rgba(129,182,76,.35);
+    border-radius:16px;padding:20px 24px;background:rgba(129,182,76,.07);font-size:36px;font-weight:700}
+  .rt b{font-family:var(--mono);font-size:26px;color:var(--cc);font-weight:800}
 </style>
 </head>
 <body>
 
 <!-- c1 · HOOK -->
 <div class="f" id="c1">
-  <h1>I found a business owner on <span>chess.com</span>.</h1>
-  <div class="sub">On purpose.</div>
+  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
+  <h1>The most underrated client acquisition strategy right now is <span class="cc">chess.com</span>.</h1>
+  <div class="sub">I'm not joking. Give me twenty seconds.</div>
 </div>
 
 <!-- c2 · the gap -->
 <div class="f" id="c2">
   <div class="eb">Why it works</div>
   <h1 class="sm">Everyone is fighting in the same <span>Instagram DMs</span>.</h1>
-  <div class="sub">Nobody is here. That is the entire advantage.</div>
+  <div class="sub">Same inbox, same twenty messages, same day. Nobody is here.</div>
 </div>
 
 <!-- c3 · the search string -->
 <div class="f" id="c3">
+  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
   <div class="eb">Paste this into Google</div>
   <div class="q">site:chess.com/member "business"</div>
   <div class="qnote">that is it. that is the whole tool.</div>
 </div>
 
-<!-- c4 · what you are actually reading -->
+<!-- c4 · why this works at all -->
 <div class="f" id="c4">
   <div class="eb">What just happened</div>
-  <h1 class="xs">Chess.com profiles have a <span>bio</span>.<br>Google reads it.</h1>
+  <h1 class="xs">Chess.com profiles have a <span>bio</span>.<br>Google reads every one of them.</h1>
   <div class="sub">People write what they do for a living in there, and it sits on a public page nobody thinks to search.</div>
 </div>
 
-<!-- c5 · swap the word -->
+<!-- c5 · swaps -->
 <div class="f" id="c5">
   <div class="eb">Swap the word for your market</div>
   <div class="swaps">
@@ -81,34 +95,40 @@
   </div>
 </div>
 
-<!-- c6 · the turn -->
+<!-- c6 · you can just message them -->
 <div class="f" id="c6">
-  <h1 class="sm">You cannot DM him.</h1>
-  <div class="sub">There is no inbox to slide into. To talk to this man you have to <b style="color:var(--gold-soft)">play him at chess</b>.</div>
+  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
+  <h1 class="sm">And you can just <span class="cc">message them</span>.</h1>
+  <div class="route">
+    <div class="rt"><b>1</b>Open the profile</div>
+    <div class="rt"><b>2</b>Hit the three dots</div>
+    <div class="rt"><b>3</b>Chat</div>
+  </div>
 </div>
 
-<!-- c7 · why the friction is the point -->
+<!-- c7 · the angle -->
 <div class="f" id="c7">
-  <div class="eb">And that is the good part</div>
-  <h1 class="xs">Forty minutes of a stranger's <span>full attention</span>.</h1>
-  <div class="sub">No DM on earth gets that. You are in a game with him, not in a notification he swipes away.</div>
+  <div class="eb">And this is the part that matters</div>
+  <h1 class="xs">Your message is the only one in there.</h1>
+  <div class="sub">His Instagram has forty pitches in it. His chess.com inbox has never had one. Same person, completely different odds.</div>
 </div>
 
-<!-- c8 · how to actually do it -->
+<!-- c8 · how to not be weird about it -->
 <div class="f" id="c8">
-  <div class="eb">If you actually try it</div>
+  <div class="eb">Do it properly</div>
   <div class="steps">
-    <div class="st"><div class="n">1</div><div class="t">Run the search<small>swap the word for your market</small></div></div>
-    <div class="st"><div class="n">2</div><div class="t">Open a profile that is still active<small>check last online, plenty have not logged in since 2013</small></div></div>
-    <div class="st"><div class="n">3</div><div class="t">Challenge, do not pitch<small>play the game first. Talk after.</small></div></div>
+    <div class="st"><div class="n">1</div><div class="t">Check they still log in<small>plenty of these profiles have been dead since 2013</small></div></div>
+    <div class="st"><div class="n">2</div><div class="t">Play them first<small>challenge, lose, then talk. You are a person, not a pitch</small></div></div>
+    <div class="st"><div class="n">3</div><div class="t">Mention the chess, not the offer<small>you found him on a chess site. Open like a human would</small></div></div>
   </div>
 </div>
 
 <!-- c9 · CTA -->
 <div class="f" id="c9">
-  <div class="eb">The search</div>
-  <h1 class="sm">Comment <span>CHESS</span></h1>
-  <div class="sub">and I'll send you the exact string plus the swaps for your market.</div>
+  <div class="cbadge"><div class="pawn">&#9823;</div><div class="wm">chess<i>.com</i></div></div>
+  <div class="eb">The whole thing, written up</div>
+  <h1 class="sm">Comment <span class="cc">CHESS</span></h1>
+  <div class="sub">and I'll send you the full SOP: the searches, the swaps, how to pick a live profile and the exact opener.</div>
 </div>
 
 </body>
