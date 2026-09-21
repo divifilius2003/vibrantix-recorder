@@ -188,18 +188,18 @@
     },
 
     'optin-rate': {
-      name: 'Opt-in rate · the page everyone would switch off',
+      name: 'Opt-in rate \u00b7 the page everyone would switch off',
       beats: [
-        {img:'img/opt1.jpg', s:"Seven opt-in pages, one launch, eighth of September. The page that won on opt-in rate came last on quality. If I'd picked the winner the way everyone picks it, I'd have kept the worst page in the test."},
-        {img:'img/opt2.jpg', s:"This is how everyone ranks them. Money qualifier on top at eighteen point nine. Control at the bottom on seventeen. You keep the top one, you switch off the bottom one. Top to bottom, the whole spread is one point nine points."},
-        {img:'img/opt3.jpg', s:"Same five pages. Same traffic. Same week. Ranked on who actually qualified. It's exactly upside down. The page I was about to switch off is the one producing the buyers."},
-        {img:'img/opt4.jpg', s:"Head to head. One point nine points lower on opt-in rate, and nearly twice the qualified leads. Twenty three against forty three, on almost identical traffic."},
-        {img:'img/opt5.jpg', s:"Here's why the number everyone uses can't tell you. Opt-in rate moved one point nine points across four thousand two hundred views. Quality moved nearly double. The number you're optimising barely moves. The one you're not measuring nearly doubles."},
-        {img:'img/opt6.jpg', s:"And I got this wrong myself. Sixth of September, I switched an ad off because it opted in at twelve percent. It had the cheapest qualified lead on the whole account. Ten forty five against eleven eighty five. I'd already written down that opt-in rate was the wrong yardstick, and then used it anyway."},
-        {img:'img/opt7.jpg', s:"What I won't claim. One client, one ad account, three launches. The ad I killed only spent a hundred and seventy eight pounds against sixteen hundred, so that one is directional, not proof. And this chain stops at qualified. I don't have buyer numbers page by page yet. When I do, I'll post them."},
-        {img:'img/opt8.jpg', s:"So track these three instead. Qualified rate, per page. Cost per qualified registration, per ad. And both of them side by side, per variant, because one page can win the first and lose the second."},
-        {img:'img/opt9.jpg', s:"One build rule decides whether you get any of this. Ask the qualifying question after they're registered, never in front of it. We gated registration behind it and forty six point eight percent never came back."},
-        {img:'img/opt10.jpg', s:"Comment PAGES and I'll send you the tracking SOP and the prompt that builds your own analytics page."}
+        {img:'img/opt1.jpg', s:"Five opt-in pages, one launch, eighth of September. Same offer, same traffic, same week. And the best page in this test is the one you'd have switched off."},
+        {img:'img/opt2.jpg', s:"Because here's what everyone does. Rank them by opt-in rate, keep the top one, kill the bottom one. Top page to bottom page, the whole spread is one point nine points across four thousand two hundred views. That's what the decision gets made on."},
+        {img:'img/opt3.jpg', s:"Now the same five pages, ranked on who actually qualified. It's exactly upside down. The page that won on opt-in rate came last on quality."},
+        {img:'img/opt4.jpg', s:"Head to head. One point nine points fewer opt-ins, and nearly twice the qualified leads. Twenty three against forty three, on seven hundred and ninety five views against eight hundred and seventy one."},
+        {img:'img/opt5.jpg', s:"That's why the usual number can't tell you anything. Opt-in rate moved one point nine points. Quality moved nearly double. You're optimising the flat line."},
+        {img:'img/opt6.jpg', s:"So this is the only ranking that decides it. Qualified leads per thousand views, so page size can't flatter anything. Forty nine against twenty nine, top to bottom. This is the list you switch pages off from, and it's not the list anyone looks at."},
+        {img:'img/opt7.jpg', s:"What I won't claim. One client, one ad account, one launch. Five pages and four thousand views is enough to act on, not enough to call it settled. And this chain stops at qualified, I don't have buyer numbers page by page yet. When I do I'll post them either way."},
+        {img:'img/opt8.jpg', s:"So track these instead. Qualified rate per page. Cost per qualified registration. And both of them sat next to the opt-in rate, because that's the only way you see them disagree."},
+        {img:'img/opt9.jpg', s:"And one build rule, or none of it exists. Ask the qualifying question after they're registered, never in front of it. We put it in front and forty six point eight percent of the room left to answer it."},
+        {img:'img/opt10.jpg', s:"Comment PAGES and I'll send you the tracking SOP and the prompt that builds your own opt-in page analytics."}
       ]
     },
 
@@ -637,7 +637,18 @@
       var o=document.createElement('option'); o.value=k; o.textContent=BOARDS[k].name;
       if(k===_slug) o.selected=true; sel.appendChild(o);
     });
-    sel.addEventListener('change', function(){ location.search='?b='+sel.value; });
+    // Switch in place. This used to set location.search, which reloads — and a
+    // cached copy of this file without the newest board then fell back to the
+    // default, so picking a new board silently gave you the old one.
+    sel.addEventListener('change', function(){
+      var k = sel.value;
+      if(!BOARDS[k]) return;
+      _slug = k; beats = BOARDS[k].beats;
+      i = 0; from = 0; trans = 0; animating = false;
+      STROKES = {};
+      try{ history.replaceState(null, '', '?b=' + k); }catch(e){}
+      updateLabel();
+    });
   })();
 
   updateLabel();   // populate the script panel on load, not just after camera-enable
