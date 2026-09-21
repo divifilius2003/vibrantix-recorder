@@ -38,6 +38,13 @@
     font-weight:700; margin-bottom:9px; }
   .scriptbox p{ font-size:19px; line-height:1.55; color:#f4f1ea; font-weight:500; margin:0; }
   .scriptbox:empty{ display:none; }
+  #meter{ width:104px; height:11px; border-radius:6px; background:#1b1b20; border:1px solid #33312c; overflow:hidden; }
+  #meter i{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#6f8257,var(--gold)); transition:width .06s linear; }
+  #microw.bad #meter{ border-color:#e5484d; }
+  .warn{ display:none; max-width:560px; text-align:center; font-size:13px; font-weight:600; line-height:1.5;
+    border:1px solid #e5484d; background:rgba(229,72,77,.10); color:#ffb4b6; border-radius:11px; padding:10px 14px; }
+  .warn.on{ display:block; }
+  .warn b{ color:#fff; }
 
 </style>
 </head>
@@ -54,6 +61,11 @@
       <label for="boardsel" style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:700">Board</label>
       <select id="boardsel" style="background:#141418;color:#f4f1ea;border:1px solid #33312c;border-radius:9px;padding:8px 11px;font:inherit;font-size:14px;font-weight:600"></select>
     </div>
+    <div class="row" id="microw" style="margin-bottom:2px">
+      <label for="micsel" style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:700">Mic</label>
+      <select id="micsel" style="background:#141418;color:#f4f1ea;border:1px solid #33312c;border-radius:9px;padding:8px 11px;font:inherit;font-size:14px;font-weight:600;max-width:230px"><option>—</option></select>
+      <div id="meter" title="Speak — this should move"><i></i></div>
+    </div>
     <div class="row">
       <button id="prev" disabled>&larr; Prev</button>
       <span id="beatlabel">1 / 9</span>
@@ -63,9 +75,11 @@
     <button id="stop" disabled>&#9632; Stop</button>
     <a class="dl" id="download" style="display:none"><button class="primary">&darr; Download reel</button></a>
   </div>
+  <div class="warn" id="warn"></div>
   <div class="hint">
-    1. Enable camera &amp; mic. 2. Hit <b>Record</b>. 3. Advance the board with <b>Next</b> (or the &rarr; key) while you talk.
-    4. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.
+    1. Enable camera &amp; mic. 2. <b>Say something and watch the Mic bar move</b> &mdash; if it doesn't, the take will be silent.
+    3. Hit <b>Record</b>. 4. Advance the board with <b>Next</b> (or the &rarr; key) while you talk.
+    5. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.
   </div>
   <div class="scriptbox" id="scriptbox">
     <div class="slab">Say this <span id="scriptnum"></span></div>
@@ -525,27 +539,121 @@
   document.getElementById('prev').onclick=function(){ go(i-1); };
   window.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);} if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);} });
 
-  // camera
-  var stream=null;
-  document.getElementById('enable').onclick=async function(){
+  // =================================================================
+  // CAMERA + MIC
+  // Asked for together, a granted camera hides a refused mic and you
+  // find out after the take. They are acquired SEPARATELY so a mic
+  // failure is reported on its own, and a live level meter proves the
+  // mic is actually passing signal BEFORE you record.
+  // =================================================================
+  var stream=null, astream=null, meterRAF=null, actx=null;
+
+  function warn(html){ var w=document.getElementById('warn');
+    if(!html){ w.classList.remove('on'); w.innerHTML=''; return; }
+    w.innerHTML=html; w.classList.add('on'); }
+  function micBad(bad){ document.getElementById('microw').classList.toggle('bad', !!bad); }
+
+  function stopMeter(){ if(meterRAF) cancelAnimationFrame(meterRAF); meterRAF=null;
+    document.querySelector('#meter i').style.width='0%'; }
+
+  function startMeter(st){
+    stopMeter();
     try{
-      stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720},facingMode:'user'},audio:true});
+      actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+      if(actx.state==='suspended') actx.resume();
+      var src=actx.createMediaStreamSource(st), an=actx.createAnalyser();
+      an.fftSize=512; src.connect(an);
+      var buf=new Uint8Array(an.fftSize), bar=document.querySelector('#meter i'), quiet=0;
+      (function tick(){
+        an.getByteTimeDomainData(buf);
+        var peak=0; for(var k=0;k<buf.length;k++){ var v=Math.abs(buf[k]-128); if(v>peak) peak=v; }
+        var pct=Math.min(100, (peak/48)*100);
+        bar.style.width=pct.toFixed(0)+'%';
+        quiet = pct<2 ? quiet+1 : 0;
+        meterRAF=requestAnimationFrame(tick);
+      })();
+    }catch(e){ /* meter is a nicety; never let it break recording */ }
+  }
+
+  async function listMics(){
+    try{
+      var devs=await navigator.mediaDevices.enumerateDevices();
+      var ins=devs.filter(function(d){ return d.kind==='audioinput'; });
+      var sel=document.getElementById('micsel'); sel.innerHTML='';
+      if(!ins.length){ sel.innerHTML='<option>no input found</option>'; return; }
+      var cur = astream && astream.getAudioTracks()[0] && astream.getAudioTracks()[0].getSettings().deviceId;
+      ins.forEach(function(d,n){
+        var o=document.createElement('option'); o.value=d.deviceId;
+        o.textContent=d.label||('Microphone '+(n+1));
+        if(d.deviceId===cur) o.selected=true;
+        sel.appendChild(o);
+      });
+    }catch(e){}
+  }
+
+  async function getMic(deviceId){
+    if(astream){ astream.getTracks().forEach(function(t){ t.stop(); }); astream=null; }
+    try{
+      astream = await navigator.mediaDevices.getUserMedia({
+        audio: deviceId ? {deviceId:{exact:deviceId}} : {echoCancellation:true, noiseSuppression:true}
+      });
+      var tr=astream.getAudioTracks()[0];
+      if(!tr){ throw new Error('granted but no audio track'); }
+      micBad(false);
+      warn('');
+      silentOK=false;          // re-arm the guard now that a mic is back
+      startMeter(astream);
+      await listMics();
+      // a track can be live but muted at the OS level — that still records silence
+      if(tr.muted) warn('Your mic track is <b>muted at the system level</b>. Check macOS input settings, then reload.');
+      return true;
+    }catch(err){
+      astream=null; micBad(true); stopMeter();
+      warn('<b>No microphone.</b> ' + (err && err.message ? err.message : '') +
+           '<br>Click the camera icon in the address bar, set Microphone to <b>Allow</b>, then reload. ' +
+           'You can still record, but it will be silent.');
+      return false;
+    }
+  }
+
+  document.getElementById('enable').onclick=async function(){
+    var btn=document.getElementById('enable');
+    btn.disabled=true; btn.textContent='Starting…';
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720},facingMode:'user'}});
       cam.srcObject=stream; await cam.play();
-      document.getElementById('enable').textContent='Camera on';
-      document.getElementById('enable').disabled=true;
+      btn.textContent='Camera on';
       document.getElementById('record').disabled=false;
       document.getElementById('next').disabled=false;
       updateLabel();
-    }catch(err){ alert('Camera/mic blocked: '+err.message+'\nAllow access and reload. (Must be on https or localhost.)'); }
+    }catch(err){
+      btn.disabled=false; btn.textContent='Enable camera & mic';
+      warn('<b>Camera blocked.</b> '+(err&&err.message?err.message:'')+' Allow access and reload. Must be on https or localhost.');
+      return;
+    }
+    await getMic(null);          // mic asked for separately, so it fails loudly on its own
   };
+
+  document.getElementById('micsel').onchange=function(){ getMic(this.value); };
 
   // recording
   var mr=null, chunks=[], t0=0, timerInt=null;
   function pickMime(){ var c=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm']; for(var k=0;k<c.length;k++){ if(window.MediaRecorder&&MediaRecorder.isTypeSupported(c[k])) return c[k]; } return ''; }
+  var silentOK=false;
   document.getElementById('record').onclick=function(){
-    if(!stream) return; chunks=[];
+    if(!stream) return;
+    var atracks = astream ? astream.getAudioTracks().filter(function(t){ return t.readyState==='live'; }) : [];
+    // Never start a long take that is silently video-only. Make it a decision.
+    if(!atracks.length && !silentOK){
+      silentOK=true;
+      warn('<b>There is no microphone — this take will have NO SOUND.</b><br>' +
+           'Fix the mic above, or press Record again to record silent anyway.');
+      return;
+    }
+    chunks=[];
     var out=canvas.captureStream(30);
-    stream.getAudioTracks().forEach(function(tr){ out.addTrack(tr); });
+    atracks.forEach(function(tr){ out.addTrack(tr); });
+    if(atracks.length) warn('');
     var mime=pickMime();
     try{ mr=new MediaRecorder(out, mime?{mimeType:mime,videoBitsPerSecond:6000000}:undefined); }
     catch(e){ alert('Recording not supported in this browser: '+e.message); return; }
