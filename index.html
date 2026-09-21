@@ -38,6 +38,11 @@
     font-weight:700; margin-bottom:9px; }
   .scriptbox p{ font-size:19px; line-height:1.55; color:#f4f1ea; font-weight:500; margin:0; }
   .scriptbox:empty{ display:none; }
+  button.mini{ font-size:13px; padding:7px 12px; border-radius:9px; }
+  button.mini.on{ background:var(--gold); color:#0b0b0d; border-color:var(--gold); }
+  .sw{ width:26px; height:26px; border-radius:50%; border:2px solid #3a3832; cursor:pointer; padding:0; }
+  .sw.on{ border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,.25); }
+  canvas#stage.draw{ cursor:crosshair; touch-action:none; }
   #meter{ width:104px; height:11px; border-radius:6px; background:#1b1b20; border:1px solid #33312c; overflow:hidden; }
   #meter i{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#6f8257,var(--gold)); transition:width .06s linear; }
   #microw.bad #meter{ border-color:#e5484d; }
@@ -71,6 +76,15 @@
       <span id="beatlabel">1 / 9</span>
       <button id="next" disabled>Next &rarr;</button>
     </div>
+    <div class="row" id="toolrow" style="margin-bottom:2px">
+      <label style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:700">Draw</label>
+      <button class="mini on" data-tool="off">Off</button>
+      <button class="mini" data-tool="pen">Pen</button>
+      <button class="mini" data-tool="hi">Highlight</button>
+      <span id="swatches" style="display:flex;gap:6px;margin:0 4px"></span>
+      <button class="mini" id="undo">Undo</button>
+      <button class="mini" id="clearmarks">Clear</button>
+    </div>
     <button class="rec" id="record" disabled>&#9679; Record</button>
     <button id="stop" disabled>&#9632; Stop</button>
     <a class="dl" id="download" style="display:none"><button class="primary">&darr; Download reel</button></a>
@@ -79,7 +93,10 @@
   <div class="hint">
     1. Enable camera &amp; mic. 2. <b>Say something and watch the Mic bar move</b> &mdash; if it doesn't, the take will be silent.
     3. Hit <b>Record</b>. 4. Advance the board with <b>Next</b> (or the &rarr; key) while you talk.
-    5. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.
+    5. <b>Stop</b> &rarr; <b>Download</b> a finished 9:16 reel. One take, no editing.<br>
+    <b>Draw:</b> pick Pen or Highlight and mark straight on the frame while you talk &mdash; it records.
+    Marks are kept <b>per slide</b>, so Next wipes the screen and Prev brings them back.
+    Keys: <b>P</b> pen &middot; <b>H</b> highlight &middot; <b>Z</b> undo &middot; <b>X</b> clear.
   </div>
   <div class="scriptbox" id="scriptbox">
     <div class="slab">Say this <span id="scriptnum"></span></div>
@@ -481,6 +498,89 @@
     ctx.fillStyle='rgba(196,163,79,.4)'; ctx.fillRect(0,camH-2,W,2);
   }
 
+  // =================================================================
+  // ANNOTATION — draw on the frame while recording.
+  // Strokes are stored PER BEAT, so advancing clears the screen and going
+  // back brings your marks with it. They are drawn into the same canvas
+  // that captureStream() records, so they are baked into the reel.
+  // =================================================================
+  var STROKES = {}, tool = 'off', inkIdx = 0, drawing = null;
+  var INKS = ['#e5484d', '#C4A34F', '#ffffff', '#4cc2ff'];
+  var PEN = { w: 9, a: 1 }, HI = { w: 46, a: 0.32 };
+
+  function drawStrokes(){
+    var arr = STROKES[i];
+    if(!arr || !arr.length || animating) return;      // hide during the slide
+    ctx.save();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for(var s = 0; s < arr.length; s++){
+      var st = arr[s], p = st.pts;
+      if(p.length < 2) {                              // a tap = a dot
+        ctx.globalAlpha = st.a; ctx.fillStyle = st.c;
+        ctx.beginPath(); ctx.arc(p[0][0], p[0][1], st.w / 2, 0, Math.PI * 2); ctx.fill();
+        continue;
+      }
+      ctx.globalAlpha = st.a; ctx.strokeStyle = st.c; ctx.lineWidth = st.w;
+      ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
+      for(var k = 1; k < p.length; k++) ctx.lineTo(p[k][0], p[k][1]);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function toCanvas(e){
+    var r = canvas.getBoundingClientRect();
+    return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H];
+  }
+  canvas.addEventListener('pointerdown', function(e){
+    if(tool === 'off') return;
+    e.preventDefault();
+    canvas.setPointerCapture(e.pointerId);
+    var cfg = tool === 'hi' ? HI : PEN;
+    drawing = { c: INKS[inkIdx], w: cfg.w, a: cfg.a, pts: [toCanvas(e)] };
+    (STROKES[i] = STROKES[i] || []).push(drawing);
+  });
+  canvas.addEventListener('pointermove', function(e){
+    if(!drawing) return;
+    e.preventDefault();
+    var p = toCanvas(e), last = drawing.pts[drawing.pts.length - 1];
+    // skip sub-pixel jitter so the stroke stays light
+    if(Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) > 1.5) drawing.pts.push(p);
+  });
+  function endStroke(){ drawing = null; }
+  canvas.addEventListener('pointerup', endStroke);
+  canvas.addEventListener('pointercancel', endStroke);
+  canvas.addEventListener('pointerleave', endStroke);
+
+  function setTool(t){
+    tool = t;
+    [].forEach.call(document.querySelectorAll('#toolrow button[data-tool]'), function(b){
+      b.classList.toggle('on', b.dataset.tool === t);
+    });
+    canvas.classList.toggle('draw', t !== 'off');
+  }
+  [].forEach.call(document.querySelectorAll('#toolrow button[data-tool]'), function(b){
+    b.onclick = function(){ setTool(b.dataset.tool); };
+  });
+  (function(){
+    var box = document.getElementById('swatches');
+    INKS.forEach(function(col, n){
+      var b = document.createElement('button');
+      b.className = 'sw' + (n === 0 ? ' on' : '');
+      b.style.background = col; b.title = col;
+      b.onclick = function(){
+        inkIdx = n;
+        [].forEach.call(box.children, function(c, m){ c.classList.toggle('on', m === n); });
+        if(tool === 'off') setTool('pen');          // picking a colour means you want to draw
+      };
+      box.appendChild(b);
+    });
+  })();
+  document.getElementById('undo').onclick = function(){
+    if(STROKES[i] && STROKES[i].length) STROKES[i].pop();
+  };
+  document.getElementById('clearmarks').onclick = function(){ delete STROKES[i]; };
+
   function frame(){
     // board bg
     ctx.fillStyle='#0a0a0d'; ctx.fillRect(0,camH,W,H-camH);
@@ -494,6 +594,7 @@
       drawBeat(beats[i], (1-e)*(H-camH));      // incoming from below
     } else { drawBeat(beats[i], 0); }
     drawCamera();
+    drawStrokes();          // on top of both halves, and baked into the recording
     // brand
     ctx.fillStyle='rgba(143,138,126,.8)'; ctx.font='700 22px system-ui,sans-serif'; ctx.textBaseline='alphabetic';
     ctx.fillText(spaced('VIBRANTIX'), 60, H-40);
@@ -537,7 +638,14 @@
 
   document.getElementById('next').onclick=function(){ go(i+1); };
   document.getElementById('prev').onclick=function(){ go(i-1); };
-  window.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);} if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);} });
+  window.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);}
+    if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);}
+    if(e.key==='z'||e.key==='Z'){ if(STROKES[i]&&STROKES[i].length) STROKES[i].pop(); }
+    if(e.key==='x'||e.key==='X'){ delete STROKES[i]; }
+    if(e.key==='p'||e.key==='P'){ setTool(tool==='pen'?'off':'pen'); }
+    if(e.key==='h'||e.key==='H'){ setTool(tool==='hi'?'off':'hi'); }
+  });
 
   // =================================================================
   // CAMERA + MIC
