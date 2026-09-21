@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vibrantix Reel Recorder</title>
 <style>
@@ -117,6 +119,8 @@
   // Beat 1 must put something checkable on screen, with a date.
   // Load a specific board with ?b=<slug>.
   // ---------------------------------------------------------------
+  var ASSET_V = '6';   // bump whenever a frame image is re-rendered
+
   var BOARDS = {
 
     'coaching-ads': {
@@ -392,7 +396,7 @@
     Object.keys(want).forEach(function(src){
       // frame() is already looping on rAF, so caching the image is enough — the
       // old draw() call here was a leftover and threw on every single load
-      var im = new Image(); im.onload = function(){ IMGS[src]=im; }; im.src = src;
+      var im = new Image(); im.onload = function(){ IMGS[src]=im; }; im.src = src + '?v=' + ASSET_V;
     });
   })();
 
