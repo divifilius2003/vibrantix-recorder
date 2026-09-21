@@ -67,127 +67,132 @@
 </head>
 <body>
 
-<!-- o1 · hook: the exhibit, with a date -->
+<!-- o1 · HOOK: the exhibit, and the reversal, up front -->
 <div class="f" id="o1">
-  <div class="eb">Seven opt-in pages · one launch · 8 Sep 2026</div>
-  <h1>The page that <span>won</span> on opt-in rate came <em>last</em> on quality.</h1>
-  <div class="sub">Same traffic, same week, same splitter. If I had picked the winner the way everyone picks it, I would have kept the worst page in the test.</div>
-</div>
-
-<!-- o2 · what everyone does -->
-<div class="f" id="o2">
-  <div class="eb">How everyone ranks them</div>
-  <h1 class="sm">Opt-in rate</h1>
-  <div class="chart" style="margin-top:34px">
-    <div class="row"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:94.5%"><div class="solid"></div></div></div><div class="val">18.9%<i>KEEP</i></div></div>
+  <div class="eb">Five opt-in pages &middot; one launch &middot; 8 Sep 2026</div>
+  <h1 class="sm">The best page in this test is the one you would have <em>switched off</em>.</h1>
+  <div class="chart" style="margin-top:38px">
+    <div class="row"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:94.5%"><div class="solid"></div></div></div><div class="val">18.9%</div></div>
     <div class="row"><div class="lbl">Liver</div><div class="track"><div class="fill" style="width:88.0%"><div class="solid"></div></div></div><div class="val">17.6%</div></div>
     <div class="row"><div class="lbl">Gut</div><div class="track"><div class="fill" style="width:86.5%"><div class="solid"></div></div></div><div class="val">17.3%</div></div>
     <div class="row"><div class="lbl">Parasites</div><div class="track"><div class="fill" style="width:86.0%"><div class="solid"></div></div></div><div class="val">17.2%</div></div>
-    <div class="row dead"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:85.0%"><div class="solid"></div></div></div><div class="val">17.0%<i>KILL</i></div></div>
+    <div class="row dead"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:85.0%"><div class="solid"></div></div></div><div class="val">17.0%<i>LAST</i></div></div>
   </div>
-  <div class="note">4,262 views across the five arms. Top to bottom, the whole spread is 1.9 points.</div>
+  <div class="note">Same offer, same traffic, same week, one split test. Ranked the way everybody ranks them.</div>
 </div>
 
-<!-- o3 · the same pages, ranked on who actually qualified -->
+<!-- o2 · WHAT MOST PEOPLE DO -->
+<div class="f" id="o2">
+  <div class="eb">What everyone does</div>
+  <h1 class="sm">Rank by opt-in rate.<br>Keep the top. Kill the bottom.</h1>
+  <div style="margin-top:52px;display:flex;align-items:baseline;gap:26px">
+    <div style="font-family:var(--mono);font-size:150px;font-weight:800;color:var(--gold);letter-spacing:-.04em;line-height:1">1.9</div>
+    <div style="font-size:42px;font-weight:800;color:var(--mut)">points</div>
+  </div>
+  <div class="sub" style="margin-top:18px">Top page to bottom page, that is the entire spread. Across 4,262 views. That is what the decision gets made on.</div>
+  <div class="note">Third test in a row where changing the headline barely moved this number.</div>
+</div>
+
+<!-- o3 · WHY IT IS WRONG, part one: the flip -->
 <div class="f" id="o3">
-  <div class="eb">The same five pages · ranked on qualified</div>
-  <h1 class="sm">Qualified rate</h1>
-  <div class="chart" style="margin-top:34px">
+  <div class="eb">The same five pages &middot; ranked on who qualified</div>
+  <h1 class="sm">Exactly <span>upside down</span>.</h1>
+  <div class="chart" style="margin-top:38px">
     <div class="row"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:97%"><div class="solid"></div></div></div><div class="val">29.1%</div></div>
     <div class="row"><div class="lbl">Liver</div><div class="track"><div class="fill" style="width:90%"><div class="solid"></div></div></div><div class="val">27.0%</div></div>
     <div class="row"><div class="lbl">Gut</div><div class="track"><div class="fill" style="width:83%"><div class="solid"></div></div></div><div class="val">24.8%</div></div>
     <div class="row"><div class="lbl">Parasites</div><div class="track"><div class="fill" style="width:70%"><div class="solid"></div></div></div><div class="val">20.9%</div></div>
     <div class="row dead"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:51%"><div class="solid"></div></div></div><div class="val">15.3%</div></div>
   </div>
-  <div class="note">Exactly upside down. The page I was about to switch off is the one producing the buyers.</div>
+  <div class="note">The page that won on opt-in rate came last on quality. The one at the bottom is producing the buyers.</div>
 </div>
 
-<!-- o4 · the head to head, one bar each, gold = qualified -->
+<!-- o4 · WHY IT IS WRONG, part two: the head to head -->
 <div class="f" id="o4">
-  <div class="eb">Head to head · same 1,666 views</div>
-  <h1 class="sm">1.9 points lower.<br><span>Nearly twice</span> the qualified leads.</h1>
-  <div class="chart" style="margin-top:38px">
+  <div class="eb">Head to head &middot; 795 views against 871</div>
+  <h1 class="sm">1.9 points fewer opt-ins.<br><span>Nearly twice</span> the qualified leads.</h1>
+  <div class="chart" style="margin-top:40px">
     <div class="row"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:94.5%"><div class="qual" style="width:15.3%"></div><div class="rest" style="width:84.7%"></div></div></div><div class="val">23<i>QUALIFIED</i></div></div>
     <div class="row"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:85.0%"><div class="qual" style="width:29.1%"></div><div class="rest" style="width:70.9%"></div></div></div><div class="val">43<i>QUALIFIED</i></div></div>
   </div>
   <div class="key"><span class="k1"><i></i>Qualified</span><span class="k2"><i></i>Everyone else</span></div>
-  <div class="note">Bar length is the opt-in rate. The shorter bar has more gold in it. 795 views against 871.</div>
+  <div class="note">Bar length is the opt-in rate. The shorter bar has more gold in it.</div>
 </div>
 
-<!-- o5 · why the usual number is the wrong one -->
+<!-- o5 · WHY IT IS WRONG, the sentence it all reduces to -->
 <div class="f" id="o5">
-  <div class="eb">Why the usual number cannot tell you</div>
+  <div class="eb">Why that number cannot tell you</div>
   <div class="cols">
     <div class="col">
       <div class="ct">Opt-in rate moved</div>
-      <div class="cv">1.9<span style="font-size:32px">pts</span></div>
-      <div class="cs">Across 4,262 views. Third straight test where the headline barely moved it.</div>
+      <div class="cv">1.9<span style="font-size:30px">pts</span></div>
+      <div class="cs">Across 4,262 views. Close to flat.</div>
     </div>
     <div class="col good">
       <div class="ct">Quality moved</div>
-      <div class="cv">1.9<span style="font-size:32px">x</span></div>
-      <div class="cs">15.3% to 29.1% qualified, on the same pages, in the same week.</div>
+      <div class="cv">1.9<span style="font-size:30px">x</span></div>
+      <div class="cs">15.3% to 29.1% qualified. Same pages, same week.</div>
     </div>
   </div>
-  <h1 class="xs" style="margin-top:44px">The number you are optimising barely moves. The one you are not measuring nearly doubles.</h1>
+  <h1 class="sm" style="margin-top:50px">You are optimising the <span>flat line</span>.</h1>
 </div>
 
-<!-- o6 · the confession, with a date -->
+<!-- o6 · and I did it too, with a date -->
 <div class="f" id="o6">
-  <div class="eb">The one I got wrong · 6 Sep 2026</div>
+  <div class="eb">I did it myself &middot; 6 Sep 2026</div>
   <h1 class="sm">I switched off the cheapest qualified lead on the account.</h1>
-  <div class="cols" style="margin-top:36px">
+  <div class="cols" style="margin-top:38px">
     <div class="col">
-      <div class="ct">Ad 4 · kept</div>
+      <div class="ct">Ad 4 &middot; kept</div>
       <div class="cv">20.9%</div>
       <div class="cs">opt-in rate<br><b style="color:#f4f1ea">&pound;11.85</b> per qualified lead</div>
     </div>
     <div class="col good">
-      <div class="ct">Ad 3 · killed</div>
+      <div class="ct">Ad 3 &middot; killed</div>
       <div class="cv">12.4%</div>
       <div class="cs">opt-in rate<br><b style="color:var(--gold)">&pound;10.45</b> per qualified lead</div>
     </div>
   </div>
-  <div class="note">I had already written down that opt-in rate was the wrong yardstick, and then used it anyway.</div>
+  <div class="note">I had already written down that opt-in rate was the wrong yardstick. Then I used it anyway.</div>
 </div>
 
-<!-- o7 · what I will not claim -->
+<!-- o7 · the honesty beat -->
 <div class="f" id="o7">
   <div class="eb">What I will not claim</div>
   <h1 class="sm">This is a pattern on one account. It is not a law.</h1>
   <ul class="steps" style="margin-top:34px">
     <li><b>01</b><div>One client, one ad account, three launches<small>Whether it holds anywhere else is still an open question in our own notes.</small></div></li>
-    <li><b>02</b><div>Ad 3 spent &pound;178 against Ad 4's &pound;1,647<small>Seventeen qualified leads. Directional, not proof.</small></div></li>
-    <li><b>03</b><div>This chain stops at qualified<small>We do not yet have buyer numbers page by page. I will post them when we do.</small></div></li>
+    <li><b>02</b><div>Ad 3 spent &pound;178 against Ad 4&rsquo;s &pound;1,647<small>Seventeen qualified leads. Directional, not proof.</small></div></li>
+    <li><b>03</b><div>This chain stops at qualified<small>No buyer numbers page by page yet. When I have them I will post them either way.</small></div></li>
   </ul>
 </div>
 
-<!-- o8 · what to track instead -->
+<!-- o8 · WHAT TO DO INSTEAD -->
 <div class="f" id="o8">
-  <div class="eb">Track these three instead</div>
-  <ul class="steps" style="margin-top:8px">
-    <li><b>01</b><div>Qualified rate, per page<small>Not opt-ins. The share of them that match who you can actually sell to.</small></div></li>
+  <div class="eb">What to track instead</div>
+  <ul class="steps" style="margin-top:6px">
+    <li><b>01</b><div>Qualified rate, per page<small>Not how many opted in. What share of them match who you can actually sell to.</small></div></li>
     <li><b>02</b><div>Cost per qualified registration, per ad<small>Ours ran &pound;8.00 on one launch and &pound;11.02 on the next. Cost per lead said the opposite both times.</small></div></li>
-    <li><b>03</b><div>Both of them side by side, per variant<small>One page can win the first and lose the second. That is the whole point.</small></div></li>
+    <li><b>03</b><div>Both, side by side, per variant<small>A page can win the first and lose the second. That is the only view that tells you what to switch off.</small></div></li>
   </ul>
 </div>
 
-<!-- o9 · the one build rule that decides whether you get the data at all -->
+<!-- o9 · the build rule that decides whether the data exists at all -->
 <div class="f" id="o9">
-  <div class="eb">The rule that decides whether you get the data</div>
+  <div class="eb">The build rule none of it works without</div>
   <h1 class="sm">Ask the qualifying question <span>after</span> they are registered. Never in front of it.</h1>
-  <div class="chart" style="margin-top:40px">
+  <div class="chart" style="margin-top:42px">
     <div class="row"><div class="lbl">Reached the form</div><div class="track"><div class="fill" style="width:100%"><div class="solid"></div></div></div><div class="val">948</div></div>
     <div class="row dead"><div class="lbl">Never came back</div><div class="track"><div class="fill" style="width:46.8%"><div class="solid"></div></div></div><div class="val">444</div></div>
   </div>
-  <div class="note">46.8% of them. We gated registration behind the question instead of putting it on the thank-you page, and lost nearly half the room to find out who they were.</div>
+  <div class="note">We put it in front. 46.8% of the room left to answer it. Put it on the thank-you page and you keep them and still learn who they are.</div>
 </div>
 
 <!-- o10 · CTA -->
 <div class="f" id="o10">
   <div class="eb">Build the page that shows you this</div>
   <h1 class="sm">Comment <span>PAGES</span></h1>
-  <div class="sub">I'll send you the tracking SOP and the prompt that builds your own analytics page: opt-in rate per variant, qualified rate per variant, cost per qualified lead per ad.</div>
+  <div class="sub">I&rsquo;ll send you the tracking SOP and the prompt that builds your own opt-in page analytics: every variant&rsquo;s opt-in rate, its qualified rate, and what a qualified lead costs you per ad.</div>
 </div>
 
 </body>
