@@ -122,15 +122,61 @@
   .opts2{display:flex;flex-direction:column;gap:12px;margin-top:22px}
   .opts2 .o{border:2px solid rgba(255,255,255,.16);border-radius:9px;padding:16px 18px;font-size:25px;color:#c9c4ba}
   .opts2 .o.q{border-color:var(--gold);background:rgba(196,163,79,.13);color:var(--gold-soft);font-weight:700}
+
+  /* stylised live webinar, for the opening slide */
+  .weby{margin-top:40px;border-radius:16px;overflow:hidden;border:2px solid rgba(255,255,255,.10);
+    background:#111116;box-shadow:0 22px 60px rgba(0,0,0,.55)}
+  .weby .wbar{height:52px;background:#1a1a20;border-bottom:1px solid rgba(255,255,255,.07);
+    display:flex;align-items:center;gap:12px;padding:0 20px}
+  .weby .live{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:800;letter-spacing:.12em;color:#ff5f57}
+  .weby .live i{width:13px;height:13px;border-radius:50%;background:#ff5f57;display:inline-block}
+  .weby .watch{margin-left:auto;font-size:20px;font-weight:700;color:#8d887d;font-family:var(--mono)}
+  .weby .wmain{display:grid;grid-template-columns:1fr 250px;height:392px}
+  .weby .stage{position:relative;background:
+      radial-gradient(90% 70% at 30% 20%, rgba(196,163,79,.16), transparent 60%),#0d0d11;
+    padding:34px;display:flex;flex-direction:column;justify-content:center;gap:18px}
+  .weby .sl{height:20px;border-radius:6px;background:rgba(255,255,255,.13)}
+  .weby .sl.t{height:36px;width:74%;background:linear-gradient(90deg,var(--gold),rgba(196,163,79,.35))}
+  .weby .sl.a{width:88%} .weby .sl.b{width:66%} .weby .sl.c{width:78%}
+  .weby .cam{position:absolute;right:26px;bottom:26px;width:150px;height:106px;border-radius:11px;
+    background:linear-gradient(160deg,#3a3630,#1b1a18);border:2px solid rgba(196,163,79,.45)}
+  .weby .cam:after{content:"";position:absolute;left:50%;top:30px;width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,.22);transform:translateX(-50%)}
+  .weby .chat{background:#15151a;border-left:1px solid rgba(255,255,255,.07);padding:24px 20px;
+    display:flex;flex-direction:column;gap:17px}
+  .weby .msg{height:15px;border-radius:5px;background:rgba(255,255,255,.10)}
+  .weby .msg.s{width:62%} .weby .msg.m{width:86%} .weby .msg.l{width:100%}
+  .weby .msg.g{background:rgba(196,163,79,.42)}
 </style>
 </head>
 <body>
 
 <!-- g1 · the hook, in dollars -->
 <div class="f" id="g1">
-  <div class="eb">One webinar · nine days</div>
+  <div class="eb">One webinar &middot; nine days</div>
   <h1>$5,826 in ads. <span>$100,000</span> back.</h1>
-  <div class="sub">A 17&times; return on ad spend. Here is the exact webinar funnel that did it.</div>
+  <div class="sub" style="margin-top:20px">A 17&times; return on ad spend. Here is the exact webinar funnel that did it.</div>
+  <div class="weby">
+    <div class="wbar">
+      <span class="live"><i></i>LIVE</span>
+      <span class="watch">412 watching</span>
+    </div>
+    <div class="wmain">
+      <div class="stage">
+        <div class="sl t"></div>
+        <div class="sl a"></div>
+        <div class="sl b"></div>
+        <div class="sl c"></div>
+        <div class="cam"></div>
+      </div>
+      <div class="chat">
+        <div class="msg m"></div><div class="msg s"></div><div class="msg l"></div>
+        <div class="msg g s"></div><div class="msg m"></div><div class="msg s"></div>
+        <div class="msg l"></div><div class="msg g m"></div><div class="msg s"></div>
+        <div class="msg m"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- g2 · the architecture, simplified for the board -->
@@ -282,9 +328,9 @@
 </div>
 
 <div class="f" id="g14">
-  <div class="eb">The whole build</div>
+  <div class="eb">The whole thing, start to finish</div>
   <h1 class="sm">Comment <span>FUNNEL</span></h1>
-  <div class="sub">I'll send you our opt-in form SOPs: the page structure, the two-step spec and the thank-you routing.</div>
+  <div class="sub">I'll send you the full 35-minute breakdown of the strategy we actually ran on this launch.</div>
 </div>
 
 </body>
