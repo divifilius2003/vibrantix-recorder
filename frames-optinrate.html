@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Opt-in rate board frames · 1080×1114</title>
+<style>
+  :root{
+    --gold:#C4A34F; --gold-soft:#dcc07d; --ink:#f4f1ea; --mut:#a8a296; --bg:#0c0c0f;
+    --dead:#4f4a42; --red:#c2564f;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;font-family:var(--sans)}
+  .f{width:1080px;height:1114px;background:
+      radial-gradient(120% 70% at 50% 0%, rgba(196,163,79,.07), transparent 62%), var(--bg);
+    color:var(--ink);padding:58px 56px;display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden}
+  .eb{font-size:25px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:24px}
+  h1{font-size:92px;line-height:1.02;font-weight:800;letter-spacing:-.035em;text-wrap:balance}
+  h1.sm{font-size:70px}
+  h1.xs{font-size:56px}
+  h1 span{color:var(--gold)}
+  h1 em{font-style:normal;color:var(--red)}
+  .sub{font-size:35px;line-height:1.4;color:var(--mut);font-weight:600;margin-top:26px}
+  .note{font-size:25px;line-height:1.45;color:#7b756c;font-weight:600;margin-top:24px}
+
+  .chart{display:flex;flex-direction:column;gap:20px;margin:10px 0 4px}
+  .row{display:flex;align-items:center;gap:18px}
+  .row .lbl{width:210px;flex:0 0 210px;font-size:29px;font-weight:700;color:var(--mut)}
+  .row .track{flex:1;height:58px;background:rgba(255,255,255,.05);border-radius:9px;overflow:hidden}
+  .row .fill{height:100%;display:flex;border-radius:9px;overflow:hidden}
+  .row .solid{height:100%;width:100%;background:linear-gradient(90deg,#6e5c2f,var(--gold))}
+  .row .qual{height:100%;background:linear-gradient(90deg,#7d6733,var(--gold))}
+  .row .rest{height:100%;background:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.085) 0 7px, transparent 7px 15px);border-left:2px solid rgba(0,0,0,.4)}
+  .row .val{width:132px;flex:0 0 132px;text-align:right;font-family:var(--mono);font-size:38px;
+    font-weight:800;color:var(--gold-soft)}
+  .row .val i{display:block;font-style:normal;font-size:21px;color:#7b756c;font-weight:700;letter-spacing:.05em;margin-top:2px}
+  .row.dead .solid,.row.dead .qual{background:var(--dead)}
+  .row.dead .val{color:var(--dead)} .row.dead .lbl{color:#6a655c}
+  .tag{font-size:23px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--red);margin-left:14px;white-space:nowrap}
+  .tag.g{color:var(--gold)}
+
+  .key{display:flex;gap:34px;margin-top:26px;font-size:23px;color:#8b8579;font-weight:700}
+  .key i{display:inline-block;width:24px;height:15px;border-radius:4px;margin-right:9px;vertical-align:-1px}
+  .key .k1 i{background:var(--gold)}
+  .key .k2 i{background:repeating-linear-gradient(135deg, rgba(255,255,255,.16) 0 5px, transparent 5px 11px);
+    border:1px solid rgba(255,255,255,.16)}
+
+  .cols{display:flex;gap:20px;margin-top:8px}
+  .col{flex:1;border:2px solid rgba(255,255,255,.10);border-radius:18px;padding:30px 26px;
+    background:rgba(255,255,255,.02)}
+  .col.good{border-color:rgba(196,163,79,.5);background:rgba(196,163,79,.08)}
+  .col .ct{font-size:23px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#8b8579;margin-bottom:14px}
+  .col.good .ct{color:var(--gold)}
+  .col .cv{font-family:var(--mono);font-size:62px;font-weight:800;line-height:1;letter-spacing:-.03em}
+  .col.good .cv{color:var(--gold)}
+  .col .cs{font-size:26px;line-height:1.38;color:var(--mut);font-weight:600;margin-top:14px}
+
+  ul.steps{list-style:none;display:flex;flex-direction:column;gap:22px;margin-top:10px}
+  ul.steps li{display:flex;gap:20px;align-items:flex-start;font-size:36px;font-weight:700;line-height:1.22}
+  ul.steps li b{font-family:var(--mono);font-size:26px;color:var(--gold);flex:0 0 42px;padding-top:7px;font-weight:800}
+  ul.steps li small{display:block;font-size:26px;color:var(--mut);font-weight:600;margin-top:8px;line-height:1.36}
+</style>
+</head>
+<body>
+
+<!-- o1 · hook: the exhibit, with a date -->
+<div class="f" id="o1">
+  <div class="eb">Seven opt-in pages · one launch · 8 Sep 2026</div>
+  <h1>The page that <span>won</span> on opt-in rate came <em>last</em> on quality.</h1>
+  <div class="sub">Same traffic, same week, same splitter. If I had picked the winner the way everyone picks it, I would have kept the worst page in the test.</div>
+</div>
+
+<!-- o2 · what everyone does -->
+<div class="f" id="o2">
+  <div class="eb">How everyone ranks them</div>
+  <h1 class="sm">Opt-in rate</h1>
+  <div class="chart" style="margin-top:34px">
+    <div class="row"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:94.5%"><div class="solid"></div></div></div><div class="val">18.9%<i>KEEP</i></div></div>
+    <div class="row"><div class="lbl">Liver</div><div class="track"><div class="fill" style="width:88.0%"><div class="solid"></div></div></div><div class="val">17.6%</div></div>
+    <div class="row"><div class="lbl">Gut</div><div class="track"><div class="fill" style="width:86.5%"><div class="solid"></div></div></div><div class="val">17.3%</div></div>
+    <div class="row"><div class="lbl">Parasites</div><div class="track"><div class="fill" style="width:86.0%"><div class="solid"></div></div></div><div class="val">17.2%</div></div>
+    <div class="row dead"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:85.0%"><div class="solid"></div></div></div><div class="val">17.0%<i>KILL</i></div></div>
+  </div>
+  <div class="note">4,262 views across the five arms. Top to bottom, the whole spread is 1.9 points.</div>
+</div>
+
+<!-- o3 · the same pages, ranked on who actually qualified -->
+<div class="f" id="o3">
+  <div class="eb">The same five pages · ranked on qualified</div>
+  <h1 class="sm">Qualified rate</h1>
+  <div class="chart" style="margin-top:34px">
+    <div class="row"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:97%"><div class="solid"></div></div></div><div class="val">29.1%</div></div>
+    <div class="row"><div class="lbl">Liver</div><div class="track"><div class="fill" style="width:90%"><div class="solid"></div></div></div><div class="val">27.0%</div></div>
+    <div class="row"><div class="lbl">Gut</div><div class="track"><div class="fill" style="width:83%"><div class="solid"></div></div></div><div class="val">24.8%</div></div>
+    <div class="row"><div class="lbl">Parasites</div><div class="track"><div class="fill" style="width:70%"><div class="solid"></div></div></div><div class="val">20.9%</div></div>
+    <div class="row dead"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:51%"><div class="solid"></div></div></div><div class="val">15.3%</div></div>
+  </div>
+  <div class="note">Exactly upside down. The page I was about to switch off is the one producing the buyers.</div>
+</div>
+
+<!-- o4 · the head to head, one bar each, gold = qualified -->
+<div class="f" id="o4">
+  <div class="eb">Head to head · same 1,666 views</div>
+  <h1 class="sm">1.9 points lower.<br><span>Nearly twice</span> the qualified leads.</h1>
+  <div class="chart" style="margin-top:38px">
+    <div class="row"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:94.5%"><div class="qual" style="width:15.3%"></div><div class="rest" style="width:84.7%"></div></div></div><div class="val">23<i>QUALIFIED</i></div></div>
+    <div class="row"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:85.0%"><div class="qual" style="width:29.1%"></div><div class="rest" style="width:70.9%"></div></div></div><div class="val">43<i>QUALIFIED</i></div></div>
+  </div>
+  <div class="key"><span class="k1"><i></i>Qualified</span><span class="k2"><i></i>Everyone else</span></div>
+  <div class="note">Bar length is the opt-in rate. The shorter bar has more gold in it. 795 views against 871.</div>
+</div>
+
+<!-- o5 · why the usual number is the wrong one -->
+<div class="f" id="o5">
+  <div class="eb">Why the usual number cannot tell you</div>
+  <div class="cols">
+    <div class="col">
+      <div class="ct">Opt-in rate moved</div>
+      <div class="cv">1.9<span style="font-size:32px">pts</span></div>
+      <div class="cs">Across 4,262 views. Third straight test where the headline barely moved it.</div>
+    </div>
+    <div class="col good">
+      <div class="ct">Quality moved</div>
+      <div class="cv">1.9<span style="font-size:32px">x</span></div>
+      <div class="cs">15.3% to 29.1% qualified, on the same pages, in the same week.</div>
+    </div>
+  </div>
+  <h1 class="xs" style="margin-top:44px">The number you are optimising barely moves. The one you are not measuring nearly doubles.</h1>
+</div>
+
+<!-- o6 · the confession, with a date -->
+<div class="f" id="o6">
+  <div class="eb">The one I got wrong · 6 Sep 2026</div>
+  <h1 class="sm">I switched off the cheapest qualified lead on the account.</h1>
+  <div class="cols" style="margin-top:36px">
+    <div class="col">
+      <div class="ct">Ad 4 · kept</div>
+      <div class="cv">20.9%</div>
+      <div class="cs">opt-in rate<br><b style="color:#f4f1ea">&pound;11.85</b> per qualified lead</div>
+    </div>
+    <div class="col good">
+      <div class="ct">Ad 3 · killed</div>
+      <div class="cv">12.4%</div>
+      <div class="cs">opt-in rate<br><b style="color:var(--gold)">&pound;10.45</b> per qualified lead</div>
+    </div>
+  </div>
+  <div class="note">I had already written down that opt-in rate was the wrong yardstick, and then used it anyway.</div>
+</div>
+
+<!-- o7 · what I will not claim -->
+<div class="f" id="o7">
+  <div class="eb">What I will not claim</div>
+  <h1 class="sm">This is a pattern on one account. It is not a law.</h1>
+  <ul class="steps" style="margin-top:34px">
+    <li><b>01</b><div>One client, one ad account, three launches<small>Whether it holds anywhere else is still an open question in our own notes.</small></div></li>
+    <li><b>02</b><div>Ad 3 spent &pound;178 against Ad 4's &pound;1,647<small>Seventeen qualified leads. Directional, not proof.</small></div></li>
+    <li><b>03</b><div>This chain stops at qualified<small>We do not yet have buyer numbers page by page. I will post them when we do.</small></div></li>
+  </ul>
+</div>
+
+<!-- o8 · what to track instead -->
+<div class="f" id="o8">
+  <div class="eb">Track these three instead</div>
+  <ul class="steps" style="margin-top:8px">
+    <li><b>01</b><div>Qualified rate, per page<small>Not opt-ins. The share of them that match who you can actually sell to.</small></div></li>
+    <li><b>02</b><div>Cost per qualified registration, per ad<small>Ours ran &pound;8.00 on one launch and &pound;11.02 on the next. Cost per lead said the opposite both times.</small></div></li>
+    <li><b>03</b><div>Both of them side by side, per variant<small>One page can win the first and lose the second. That is the whole point.</small></div></li>
+  </ul>
+</div>
+
+<!-- o9 · the one build rule that decides whether you get the data at all -->
+<div class="f" id="o9">
+  <div class="eb">The rule that decides whether you get the data</div>
+  <h1 class="sm">Ask the qualifying question <span>after</span> they are registered. Never in front of it.</h1>
+  <div class="chart" style="margin-top:40px">
+    <div class="row"><div class="lbl">Reached the form</div><div class="track"><div class="fill" style="width:100%"><div class="solid"></div></div></div><div class="val">948</div></div>
+    <div class="row dead"><div class="lbl">Never came back</div><div class="track"><div class="fill" style="width:46.8%"><div class="solid"></div></div></div><div class="val">444</div></div>
+  </div>
+  <div class="note">46.8% of them. We gated registration behind the question instead of putting it on the thank-you page, and lost nearly half the room to find out who they were.</div>
+</div>
+
+<!-- o10 · CTA -->
+<div class="f" id="o10">
+  <div class="eb">Build the page that shows you this</div>
+  <h1 class="sm">Comment <span>PAGES</span></h1>
+  <div class="sub">I'll send you the tracking SOP and the prompt that builds your own analytics page: opt-in rate per variant, qualified rate per variant, cost per qualified lead per ad.</div>
+</div>
+
+</body>
+</html>
