@@ -63,13 +63,25 @@
   ul.steps li{display:flex;gap:20px;align-items:flex-start;font-size:36px;font-weight:700;line-height:1.22}
   ul.steps li b{font-family:var(--mono);font-size:26px;color:var(--gold);flex:0 0 42px;padding-top:7px;font-weight:800}
   ul.steps li small{display:block;font-size:26px;color:var(--mut);font-weight:600;margin-top:8px;line-height:1.36}
+
+  /* worked-example table */
+  .tbl{display:grid;grid-template-columns:1.45fr 1fr 1fr 1fr;gap:0;margin-top:26px;
+    border:2px solid rgba(255,255,255,.10);border-radius:16px;overflow:hidden}
+  .tbl > div{padding:20px 18px;font-size:31px;font-weight:700;border-bottom:1px solid rgba(255,255,255,.07)}
+  .tbl .rh{color:var(--mut);font-size:27px;font-weight:700}
+  .tbl .ch{font-size:26px;letter-spacing:.1em;text-transform:uppercase;color:#8b8579;font-weight:800;text-align:center}
+  .tbl .c{font-family:var(--mono);text-align:center;font-weight:800}
+  .tbl .win{background:rgba(196,163,79,.11)}
+  .tbl .win.c{color:var(--gold)}
+  .tbl .big{font-size:52px}
+  .tbl > div:nth-last-child(-n+4){border-bottom:none}
 </style>
 </head>
 <body>
 
 <div class="f" id="o1">
   <h1>Most people track their webinar opt-in rates wrong.</h1>
-  <div class="sub">I did too, until this test.</div>
+  <div class="sub">I did too, until I ran the numbers properly.</div>
 </div>
 
 <div class="f" id="o2">
@@ -79,78 +91,54 @@
 </div>
 
 <div class="f" id="o3">
-  <div class="eb">One launch &middot; five pages &middot; 8 Sep 2026</div>
-  <h1 class="sm">So you keep this one.</h1>
-  <div class="chart" style="margin-top:36px">
-    <div class="row"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:94.5%"><div class="solid"></div></div></div><div class="val">18.9%<i>KEEP</i></div></div>
-    <div class="row"><div class="lbl">Liver</div><div class="track"><div class="fill" style="width:88.0%"><div class="solid"></div></div></div><div class="val">17.6%</div></div>
-    <div class="row"><div class="lbl">Gut</div><div class="track"><div class="fill" style="width:86.5%"><div class="solid"></div></div></div><div class="val">17.3%</div></div>
-    <div class="row"><div class="lbl">Parasites</div><div class="track"><div class="fill" style="width:86.0%"><div class="solid"></div></div></div><div class="val">17.2%</div></div>
-    <div class="row dead"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:85.0%"><div class="solid"></div></div></div><div class="val">17.0%<i>KILL</i></div></div>
+  <div class="eb">An example</div>
+  <h1 class="sm">Three pages. Which one do you switch off?</h1>
+  <div class="chart" style="margin-top:40px">
+    <div class="row"><div class="lbl">Page C</div><div class="track"><div class="fill" style="width:100%"><div class="solid"></div></div></div><div class="val">20%</div></div>
+    <div class="row"><div class="lbl">Page B</div><div class="track"><div class="fill" style="width:75%"><div class="solid"></div></div></div><div class="val">15%</div></div>
+    <div class="row dead"><div class="lbl">Page A</div><div class="track"><div class="fill" style="width:50%"><div class="solid"></div></div></div><div class="val">10%<i>KILL</i></div></div>
   </div>
-  <div class="note">Same offer, same traffic, same week.</div>
+  <div class="note">Everybody kills Page A. It is half the rate of the winner.</div>
 </div>
 
 <div class="f" id="o4">
-  <div class="eb">The same five pages, ranked on qualified</div>
-  <h1 class="sm">And it is the <em>worst</em> page in the test.</h1>
-  <div class="chart" style="margin-top:36px">
-    <div class="row"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:97%"><div class="solid"></div></div></div><div class="val">29.1%</div></div>
-    <div class="row"><div class="lbl">Liver</div><div class="track"><div class="fill" style="width:90%"><div class="solid"></div></div></div><div class="val">27.0%</div></div>
-    <div class="row"><div class="lbl">Gut</div><div class="track"><div class="fill" style="width:83%"><div class="solid"></div></div></div><div class="val">24.8%</div></div>
-    <div class="row"><div class="lbl">Parasites</div><div class="track"><div class="fill" style="width:70%"><div class="solid"></div></div></div><div class="val">20.9%</div></div>
-    <div class="row dead"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:51%"><div class="solid"></div></div></div><div class="val">15.3%</div></div>
+  <div class="eb">Now the number nobody looks at</div>
+  <h1 class="sm">How many of them <span>qualified</span>.</h1>
+  <div class="chart" style="margin-top:40px">
+    <div class="row"><div class="lbl">Page A</div><div class="track"><div class="fill" style="width:100%"><div class="solid"></div></div></div><div class="val">70%</div></div>
+    <div class="row"><div class="lbl">Page B</div><div class="track"><div class="fill" style="width:50%"><div class="solid"></div></div></div><div class="val">35%</div></div>
+    <div class="row"><div class="lbl">Page C</div><div class="track"><div class="fill" style="width:43%"><div class="solid"></div></div></div><div class="val">30%</div></div>
   </div>
-  <div class="note">The page you were about to switch off is top.</div>
+  <div class="note">The page with the worst opt-in rate has more than double the qualified rate.</div>
 </div>
 
 <div class="f" id="o5">
-  <div class="eb">The two pages, side by side</div>
-  <h1 class="sm">23 qualified.<br><span>43 qualified.</span></h1>
-  <div class="chart" style="margin-top:38px">
-    <div class="row"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:94.5%"><div class="qual" style="width:15.3%"></div><div class="rest" style="width:84.7%"></div></div></div><div class="val">23</div></div>
-    <div class="row"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:85.0%"><div class="qual" style="width:29.1%"></div><div class="rest" style="width:70.9%"></div></div></div><div class="val">43</div></div>
+  <div class="eb">Run it at 1,000 visitors each</div>
+  <h1 class="sm">Page A wins, and it is not close.</h1>
+  <div class="tbl">
+    <div class="rh"></div><div class="ch win">Page A</div><div class="ch">Page B</div><div class="ch">Page C</div>
+    <div class="rh">Visitors</div><div class="c win">1,000</div><div class="c">1,000</div><div class="c">1,000</div>
+    <div class="rh">Opt-in rate</div><div class="c win">10%</div><div class="c">15%</div><div class="c">20%</div>
+    <div class="rh">Opt-ins</div><div class="c win">100</div><div class="c">150</div><div class="c">200</div>
+    <div class="rh">Qualified rate</div><div class="c win">70%</div><div class="c">35%</div><div class="c">30%</div>
+    <div class="rh">Qualified opt-ins</div><div class="c win big">70</div><div class="c big">53</div><div class="c big">60</div>
   </div>
-  <div class="key"><span class="k1"><i></i>Qualified</span><span class="k2"><i></i>Everyone else</span></div>
-  <div class="note">18.9% opt-in against 17.0%. Nearly twice the qualified people off the lower page.</div>
+  <div class="note">Half the opt-in rate of Page C. More qualified people than either of them.</div>
 </div>
 
 <div class="f" id="o6">
-  <div class="eb">The ranking that actually decides it</div>
-  <h1 class="sm">Qualified people<br>per 1,000 views.</h1>
-  <div class="chart" style="margin-top:36px">
-    <div class="row"><div class="lbl">Control</div><div class="track"><div class="fill" style="width:97%"><div class="solid"></div></div></div><div class="val">49.4</div></div>
-    <div class="row"><div class="lbl">Liver</div><div class="track"><div class="fill" style="width:93%"><div class="solid"></div></div></div><div class="val">47.6</div></div>
-    <div class="row"><div class="lbl">Gut</div><div class="track"><div class="fill" style="width:84%"><div class="solid"></div></div></div><div class="val">42.9</div></div>
-    <div class="row"><div class="lbl">Parasites</div><div class="track"><div class="fill" style="width:70%"><div class="solid"></div></div></div><div class="val">36.0</div></div>
-    <div class="row dead"><div class="lbl">Money qualifier</div><div class="track"><div class="fill" style="width:56%"><div class="solid"></div></div></div><div class="val">28.9</div></div>
-  </div>
-  <div class="note">Traffic evened out, so a bigger page cannot flatter itself.</div>
-</div>
-
-<div class="f" id="o7">
   <div class="eb">What to track instead</div>
   <h1 class="sm">Qualified opt-in rate.<br>Per page.</h1>
   <div class="sub">Opt-in rate tells you how many came in. Qualified rate tells you how many were worth having. Only one of them decides what to switch off.</div>
 </div>
 
-<div class="f" id="o8">
-  <div class="eb">You only get the number if you build it this way</div>
+<div class="f" id="o7">
+  <div class="eb">You only get that number if you build it this way</div>
   <h1 class="sm">Ask the qualifying question <span>after</span> they register.</h1>
-  <div class="chart" style="margin-top:40px">
-    <div class="row"><div class="lbl">Reached the form</div><div class="track"><div class="fill" style="width:100%"><div class="solid"></div></div></div><div class="val">948</div></div>
-    <div class="row dead"><div class="lbl">Never came back</div><div class="track"><div class="fill" style="width:46.8%"><div class="solid"></div></div></div><div class="val">444</div></div>
-  </div>
-  <div class="note">We put it in front of registration once. 46.8% of the room walked rather than answer it.</div>
+  <div class="sub">Put it in front of registration and you lose people who would have signed up, and you never find out who they were.<br><br>Put it on the thank-you page and you keep them and still get the answer.</div>
 </div>
 
-<div class="f" id="o9">
-  <div class="eb">What I will not claim</div>
-  <h1 class="sm">One client. One launch. Five pages.</h1>
-  <div class="sub">4,262 views. Enough to act on, not enough to call it settled. And I do not have buyer numbers page by page yet. When I do I will post them either way.</div>
-</div>
-
-<div class="f" id="o10">
+<div class="f" id="o8">
   <h1 class="sm">Comment <span>PAGES</span></h1>
   <div class="sub">I will send you the SOP for the analytics page we build to track this. Opt-in rate and qualified rate for every page, in one view.</div>
 </div>
