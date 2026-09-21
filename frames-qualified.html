@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cost per qualified registration frames · 1080×1114</title>
+<style>
+  :root{
+    --gold:#C4A34F; --gold-soft:#dcc07d; --ink:#f4f1ea; --mut:#a8a296; --bg:#0c0c0f;
+    --red:#ce4e44; --grn:#6fae80;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;font-family:var(--sans)}
+  .f{width:1080px;height:1114px;background:
+      radial-gradient(120% 70% at 50% 0%, rgba(196,163,79,.07), transparent 62%), var(--bg);
+    color:var(--ink);padding:60px 58px;display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden}
+  .eb{font-size:26px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:26px}
+  h1{font-size:92px;line-height:1.0;font-weight:800;letter-spacing:-.035em;text-wrap:balance}
+  h1.sm{font-size:74px}
+  h1.xs{font-size:60px}
+  h1 span{color:var(--gold)}
+  h1 .bad{color:var(--red)}
+  .sub{font-size:37px;line-height:1.38;color:var(--mut);font-weight:600;margin-top:30px}
+
+  .rows{display:flex;flex-direction:column;gap:20px;margin-top:6px}
+  .row{border:2px solid rgba(255,255,255,.1);border-radius:20px;padding:26px 30px;
+    background:rgba(255,255,255,.025);display:flex;align-items:center;gap:28px}
+  .row .ctr{font-family:var(--mono);font-size:52px;font-weight:800;color:var(--gold-soft);
+    width:190px;flex:0 0 190px}
+  .row .arrow{font-size:40px;color:#5a554c;font-weight:800}
+  .row .out{font-size:42px;font-weight:800;line-height:1.14}
+  .row .out small{display:block;font-size:26px;color:var(--mut);font-weight:600;margin-top:7px}
+  .row.zero{border-color:rgba(206,78,68,.5);background:rgba(206,78,68,.11)}
+  .row.zero .out{color:#ef8a80}
+  .row.win{border-color:rgba(111,174,128,.5);background:rgba(111,174,128,.11)}
+  .row.win .out{color:#9fd9ad}
+
+  .flip{display:flex;flex-direction:column;gap:24px;margin-top:8px}
+  .fl{border-radius:22px;padding:30px 32px;border:2px solid}
+  .fl .lab{font-family:var(--mono);font-size:23px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;margin-bottom:12px}
+  .fl .v{font-size:74px;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .fl .n{font-size:29px;color:var(--mut);font-weight:600;margin-top:14px;line-height:1.34}
+  .fl.bad{border-color:rgba(206,78,68,.42);background:rgba(206,78,68,.1)}
+  .fl.bad .lab{color:#e0736a}
+  .fl.good{border-color:rgba(111,174,128,.42);background:rgba(111,174,128,.1)}
+  .fl.good .lab{color:#8fc79e}
+
+  .huge{font-size:250px;line-height:.86;font-weight:800;color:var(--gold);letter-spacing:-.05em}
+  .hugelab{font-family:var(--mono);font-size:30px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--mut);font-weight:700;margin-top:18px}
+
+  .steps{display:flex;flex-direction:column;gap:22px;margin-top:8px}
+  .st{display:flex;align-items:flex-start;gap:26px}
+  .st .n{font-family:var(--mono);font-size:32px;font-weight:800;color:var(--gold);width:58px;flex:0 0 58px;padding-top:7px}
+  .st .t{font-size:42px;font-weight:700;line-height:1.24}
+  .st .t small{display:block;font-size:29px;font-weight:600;color:var(--mut);margin-top:8px;line-height:1.34}
+
+  .caveat{border-left:7px solid var(--red);background:rgba(206,78,68,.1);border-radius:0 18px 18px 0;
+    padding:28px 32px;margin-top:34px}
+  .caveat .lab{font-family:var(--mono);font-size:23px;letter-spacing:.18em;text-transform:uppercase;
+    color:#e0736a;font-weight:800;margin-bottom:12px}
+  .caveat .t{font-size:34px;line-height:1.32;font-weight:600;color:#f3cdc7}
+
+  .final{text-align:center;align-items:center}
+  .final h1{font-size:80px}
+  .cta{font-family:var(--mono);font-size:44px;font-weight:800;color:#0c0c0f;background:var(--gold);
+    border-radius:18px;padding:26px 40px;margin-top:40px;letter-spacing:.04em;display:inline-block}
+  .wm{position:absolute;bottom:40px;left:58px;font-family:var(--mono);font-size:22px;
+    letter-spacing:.24em;text-transform:uppercase;color:#4a463f;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- 1 HOOK -->
+<div class="f" id="q1">
+  <div class="eb">The wrong metric</div>
+  <h1 class="sm">Your cost per registration went up <span>4.8x</span> and you think the launch failed.</h1>
+  <div class="sub">It might have been the best thing that happened to it.</div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 2 THE CLAIM -->
+<div class="f" id="q2">
+  <div class="eb">Say it plainly</div>
+  <h1 class="xs">Cost per registration is the only number in your ad account that <span>cannot tell you</span> if you made money.</h1>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 3 THE CTR TRAP -->
+<div class="f" id="q3">
+  <div class="eb">One real account, three ads</div>
+  <div class="rows">
+    <div class="row zero">
+      <div class="ctr">13.40%</div><div class="arrow">&rarr;</div>
+      <div class="out">0 registrations<small>best click through in the account</small></div>
+    </div>
+    <div class="row">
+      <div class="ctr">13.30%</div><div class="arrow">&rarr;</div>
+      <div class="out">4 registrations<small>at EUR 22.99 each</small></div>
+    </div>
+    <div class="row win">
+      <div class="ctr">2.78%</div><div class="arrow">&rarr;</div>
+      <div class="out">18 registrations<small>at EUR 17.99, the top driver</small></div>
+    </div>
+  </div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 4 THE POINT -->
+<div class="f" id="q4">
+  <div class="eb">Read that again</div>
+  <h1 class="sm">The ad with the <span>best</span> click through rate in the account made <span class="bad">nothing</span>.</h1>
+  <div class="sub">The one everybody would have switched off made eighteen.</div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 5 THE FLIP -->
+<div class="f" id="q5">
+  <div class="eb">Same launch, two ways to read it</div>
+  <div class="flip">
+    <div class="fl bad">
+      <div class="lab">What the dashboard said</div>
+      <div class="v">EUR 19.20</div>
+      <div class="n">per registration. Expensive. Four times the last campaign.</div>
+    </div>
+    <div class="fl good">
+      <div class="lab">What actually happened</div>
+      <div class="v">6 enrolments</div>
+      <div class="n">from 16 calls held. The cheapest acquisition on the entire account.</div>
+    </div>
+  </div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 6 THE 5X -->
+<div class="f" id="q6" style="justify-content:center;align-items:center;text-align:center">
+  <div class="eb">Different client, same lesson</div>
+  <div class="huge">2.2x</div>
+  <div class="hugelab">more buyers per registration</div>
+  <div class="sub" style="max-width:860px">Registrant to buyer went from 0.20% to 0.44%. One qualifying line above the headline, and one revenue question after sign up. Same offer, same traffic source.</div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 7 THE CAVEAT -->
+<div class="f" id="q7">
+  <div class="eb">The part nobody posts</div>
+  <h1 class="xs">That launch still <span class="bad">underperformed</span>.</h1>
+  <div class="caveat">
+    <div class="lab">What went wrong anyway</div>
+    <div class="t">The qualifier worked. The media buying did not. Fifty six ads on a two thousand pound budget, lookalike audiences only, and a survey gated in front of registration that lost nearly half the opt ins.</div>
+  </div>
+  <div class="sub" style="margin-top:26px">A better metric does not save a bad media buy. It just stops you optimising toward the wrong thing.</div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 8 HOW -->
+<div class="f" id="q8">
+  <div class="eb">How you actually track it</div>
+  <div class="steps">
+    <div class="st"><div class="n">01</div><div class="t">Two step form<small>Name, email, phone. Registration is done at step one.</small></div></div>
+    <div class="st"><div class="n">02</div><div class="t">One revenue question, after<small>Never in front. Gate it first and you lose about half of them.</small></div></div>
+    <div class="st"><div class="n">03</div><div class="t">Two thank you pages<small>Only the qualified one fires the conversion event.</small></div></div>
+    <div class="st"><div class="n">04</div><div class="t">Optimise on that number<small>Cost per qualified registration. Then cost per booked call.</small></div></div>
+  </div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 9 THE LINE -->
+<div class="f" id="q9">
+  <div class="eb">The whole idea</div>
+  <h1 class="sm">Make your leads <span>more expensive</span> on purpose.</h1>
+  <div class="sub">Cheap registrations are the most expensive thing you can buy, because you pay for them twice. Once in ad spend, and again in a calendar full of people who were never going to buy.</div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+<!-- 10 CTA -->
+<div class="f final" id="q10">
+  <div class="eb">The setup</div>
+  <h1>The two step form and the tracking behind it.</h1>
+  <div class="sub" style="max-width:800px">I will send you the setup we use, the form, the events and the sheet.</div>
+  <div class="cta">Comment QUALIFIED</div>
+  <div class="wm">Vibrantix</div>
+</div>
+
+</body>
+</html>
