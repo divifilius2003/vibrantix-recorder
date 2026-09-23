@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rivera teardown board frames · 1080×1114</title>
+<style>
+  :root{
+    --gold:#C4A34F; --gold-soft:#dcc07d; --ink:#f4f1ea; --mut:#a8a296; --bg:#0c0c0f;
+    --dead:#4f4a42; --red:#c2564f;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;font-family:var(--sans)}
+  .f{width:1080px;height:1114px;background:
+      radial-gradient(120% 70% at 50% 0%, rgba(196,163,79,.07), transparent 62%), var(--bg);
+    color:var(--ink);padding:56px 54px;display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden}
+  .eb{font-size:25px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:22px}
+  h1{font-size:88px;line-height:1.03;font-weight:800;letter-spacing:-.035em;text-wrap:balance}
+  h1.sm{font-size:66px} h1.xs{font-size:54px}
+  h1 span{color:var(--gold)} h1 em{font-style:normal;color:var(--red)}
+  .sub{font-size:34px;line-height:1.4;color:var(--mut);font-weight:600;margin-top:24px}
+  .note{font-size:25px;line-height:1.45;color:#7b756c;font-weight:600;margin-top:22px}
+
+  /* phone screenshot beside a point */
+  .split{display:flex;gap:34px;align-items:center;margin-top:26px}
+  .phone{flex:0 0 400px;border-radius:18px;overflow:hidden;border:2px solid rgba(196,163,79,.34);
+    box-shadow:0 22px 56px rgba(0,0,0,.6);max-height:720px}
+  .phone img{display:block;width:100%}
+  .side{flex:1}
+  .side h2{font-size:52px;line-height:1.08;font-weight:800;letter-spacing:-.03em}
+  .side h2 span{color:var(--gold)}
+  .side .d{font-size:28px;line-height:1.42;color:var(--mut);font-weight:600;margin-top:18px}
+
+  /* wide screenshot, full width */
+  .shot{border-radius:16px;overflow:hidden;border:2px solid rgba(196,163,79,.30);margin-top:26px;
+    box-shadow:0 20px 50px rgba(0,0,0,.55)}
+  .shot img{display:block;width:100%}
+
+  /* element list stacked on a page */
+  ul.els{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:8px}
+  ul.els li{display:flex;gap:18px;align-items:center;font-size:33px;font-weight:700;
+    border:2px solid rgba(255,255,255,.09);border-radius:13px;padding:16px 22px;background:rgba(255,255,255,.02)}
+  ul.els li b{font-family:var(--mono);font-size:24px;color:var(--gold);flex:0 0 40px;font-weight:800}
+  ul.els li.key{border-color:rgba(196,163,79,.5);background:rgba(196,163,79,.09)}
+
+  /* the funnel chain */
+  .chain{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .cs{display:flex;align-items:center;gap:18px;border:2px solid rgba(255,255,255,.09);border-radius:14px;
+    padding:18px 24px;background:rgba(255,255,255,.02)}
+  .cs.hi{border-color:rgba(196,163,79,.55);background:rgba(196,163,79,.10)}
+  .cs .n{font-family:var(--mono);font-size:24px;font-weight:800;color:var(--gold);flex:0 0 38px}
+  .cs .t{font-size:33px;font-weight:700;flex:1}
+  .cs .v{font-family:var(--mono);font-size:31px;font-weight:800;color:var(--gold-soft)}
+  .arw{text-align:center;color:#4a463f;font-size:22px;line-height:.8}
+
+  /* big stat */
+  .big{font-family:var(--mono);font-size:150px;font-weight:800;color:var(--gold);
+    letter-spacing:-.045em;line-height:1}
+  .big.sm{font-size:112px}
+  .cols{display:flex;gap:20px;margin-top:20px}
+  .col{flex:1;border:2px solid rgba(255,255,255,.10);border-radius:17px;padding:26px 24px;background:rgba(255,255,255,.02)}
+  .col.good{border-color:rgba(196,163,79,.5);background:rgba(196,163,79,.08)}
+  .col .ct{font-size:22px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#8b8579;margin-bottom:12px}
+  .col.good .ct{color:var(--gold)}
+  .col .cv{font-family:var(--mono);font-size:56px;font-weight:800;line-height:1}
+  .col.good .cv{color:var(--gold)}
+  .col .cd{font-size:25px;line-height:1.38;color:var(--mut);font-weight:600;margin-top:12px}
+
+  .quote{border-left:5px solid var(--gold);padding:8px 0 8px 26px;margin-top:26px;
+    font-size:38px;line-height:1.32;font-weight:600;color:var(--ink)}
+  .quote small{display:block;font-size:24px;color:#7b756c;font-weight:700;margin-top:14px;letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<!-- r1 · hook -->
+<div class="f" id="r1">
+  <div class="eb">Checked 23 Sep 2026 &middot; Meta Ad Library</div>
+  <h1 class="sm">He is running <span>190 ads</span> right now.<br>183 of them launched this month.</h1>
+  <div class="sub">Will Rivera, Ecom Degree University. He says one launch did $605,000 cash in three days. That is his claim, not my measurement. This is what the machine behind it actually looks like.</div>
+</div>
+
+<!-- r2 · the shape -->
+<div class="f" id="r2">
+  <div class="eb">The whole funnel</div>
+  <div class="chain">
+    <div class="cs"><div class="n">01</div><div class="t">Meta ad</div><div class="v">190 live</div></div>
+    <div class="arw">&darr;</div>
+    <div class="cs hi"><div class="n">02</div><div class="t">Opt-in page</div><div class="v">one screen</div></div>
+    <div class="arw">&darr;</div>
+    <div class="cs hi"><div class="n">03</div><div class="t">Bridge page</div><div class="v">$27</div></div>
+    <div class="arw">&darr;</div>
+    <div class="cs"><div class="n">04</div><div class="t">Live dated workshop</div><div class="v">free</div></div>
+    <div class="arw">&darr;</div>
+    <div class="cs"><div class="n">05</div><div class="t">Offer on the workshop</div><div class="v">$1,995</div></div>
+    <div class="arw">&darr;</div>
+    <div class="cs"><div class="n">06</div><div class="t">Backend</div><div class="v">$5.8k&ndash;$20k</div></div>
+  </div>
+  <div class="note">He sells a $27 product before you have even seen the free workshop. Nobody else in our swipe file does that.</div>
+</div>
+
+<!-- r3 · the opt-in page -->
+<div class="f" id="r3">
+  <div class="eb">The opt-in page</div>
+  <div class="split">
+    <div class="phone"><img src="img/riv-optin.jpg"></div>
+    <div class="side">
+      <h2>That is the <span>whole page</span>.</h2>
+      <div class="d">Not the top of it. All of it. One screen, six elements, then the footer.<br><br>Our client's page has twelve sections.</div>
+    </div>
+  </div>
+</div>
+
+<!-- r4 · the six elements -->
+<div class="f" id="r4">
+  <div class="eb">Every element on it</div>
+  <ul class="els">
+    <li><b>01</b>The date and time, above everything</li>
+    <li><b>02</b>"100% Free LIVE Workshop Reveals..."</li>
+    <li class="key"><b>03</b>Headline: a before and after with a number</li>
+    <li><b>04</b>One paragraph. Who it worked for, what it pays</li>
+    <li class="key"><b>05</b>A live countdown to the event</li>
+    <li><b>06</b>One button. Then Trustpilot and nothing else</li>
+  </ul>
+  <div class="note">No about section. No curriculum. No case study grid. No press logos.</div>
+</div>
+
+<!-- r5 · the form -->
+<div class="f" id="r5">
+  <div class="eb">The form</div>
+  <div class="split">
+    <div class="phone"><img src="img/riv-form.jpg"></div>
+    <div class="side">
+      <h2>Three fields.<br><span>Phone is required.</span></h2>
+      <div class="d">Name, email, phone, all at once. No two-step.<br><br>And the consent line under the button signs you up to recurring marketing calls and texts.</div>
+    </div>
+  </div>
+</div>
+
+<!-- r6 · the show-up bribe -->
+<div class="f" id="r6">
+  <div class="eb">The gift is not for signing up</div>
+  <h1 class="sm">"Show up <span>LIVE</span> to secure your FREE Winning Product Checklist"</h1>
+  <div class="sub">Most people bribe the opt-in. He bribes the attendance. The free thing is only released if you are in the room.</div>
+  <div class="note">Nothing on this page is trying to win the click. It is trying to win the seat.</div>
+</div>
+
+<!-- r7 · the bridge -->
+<div class="f" id="r7">
+  <div class="eb">Then, before the workshop</div>
+  <div class="split">
+    <div class="phone"><img src="img/riv-bridge.jpg"></div>
+    <div class="side">
+      <h2>He sells you something for <span>$27</span>.</h2>
+      <div class="d">Straight after the opt-in, before you have watched anything.<br><br>"WAIT! Before we confirm your ticket."</div>
+    </div>
+  </div>
+</div>
+
+<!-- r8 · the decline link -->
+<div class="f" id="r8">
+  <div class="eb">And the way out is written to hurt</div>
+  <div class="shot"><img src="img/riv-decline.jpg"></div>
+  <div class="note">1,351 people have taken it. That funds the ad account before a single person attends.</div>
+</div>
+
+<!-- r9 · the account -->
+<div class="f" id="r9">
+  <div class="eb">The ad account</div>
+  <div class="cols">
+    <div class="col"><div class="ct">Live ads</div><div class="cv">190</div><div class="cd">on the brand page</div></div>
+    <div class="col"><div class="ct">Creative variants</div><div class="cv">373</div><div class="cd">across those ads</div></div>
+    <div class="col good"><div class="ct">Launched in Sept</div><div class="cv">183</div><div class="cd">of the 190</div></div>
+  </div>
+  <h1 class="xs" style="margin-top:38px">That is not a slow burn. That is one month of hard scale.</h1>
+</div>
+
+<!-- r10 · the control body -->
+<div class="f" id="r10">
+  <div class="eb">The thing I did not expect</div>
+  <div class="big">82%</div>
+  <h1 class="sm" style="margin-top:20px">One body of copy carries 138 of the 190 ads.</h1>
+  <div class="sub">Fourteen bodies exist. One of them runs almost the entire account, word for word, across 305 of the 373 variants.</div>
+</div>
+
+<!-- r11 · what that means -->
+<div class="f" id="r11">
+  <div class="eb">Which means</div>
+  <h1 class="sm">He is not testing copy.<br>He is testing <span>creative</span> against a locked control.</h1>
+  <div class="sub">Every new video runs against the same words, so any change in result belongs to the video.</div>
+  <div class="note">Our own account did the opposite. Seventeen ads, several angles at once, six of them spent with zero registrations and no way to tell why.</div>
+</div>
+
+<!-- r12 · no income claim in the control -->
+<div class="f" id="r12">
+  <div class="eb">Read the control body again</div>
+  <h1 class="sm">There is <em>no income claim</em> in it.</h1>
+  <div class="sub">The ad that carries 82% of his spend reads like a syllabus. What you will learn, who it is for, when it is on.</div>
+  <div class="note">The income claim lives in a different body entirely, written as a report: "Walmart in 2026 looks like Amazon in 2015." Quarantined, so the workhorse ad never carries the risk.</div>
+</div>
+
+<!-- r13 · retargeting -->
+<div class="f" id="r13">
+  <div class="eb">The layer underneath</div>
+  <div class="quote">"You've probably seen my ads before. But don't take my word for it... if you've been watching from the sidelines"
+    <small>Body 3 &middot; 13 ads &middot; all launched 8 Sep &middot; one variant each</small></div>
+  <div class="sub">That copy only makes sense to someone who has already seen him. The testimonial ads are the warm audience.</div>
+  <div class="note">Three tells: the copy itself, one variant each against 305 on the cold control, and all thirteen launched the same day and never touched again.</div>
+</div>
+
+<!-- r14 · nine formats one idea -->
+<div class="f" id="r14">
+  <div class="eb">Nine formats, one idea</div>
+  <div class="shot"><img src="img/riv-creatives.jpg"></div>
+  <div class="sub" style="margin-top:22px">Screen-share demos, objection interviews, skits, grandma, lifestyle, named students. All of it says the same sentence: 200 million people shop at Walmart and fewer than 200,000 sell on it.</div>
+</div>
+
+<!-- r15 · the number test -->
+<div class="f" id="r15">
+  <div class="eb">The test hiding in plain sight</div>
+  <h1 class="sm">Same video. Same list.<br>One number, written two ways.</h1>
+  <div class="cols" style="margin-top:34px">
+    <div class="col good"><div class="ct">Version A</div><div class="cv">$2,847<span style="font-size:26px">/mo</span></div></div>
+    <div class="col good"><div class="ct">Version B</div><div class="cv">2,847<span style="font-size:26px"> units</span></div></div>
+  </div>
+  <div class="note">Everything else identical. That is the resolution he is testing at.</div>
+</div>
+
+<!-- r16 · honesty -->
+<div class="f" id="r16">
+  <div class="eb">What I cannot confirm</div>
+  <h1 class="sm">The $605,000 is his number, not mine.</h1>
+  <div class="sub">So is the $30M, the 46% ascension and the backend pricing. I can see the ads, the pages, the form and the $27 offer, because those are public. I cannot see his spend, his refunds or his bank.</div>
+  <div class="note">The Ad Library does not publish targeting outside the EU either, so the retargeting read is strong inference, not fact.</div>
+</div>
+
+<!-- r17 · CTA -->
+<div class="f" id="r17">
+  <div class="eb">The full teardown</div>
+  <h1 class="sm">Comment <span>WALMART</span></h1>
+  <div class="sub">I'll send you the whole breakdown: all 190 ads, the 14 bodies, the 31 transcripts, and every page of the funnel.</div>
+</div>
+
+</body>
+</html>
