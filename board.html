@@ -24,12 +24,15 @@
   .sw.on{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.28)}
   .lab{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:800}
   input[type=range]{width:88px;accent-color:var(--gold)}
+  #zlab{font-size:13px;font-weight:700;color:#8d887d;min-width:50px;text-align:center}
   #pg{font-size:13px;font-weight:700;color:#8d887d;min-width:58px;text-align:center}
   #wrap{flex:1;position:relative;min-height:0}
   canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
   #hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#2f2d29;font-size:34px;
     font-weight:800;letter-spacing:.06em;pointer-events:none;user-select:none}
   #hint.hide{display:none}
+  #nav{position:absolute;left:14px;bottom:12px;font-size:11px;letter-spacing:.08em;color:#3a3833;
+    font-weight:700;pointer-events:none;user-select:none}
   .rec{background:#e5484d;color:#fff;border-color:#e5484d}
   #tag{display:none;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#e5484d}
   #tag.on{display:flex}
@@ -57,6 +60,10 @@
     <button id="clear">Clear</button>
   </div>
   <div class="grp">
+    <button id="zout">&minus;</button><span id="zlab">100%</span><button id="zin">+</button>
+    <button id="zfit">Fit</button>
+  </div>
+  <div class="grp">
     <button id="prev">&larr;</button><span id="pg">1 / 1</span><button id="next">&rarr;</button>
     <button id="add">+ Page</button>
   </div>
@@ -71,6 +78,7 @@
 <div id="wrap">
   <canvas id="c"></canvas>
   <div id="hint">DRAW</div>
+  <div id="nav">right-drag or space-drag to move &middot; pinch or &#8984;+scroll to zoom</div>
 </div>
 
 <script>
@@ -80,6 +88,10 @@
   var ink=0, tool='pen', size=7;
   var pages=[[]], pi=0, redoStack=[];
   var drawing=null, start=null, DPR=Math.max(1, window.devicePixelRatio||1);
+  // the canvas is a window onto an unbounded board: strokes are stored in WORLD
+  // coordinates and only converted at paint time, so zoom never rasterises them
+  var sc=1, ox=0, oy=0, panning=null, spaceDown=false;
+  function zlab(){ var e=document.getElementById('zlab'); if(e) e.textContent=Math.round(sc*100)+'%'; }
 
   function fit(){
     var r=c.getBoundingClientRect();
@@ -88,9 +100,13 @@
   }
   window.addEventListener('resize', fit);
 
-  function pt(e){
+  function scr(e){
     var r=c.getBoundingClientRect();
     return [(e.clientX-r.left)*DPR, (e.clientY-r.top)*DPR];
+  }
+  function pt(e){                       // screen -> world
+    var p=scr(e);
+    return [(p[0]-ox)/sc, (p[1]-oy)/sc];
   }
 
   function strokeShape(s){
@@ -133,43 +149,109 @@
     x.stroke(); x.restore();
   }
 
+  function grid(){
+    var step=60*sc;                     // dots stay a sane distance apart at any zoom
+    while(step<26) step*=2;
+    while(step>150) step/=2;
+    var x0=((ox%step)+step)%step, y0=((oy%step)+step)%step;
+    x.save(); x.fillStyle='#17171c';
+    for(var gx=x0; gx<c.width; gx+=step)
+      for(var gy=y0; gy<c.height; gy+=step) x.fillRect(gx,gy,2,2);
+    x.restore();
+  }
   function draw(){
-    x.save(); x.globalCompositeOperation='source-over';
-    x.fillStyle='#08080a'; x.fillRect(0,0,c.width,c.height); x.restore();
+    x.setTransform(1,0,0,1,0,0);
+    x.globalCompositeOperation='source-over';
+    x.fillStyle='#08080a'; x.fillRect(0,0,c.width,c.height);
+    grid();
+    x.setTransform(sc,0,0,sc,ox,oy);
     pages[pi].forEach(strokeShape);
     if(drawing) strokeShape(drawing);
+    x.setTransform(1,0,0,1,0,0);
     document.getElementById('hint').classList.toggle('hide', pages[pi].length>0 || !!drawing);
   }
 
+  c.addEventListener('contextmenu', function(e){ e.preventDefault(); });
   c.addEventListener('pointerdown', function(e){
     e.preventDefault(); c.setPointerCapture(e.pointerId);
+    if(e.button===2 || e.button===1 || spaceDown){      // right, middle or space = pan
+      panning={x:e.clientX, y:e.clientY, ox:ox, oy:oy};
+      c.style.cursor='grabbing'; return;
+    }
     var p=pt(e);
     if(tool==='text'){
       var t=prompt('Text:');
-      if(t){ pages[pi].push({t:'text',c:INKS[ink],w:size,p:[p],txt:t}); redoStack=[]; draw(); }
+      if(t){ pages[pi].push({t:'text',c:INKS[ink],w:size*DPR/sc,p:[p],txt:t}); redoStack=[]; draw(); }
       return;
     }
     start=p;
     var shape = (tool==='line'||tool==='box'||tool==='arrow');
-    drawing={t:tool, c:INKS[ink], w:size*DPR, p: shape ? [p,p] : [p]};
+    drawing={t:tool, c:INKS[ink], w:size*DPR/sc, p: shape ? [p,p] : [p]};
     draw();
   });
   c.addEventListener('pointermove', function(e){
+    if(panning){
+      ox = panning.ox + (e.clientX-panning.x)*DPR;
+      oy = panning.oy + (e.clientY-panning.y)*DPR;
+      draw(); return;
+    }
     if(!drawing) return;
     e.preventDefault();
     var p=pt(e);
     if(tool==='pen'||tool==='hi'||tool==='erase'){
       var l=drawing.p[drawing.p.length-1];
-      if(Math.abs(p[0]-l[0])+Math.abs(p[1]-l[1])>1.5) drawing.p.push(p);
+      if(Math.abs(p[0]-l[0])+Math.abs(p[1]-l[1])>1.5/sc) drawing.p.push(p);
     } else {
       drawing.p=[start,p];
     }
     draw();
   });
-  function end(){ if(drawing){ pages[pi].push(drawing); redoStack=[]; drawing=null; draw(); } }
+  function end(){
+    if(panning){ panning=null; c.style.cursor=spaceDown?'grab':'crosshair'; return; }
+    if(drawing){ pages[pi].push(drawing); redoStack=[]; drawing=null; draw(); }
+  }
   c.addEventListener('pointerup', end);
   c.addEventListener('pointercancel', end);
   c.addEventListener('pointerleave', end);
+
+  function zoomAt(sx, sy, factor){
+    var nx=Math.min(6, Math.max(0.15, sc*factor));
+    factor = nx/sc;
+    ox = sx - (sx-ox)*factor;      // keep the point under the cursor fixed
+    oy = sy - (sy-oy)*factor;
+    sc = nx; zlab(); draw();
+  }
+  c.addEventListener('wheel', function(e){
+    e.preventDefault();
+    var p=scr(e);
+    if(e.ctrlKey || e.metaKey){                  // pinch on a trackpad, or cmd+scroll
+      // a trackpad pinch sends many small deltas, a mouse wheel sends one big one;
+      // clamp per event so a single notch cannot fling the zoom to the limit
+      var f=Math.pow(0.99, e.deltaY);
+      zoomAt(p[0], p[1], Math.min(1.18, Math.max(0.85, f)));
+    } else {                                     // two-finger scroll pans, like Miro
+      ox -= e.deltaX*DPR; oy -= e.deltaY*DPR; draw();
+    }
+  }, {passive:false});
+  window.addEventListener('keydown', function(e){
+    if(e.code==='Space' && e.target.tagName!=='INPUT'){ spaceDown=true; if(!panning) c.style.cursor='grab'; e.preventDefault(); }
+  });
+  window.addEventListener('keyup', function(e){
+    if(e.code==='Space'){ spaceDown=false; if(!panning) c.style.cursor='crosshair'; }
+  });
+  document.getElementById('zin').onclick=function(){ zoomAt(c.width/2, c.height/2, 1.25); };
+  document.getElementById('zout').onclick=function(){ zoomAt(c.width/2, c.height/2, 0.8); };
+  document.getElementById('zfit').onclick=function(){
+    var all=pages[pi];
+    if(!all.length){ sc=1; ox=0; oy=0; zlab(); draw(); return; }
+    var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+    all.forEach(function(s){ s.p.forEach(function(q){
+      x0=Math.min(x0,q[0]); y0=Math.min(y0,q[1]); x1=Math.max(x1,q[0]); y1=Math.max(y1,q[1]); }); });
+    var pad=80, w=Math.max(1,x1-x0), h=Math.max(1,y1-y0);
+    sc=Math.min(6, Math.max(0.15, Math.min((c.width-pad*2)/w, (c.height-pad*2)/h)));
+    ox=(c.width-w*sc)/2 - x0*sc; oy=(c.height-h*sc)/2 - y0*sc;
+    zlab(); draw();
+  };
 
   // toolbar
   [].forEach.call(document.querySelectorAll('#bar button[data-tool]'), function(b){
@@ -247,7 +329,7 @@
     if(e.key==='ArrowLeft') document.getElementById('prev').click();
   });
 
-  fit(); label();
+  fit(); label(); zlab();
 })();
 </script>
 </body>
