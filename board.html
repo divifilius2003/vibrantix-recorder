@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<title>Vibrantix Board</title>
+<style>
+  :root{ --gold:#C4A34F; --gold-soft:#dcc07d; --bg:#08080a; --panel:#141418; --line:#33312c; --ink:#f4f1ea;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column}
+
+  #bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:9px 12px;background:#0d0d10;
+    border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .grp{display:flex;align-items:center;gap:6px;padding-right:10px;margin-right:4px;border-right:1px solid #24231f}
+  .grp:last-child{border-right:0}
+  button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;
+    font-size:13px;font-weight:700;padding:7px 11px;border-radius:9px;cursor:pointer;white-space:nowrap}
+  button:hover{border-color:var(--gold);color:var(--gold)}
+  button.on{background:var(--gold);color:#0b0b0d;border-color:var(--gold)}
+  .sw{width:24px;height:24px;border-radius:50%;border:2px solid #3a3832;padding:0;cursor:pointer}
+  .sw.on{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.28)}
+  .lab{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d887d;font-weight:800}
+  input[type=range]{width:88px;accent-color:var(--gold)}
+  #pg{font-size:13px;font-weight:700;color:#8d887d;min-width:58px;text-align:center}
+  #wrap{flex:1;position:relative;min-height:0}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
+  #hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#2f2d29;font-size:34px;
+    font-weight:800;letter-spacing:.06em;pointer-events:none;user-select:none}
+  #hint.hide{display:none}
+  .rec{background:#e5484d;color:#fff;border-color:#e5484d}
+  #tag{display:none;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#e5484d}
+  #tag.on{display:flex}
+  #tag i{width:9px;height:9px;border-radius:50%;background:#e5484d;display:inline-block;animation:bl 1s infinite}
+  @keyframes bl{50%{opacity:.25}}
+</style>
+</head>
+<body>
+<div id="bar">
+  <div class="grp">
+    <span class="lab">Tool</span>
+    <button data-tool="pen" class="on">Pen</button>
+    <button data-tool="hi">Marker</button>
+    <button data-tool="line">Line</button>
+    <button data-tool="box">Box</button>
+    <button data-tool="arrow">Arrow</button>
+    <button data-tool="text">Text</button>
+    <button data-tool="erase">Erase</button>
+  </div>
+  <div class="grp"><span class="lab">Ink</span><span id="sw"></span></div>
+  <div class="grp"><span class="lab">Size</span><input type="range" id="size" min="2" max="40" value="7"></div>
+  <div class="grp">
+    <button id="undo">Undo</button>
+    <button id="redo">Redo</button>
+    <button id="clear">Clear</button>
+  </div>
+  <div class="grp">
+    <button id="prev">&larr;</button><span id="pg">1 / 1</span><button id="next">&rarr;</button>
+    <button id="add">+ Page</button>
+  </div>
+  <div class="grp">
+    <button id="png">Save PNG</button>
+    <button id="rec" class="rec">&#9679; Record</button>
+    <button id="stop" disabled>&#9632; Stop</button>
+    <a id="dl" style="display:none"><button>&darr; Download</button></a>
+    <span id="tag"><i></i><span id="timer">0:00</span></span>
+  </div>
+</div>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="hint">DRAW</div>
+</div>
+
+<script>
+(function(){
+  var c=document.getElementById('c'), x=c.getContext('2d');
+  var INKS=['#C4A34F','#ffffff','#e5484d','#4cc2ff','#6f8257'];
+  var ink=0, tool='pen', size=7;
+  var pages=[[]], pi=0, redoStack=[];
+  var drawing=null, start=null, DPR=Math.max(1, window.devicePixelRatio||1);
+
+  function fit(){
+    var r=c.getBoundingClientRect();
+    c.width=Math.round(r.width*DPR); c.height=Math.round(r.height*DPR);
+    draw();
+  }
+  window.addEventListener('resize', fit);
+
+  function pt(e){
+    var r=c.getBoundingClientRect();
+    return [(e.clientX-r.left)*DPR, (e.clientY-r.top)*DPR];
+  }
+
+  function strokeShape(s){
+    x.save();
+    x.lineCap='round'; x.lineJoin='round';
+    x.globalAlpha = s.t==='hi' ? 0.30 : 1;
+    x.strokeStyle=s.c; x.fillStyle=s.c;
+    x.lineWidth = s.t==='hi' ? s.w*4 : s.w;
+    if(s.t==='erase'){ x.globalCompositeOperation='destination-out'; x.globalAlpha=1; x.lineWidth=s.w*3; }
+    var p=s.p;
+    if(s.t==='text'){
+      x.globalCompositeOperation='source-over';
+      x.font='800 '+(s.w*4.6)+'px '+getComputedStyle(document.body).fontFamily;
+      x.textBaseline='top';
+      s.txt.split('\n').forEach(function(ln,i){ x.fillText(ln, p[0][0], p[0][1]+i*s.w*5.4); });
+      x.restore(); return;
+    }
+    if(s.t==='box'){
+      x.strokeRect(p[0][0], p[0][1], p[1][0]-p[0][0], p[1][1]-p[0][1]); x.restore(); return;
+    }
+    if(s.t==='line' || s.t==='arrow'){
+      x.beginPath(); x.moveTo(p[0][0],p[0][1]); x.lineTo(p[1][0],p[1][1]); x.stroke();
+      if(s.t==='arrow'){
+        var a=Math.atan2(p[1][1]-p[0][1], p[1][0]-p[0][0]), h=Math.max(14, s.w*3.4);
+        x.beginPath(); x.moveTo(p[1][0],p[1][1]);
+        x.lineTo(p[1][0]-h*Math.cos(a-0.4), p[1][1]-h*Math.sin(a-0.4));
+        x.lineTo(p[1][0]-h*Math.cos(a+0.4), p[1][1]-h*Math.sin(a+0.4));
+        x.closePath(); x.fill();
+      }
+      x.restore(); return;
+    }
+    // freehand, smoothed through midpoints so it does not look like polylines
+    if(p.length<2){ x.beginPath(); x.arc(p[0][0],p[0][1],x.lineWidth/2,0,6.283); x.fill(); x.restore(); return; }
+    x.beginPath(); x.moveTo(p[0][0],p[0][1]);
+    for(var i=1;i<p.length-1;i++){
+      var mx=(p[i][0]+p[i+1][0])/2, my=(p[i][1]+p[i+1][1])/2;
+      x.quadraticCurveTo(p[i][0],p[i][1],mx,my);
+    }
+    x.lineTo(p[p.length-1][0],p[p.length-1][1]);
+    x.stroke(); x.restore();
+  }
+
+  function draw(){
+    x.save(); x.globalCompositeOperation='source-over';
+    x.fillStyle='#08080a'; x.fillRect(0,0,c.width,c.height); x.restore();
+    pages[pi].forEach(strokeShape);
+    if(drawing) strokeShape(drawing);
+    document.getElementById('hint').classList.toggle('hide', pages[pi].length>0 || !!drawing);
+  }
+
+  c.addEventListener('pointerdown', function(e){
+    e.preventDefault(); c.setPointerCapture(e.pointerId);
+    var p=pt(e);
+    if(tool==='text'){
+      var t=prompt('Text:');
+      if(t){ pages[pi].push({t:'text',c:INKS[ink],w:size,p:[p],txt:t}); redoStack=[]; draw(); }
+      return;
+    }
+    start=p;
+    var shape = (tool==='line'||tool==='box'||tool==='arrow');
+    drawing={t:tool, c:INKS[ink], w:size*DPR, p: shape ? [p,p] : [p]};
+    draw();
+  });
+  c.addEventListener('pointermove', function(e){
+    if(!drawing) return;
+    e.preventDefault();
+    var p=pt(e);
+    if(tool==='pen'||tool==='hi'||tool==='erase'){
+      var l=drawing.p[drawing.p.length-1];
+      if(Math.abs(p[0]-l[0])+Math.abs(p[1]-l[1])>1.5) drawing.p.push(p);
+    } else {
+      drawing.p=[start,p];
+    }
+    draw();
+  });
+  function end(){ if(drawing){ pages[pi].push(drawing); redoStack=[]; drawing=null; draw(); } }
+  c.addEventListener('pointerup', end);
+  c.addEventListener('pointercancel', end);
+  c.addEventListener('pointerleave', end);
+
+  // toolbar
+  [].forEach.call(document.querySelectorAll('#bar button[data-tool]'), function(b){
+    b.onclick=function(){
+      tool=b.dataset.tool;
+      [].forEach.call(document.querySelectorAll('#bar button[data-tool]'), function(o){ o.classList.toggle('on', o===b); });
+    };
+  });
+  (function(){
+    var box=document.getElementById('sw');
+    INKS.forEach(function(col,n){
+      var b=document.createElement('button');
+      b.className='sw'+(n===0?' on':''); b.style.background=col;
+      b.onclick=function(){ ink=n; [].forEach.call(box.children,function(o,m){o.classList.toggle('on',m===n);}); };
+      box.appendChild(b);
+    });
+  })();
+  document.getElementById('size').oninput=function(){ size=+this.value; };
+  document.getElementById('undo').onclick=function(){ if(pages[pi].length){ redoStack.push(pages[pi].pop()); draw(); } };
+  document.getElementById('redo').onclick=function(){ if(redoStack.length){ pages[pi].push(redoStack.pop()); draw(); } };
+  document.getElementById('clear').onclick=function(){ if(pages[pi].length && confirm('Clear this page?')){ pages[pi]=[]; redoStack=[]; draw(); } };
+
+  function label(){ document.getElementById('pg').textContent=(pi+1)+' / '+pages.length; }
+  document.getElementById('add').onclick=function(){ pages.splice(pi+1,0,[]); pi++; redoStack=[]; label(); draw(); };
+  document.getElementById('prev').onclick=function(){ if(pi>0){ pi--; label(); draw(); } };
+  document.getElementById('next').onclick=function(){ if(pi<pages.length-1){ pi++; label(); draw(); } };
+
+  document.getElementById('png').onclick=function(){
+    var a=document.createElement('a');
+    a.href=c.toDataURL('image/png');
+    a.download='vibrantix-board-'+(pi+1)+'.png';
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  // record the board with your voice, for talking a plan through
+  var mr=null, chunks=[], t0=0, iv=null, raf=null;
+  function keepAlive(){ draw(); raf=requestAnimationFrame(keepAlive); }
+  document.getElementById('rec').onclick=async function(){
+    chunks=[];
+    var out=c.captureStream(30);
+    try{
+      var a=await navigator.mediaDevices.getUserMedia({audio:true});
+      a.getAudioTracks().forEach(function(t){ out.addTrack(t); });
+    }catch(e){ /* silent recording is still useful */ }
+    var m=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm']
+      .find(function(k){ return window.MediaRecorder && MediaRecorder.isTypeSupported(k); });
+    mr=new MediaRecorder(out, m?{mimeType:m,videoBitsPerSecond:8000000}:undefined);
+    mr.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+    mr.onstop=function(){
+      var u=URL.createObjectURL(new Blob(chunks,{type:'video/webm'}));
+      var d=document.getElementById('dl'); d.href=u; d.download='vibrantix-board.webm'; d.style.display='inline-block';
+    };
+    mr.start();
+    keepAlive();                       // feed captureStream real frames even when idle
+    this.disabled=true; document.getElementById('stop').disabled=false;
+    document.getElementById('tag').classList.add('on');
+    document.getElementById('dl').style.display='none';
+    t0=Date.now(); iv=setInterval(function(){ var s=Math.floor((Date.now()-t0)/1000);
+      document.getElementById('timer').textContent=Math.floor(s/60)+':'+('0'+(s%60)).slice(-2); },500);
+  };
+  document.getElementById('stop').onclick=function(){
+    if(mr&&mr.state!=='inactive') mr.stop();
+    if(raf){ cancelAnimationFrame(raf); raf=null; }
+    clearInterval(iv); document.getElementById('tag').classList.remove('on');
+    document.getElementById('rec').disabled=false; this.disabled=true;
+  };
+
+  window.addEventListener('keydown', function(e){
+    if(e.target.tagName==='INPUT') return;
+    var k=e.key.toLowerCase();
+    if((e.metaKey||e.ctrlKey) && k==='z'){ e.preventDefault(); (e.shiftKey?document.getElementById('redo'):document.getElementById('undo')).click(); return; }
+    var map={p:'pen',m:'hi',l:'line',b:'box',a:'arrow',t:'text',e:'erase'};
+    if(map[k]){ document.querySelector('#bar button[data-tool="'+map[k]+'"]').click(); }
+    if(e.key==='ArrowRight') document.getElementById('next').click();
+    if(e.key==='ArrowLeft') document.getElementById('prev').click();
+  });
+
+  fit(); label();
+})();
+</script>
+</body>
+</html>
